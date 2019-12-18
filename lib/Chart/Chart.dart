@@ -16,6 +16,26 @@ class _ChartsState extends State<Charts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+        backgroundColor: Color(0xffF6F6F6),
+
+        appBar: AppBar(
+        backgroundColor: Color(0xffF6F6F6),
+
+
+        elevation: 0.0,
+        leading: InkWell(
+
+            onTap: (){
+
+              Navigator.of(context).pop();
+
+            },
+            child: new Icon(Icons.arrow_back,color: Colors.black87,)),
+        
+        
+      ),
+      
       body:  Common.gmail!=null ?  Stack(
         children: <Widget>[
           
@@ -30,7 +50,7 @@ class _ChartsState extends State<Charts> {
         ],
       ):Center(
         
-        child: Text("Please Sing up or log in first"),
+        child: Text("Please Sing up or log in first",style: TextStyle(color: Common.orange_color),),
         
       )
     );

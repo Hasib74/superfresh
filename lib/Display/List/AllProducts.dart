@@ -35,7 +35,7 @@ class _AllProductsState extends State<AllProducts>
   var scroll_direction;
 
   String _prev_search_text = "";
-  String _search_text="" ;
+  String _search_text = "";
 
   /*
   * name: v["name"],
@@ -52,8 +52,6 @@ class _AllProductsState extends State<AllProducts>
 
   @override
   Widget build(BuildContext context) {
-
-
     print("index is  ${widget.index}");
 
     _scrollController.addListener(() {
@@ -79,15 +77,10 @@ class _AllProductsState extends State<AllProducts>
       backgroundColor: Color(0xffF6F6F6),
       body: Stack(
         children: <Widget>[
-
-
           tabs(),
           list_view(),
 
-
           //_search_text == "" ? Container() :  search_list(),
-
-
         ],
       ),
     );
@@ -95,90 +88,87 @@ class _AllProductsState extends State<AllProducts>
 
   tabs() {
     return Container(
-        height: 100,
-        width: double.infinity,
-        decoration: BoxDecoration(color: Color(0xffF6F6F6), boxShadow: [
-          BoxShadow(
-              color: Colors.black54, blurRadius: 4, offset: Offset(0.20, 0.20))
-        ]),
-        child: Column(
-          children: <Widget>[
-            StreamBuilder(
-                stream: FirebaseDatabase.instance
-                    .reference()
-                    .child(Common.category)
-                    .onValue,
-                builder: (context, snapshot) {
-                  List<Category> _catagory_list = new List();
+      height: 100,
+      width: double.infinity,
+      decoration: BoxDecoration(color: Color(0xffF6F6F6), boxShadow: [
+        BoxShadow(
+            color: Colors.black54, blurRadius: 4, offset: Offset(0.20, 0.20))
+      ]),
+      child: Column(
+        children: <Widget>[
+          StreamBuilder(
+              stream: FirebaseDatabase.instance
+                  .reference()
+                  .child(Common.category)
+                  .onValue,
+              builder: (context, snapshot) {
+                List<Category> _catagory_list = new List();
 
-                  if (snapshot.data == null) {
-                    return Container();
-                  } else {
-                    Map<dynamic, dynamic> catagory = snapshot.data.snapshot.value;
+                if (snapshot.data == null) {
+                  return Container();
+                } else {
+                  Map<dynamic, dynamic> catagory = snapshot.data.snapshot.value;
 
-                    catagory.forEach((k, v) {
-                      _catagory_list
-                          .add(new Category(categoryId: k, name: v["name"]));
+                  catagory.forEach((k, v) {
+                    _catagory_list
+                        .add(new Category(categoryId: k, name: v["name"]));
+                  });
+
+                  return TabBar(
+                    indicatorColor: Colors.transparent,
+                    controller: _tabController,
+                    isScrollable: true,
+                    onTap: (possition) {
+                      setState(() {
+                        possition = possition;
+                      });
+                    },
+                    tabs: _catagory_list.map<Widget>((catagory) {
+                      return Container(
+                        height: 25,
+                        decoration: BoxDecoration(
+                            color: _catagory_list.indexOf(catagory) ==
+                                    _tabController.index
+                                ? Color(0xffFF5126)
+                                : Colors.grey,
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black12,
+                                  spreadRadius: 1,
+                                  blurRadius: 1)
+                            ]),
+                        child: Center(
+                          child: Text(
+                            "   ${catagory.name}   ",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  );
+                }
+              }),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: Color(0xffFF5126), width: 1),
+                  borderRadius: BorderRadius.all(Radius.circular(50)),
+                  color: Color(0xffE9EBEE)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15, right: 10),
+                child: TextField(
+                  //controller: _text_controller,
+                  onChanged: (text) {
+                    print("Text  onChange ${text}");
+
+                    setState(() {
+                      _search_text = text;
                     });
 
-                    return TabBar(
-                      indicatorColor: Colors.transparent,
-                      controller: _tabController,
-                      isScrollable: true,
-                      onTap: (possition) {
-                        setState(() {
-                          possition = possition;
-                        });
-                      },
-                      tabs: _catagory_list.map<Widget>((catagory) {
-                        return Container(
-                          height: 25,
-                          decoration: BoxDecoration(
-                              color: _catagory_list.indexOf(catagory) ==
-                                      _tabController.index
-                                  ? Color(0xffFF5126)
-                                  : Colors.grey,
-                              borderRadius: BorderRadius.all(Radius.circular(50)),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black12,
-                                    spreadRadius: 1,
-                                    blurRadius: 1)
-                              ]),
-                          child: Center(
-                            child: Text(
-                              "   ${catagory.name}   ",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  }
-                }),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xffFF5126), width: 1),
-                    borderRadius: BorderRadius.all(Radius.circular(50)),
-                    color: Color(0xffE9EBEE)),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15, right: 10),
-                  child: TextField(
-                    //controller: _text_controller,
-                    onChanged: (text) {
-                      print("Text  onChange ${text}");
-
-
-                      setState(() {
-
-                        _search_text = text;
-
-                      });
-
-                      setState(() {
-                        /*
+                    setState(() {
+                      /*
                         *  List _search_name=new List();
   List _search_image=new List();
   List _search_price=new List();
@@ -189,7 +179,7 @@ class _AllProductsState extends State<AllProducts>
   List _search_id=new List();
                         * */
 
-                        /*_search_name.clear();
+                      /*_search_name.clear();
                         _search_image.clear();
                         _search_price.clear();
                         _search_previous_price.clear();
@@ -197,47 +187,45 @@ class _AllProductsState extends State<AllProducts>
                         _search_description.clear();
                         _search_discount.clear();
                         _search_id.clear();*/
-                        // _search_room_number.clear();
+                      // _search_room_number.clear();
 
+                      print("Text.................runing    ${_search_text}");
 
+                      _prev_search_text =
+                          _search_text.substring(0, _search_text.length - 1);
 
-                        print("Text.................runing    ${_search_text}");
+                      print(
+                          "Text.................privious  ${_prev_search_text}");
+                    });
+                  },
 
-                        _prev_search_text = _search_text.substring(0, _search_text.length - 1);
-
-                        print("Text.................privious  ${_prev_search_text}");
-                      });
-                    },
-
-                    decoration: InputDecoration(
-                      disabledBorder: InputBorder.none,
-                      hintText: "Search Product",
-                      suffixIcon: Icon(
-                        Icons.search,
-                        color: Color(0xffFF5126),
-                      ),
-                      border: InputBorder.none,
-                      /*  enabledBorder: const OutlineInputBorder(
+                  decoration: InputDecoration(
+                    disabledBorder: InputBorder.none,
+                    hintText: "Search Product",
+                    suffixIcon: Icon(
+                      Icons.search,
+                      color: Color(0xffFF5126),
+                    ),
+                    border: InputBorder.none,
+                    /*  enabledBorder: const OutlineInputBorder(
 
                           borderSide: const BorderSide(color: Colors.blue, width: 1.0),
 
                         ),
 */
-                    ),
                   ),
                 ),
               ),
             ),
-          ],
-        ),
-      );
-
+          ),
+        ],
+      ),
+    );
   }
 
   list_view() {
     return Padding(
-
-      padding: EdgeInsets.only(top: 100,bottom: 0.0),
+      padding: EdgeInsets.only(top: 100, bottom: 0.0),
       child: StreamBuilder(
           stream: FirebaseDatabase.instance
               .reference()
@@ -249,9 +237,6 @@ class _AllProductsState extends State<AllProducts>
                 child: CircularProgressIndicator(),
               );
             } else {
-
-
-
               List _search_name = new List();
               List _search_image = new List();
               List _search_price = new List();
@@ -260,9 +245,6 @@ class _AllProductsState extends State<AllProducts>
               List _search_description = new List();
               List _search_discount = new List();
               List _search_id = new List();
-
-
-
 
               Map<dynamic, dynamic> product = snapshot.data.snapshot.value;
 
@@ -285,14 +267,10 @@ class _AllProductsState extends State<AllProducts>
                 }
               });
 
-
               print("Search Text...................  ${_search_text}");
 
-
-
-              if(_products_list.length > 0 ){
-                if (_search_text != "" &&
-                    _prev_search_text != _search_text) {
+              if (_products_list.length > 0) {
+                if (_search_text != "" && _prev_search_text != _search_text) {
                   _search_name.clear();
                   _search_image.clear();
                   _search_price.clear();
@@ -308,13 +286,7 @@ class _AllProductsState extends State<AllProducts>
                         .toString()
                         .toLowerCase()
                         .contains(_search_text.toLowerCase())) {
-
-
-
                       // setState(() {
-
-
-
 
                       print("Monu1");
 
@@ -324,21 +296,16 @@ class _AllProductsState extends State<AllProducts>
                       _search_name.add(_products_list[i].name);
                       _search_image.add(_products_list[i].image);
                       _search_price.add(_products_list[i].price);
-                      _search_previous_price.add(_products_list[i].previous_price);
-                      _search_categoryId
-                          .add(_products_list[i].categoryId);
-                      _search_description
-                          .add(_products_list[i].description);
-                      _search_discount
-                          .add(_products_list[i].discount);
+                      _search_previous_price
+                          .add(_products_list[i].previous_price);
+                      _search_categoryId.add(_products_list[i].categoryId);
+                      _search_description.add(_products_list[i].description);
+                      _search_discount.add(_products_list[i].discount);
                       _search_id.add(_products_list[i].id);
-
-
                     }
                   }
                 } else {
-
-                /*  _search_name.clear();
+                  /*  _search_name.clear();
                   _search_image.clear();
                   _search_price.clear();
                   _search_previous_price.clear();
@@ -347,15 +314,11 @@ class _AllProductsState extends State<AllProducts>
                   _search_discount.clear();
                   _search_id.clear();*/
 
-
                 }
-
-
-
               }
 
-
-                return _search_text=="" ? GridView.builder(
+              return _search_text == ""
+                  ? GridView.builder(
                       controller: _scrollController,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
@@ -364,9 +327,7 @@ class _AllProductsState extends State<AllProducts>
                       ),
                       itemCount: _products_list.length,
                       itemBuilder: (context, int index) {
-
-
-                     return  /*_search_text=="" ? */ InkWell(
+                        return /*_search_text=="" ? */ InkWell(
                           onTap: () {
                             Navigator.of(context).push(new MaterialPageRoute(
                                 builder: (context) => ProductDiscription(
@@ -429,7 +390,8 @@ class _AllProductsState extends State<AllProducts>
                                                 style: TextStyle(
                                                     color: Colors.black,
                                                     fontSize: 16,
-                                                    fontWeight: FontWeight.bold),
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                               Container(
                                                 child: StarRating(
@@ -447,7 +409,8 @@ class _AllProductsState extends State<AllProducts>
                                               ),
                                               Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.spaceAround,
+                                                    MainAxisAlignment
+                                                        .spaceAround,
                                                 children: <Widget>[
                                                   Text(
                                                     "\$${_products_list[index].price}",
@@ -485,145 +448,144 @@ class _AllProductsState extends State<AllProducts>
                               ),
                             ),
                           ),
-                        ) ;
-                      })  :  GridView.builder(
-                    controller: _scrollController,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: MediaQuery.of(context).size.width /
-                          (MediaQuery.of(context).size.height / 1.4),
-                    ),
-                    itemCount: _search_price.length,
-                    itemBuilder: (context, int index) {
+                        );
+                      })
+                  : GridView.builder(
+                      controller: _scrollController,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: MediaQuery.of(context).size.width /
+                            (MediaQuery.of(context).size.height / 1.4),
+                      ),
+                      itemCount: _search_price.length,
+                      itemBuilder: (context, int index) {
+                        print(
+                            "....................................................  ${_search_name.length}");
 
-                      print("....................................................  ${_search_name.length}");
-
-                      return InkWell(
+                        return InkWell(
                           onTap: () {
-                          Navigator.of(context).push(new MaterialPageRoute(
-                              builder: (context) => ProductDiscription(
-                                child: "Products",
-                                image: _search_image[index],
-                                name: _search_name[index],
-                                id: _search_id[index],
-                                price: _search_price[index],
-                                previous_price:
-                                _search_previous_price[index],
-                                discreption:
-                                _search_description[index],
-                                rating:"3.5",
-                                catagory_id:
-                                _search_categoryId[index],
-                              )));
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black12,
-                                      spreadRadius: 1,
-                                      blurRadius: 1)
-                                ]),
-                            child: Column(
-                              children: <Widget>[
-                                Expanded(
-                                  flex: 2,
-                                  child: new Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                              _search_image[index]),
-                                          fit: BoxFit.cover),
+                            Navigator.of(context).push(new MaterialPageRoute(
+                                builder: (context) => ProductDiscription(
+                                      child: "Products",
+                                      image: _search_image[index],
+                                      name: _search_name[index],
+                                      id: _search_id[index],
+                                      price: _search_price[index],
+                                      previous_price:
+                                          _search_previous_price[index],
+                                      discreption: _search_description[index],
+                                      rating: "3.5",
+                                      catagory_id: _search_categoryId[index],
+                                    )));
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black12,
+                                        spreadRadius: 1,
+                                        blurRadius: 1)
+                                  ]),
+                              child: Column(
+                                children: <Widget>[
+                                  Expanded(
+                                    flex: 2,
+                                    child: new Container(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                                _search_image[index]),
+                                            fit: BoxFit.cover),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.end,
-                                      children: <Widget>[
-                                        new Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text(
-                                              "${_search_name[index]}",
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 16,
-                                                  fontWeight:
-                                                  FontWeight.bold),
-                                            ),
-                                            Container(
-                                              child: StarRating(
-                                                  rating: double.parse("3"),
-                                                  spaceBetween: 0.0,
-                                                  starConfig: StarConfig(
-                                                    fillColor: Colors.yellow,
-                                                    size: 15,
+                                  Expanded(
+                                    flex: 1,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: <Widget>[
+                                          new Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                "${_search_name[index]}",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              Container(
+                                                child: StarRating(
+                                                    rating: double.parse("3"),
+                                                    spaceBetween: 0.0,
+                                                    starConfig: StarConfig(
+                                                      fillColor: Colors.yellow,
+                                                      size: 15,
 
-                                                    // other props
-                                                  )),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment
-                                                  .spaceAround,
-                                              children: <Widget>[
-                                                Text(
-                                                  "\$${_search_price[index]}",
-                                                  style: TextStyle(
-                                                      color: Colors.orange,
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                      FontWeight.bold),
-                                                ),
-                                                SizedBox(
-                                                  width: 10,
-                                                ),
-                                                Text(
-                                                  " \$${_search_previous_price[index]}",
-                                                  style: TextStyle(
-                                                    decoration: TextDecoration
-                                                        .lineThrough,
-                                                    decorationColor:
-                                                    Colors.black,
-                                                    decorationStyle:
-                                                    TextDecorationStyle
-                                                        .solid,
+                                                      // other props
+                                                    )),
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: <Widget>[
+                                                  Text(
+                                                    "\$${_search_price[index]}",
+                                                    style: TextStyle(
+                                                        color: Colors.orange,
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                        Icon(Icons.add_shopping_cart),
-                                      ],
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Text(
+                                                    " \$${_search_previous_price[index]}",
+                                                    style: TextStyle(
+                                                      decoration: TextDecoration
+                                                          .lineThrough,
+                                                      decorationColor:
+                                                          Colors.black,
+                                                      decorationStyle:
+                                                          TextDecorationStyle
+                                                              .solid,
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                          Icon(Icons.add_shopping_cart),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    });
+                        );
+                      });
             }
           }),
     );
   }
 
- /* search_list(){
+/* search_list(){
 
    return  Padding(
 
@@ -645,7 +607,7 @@ class _AllProductsState extends State<AllProducts>
                 print("....................................................  ${_search_name.length}");
 
                 return InkWell(
-                  *//*  onTap: () {
+                  */ /*  onTap: () {
                           Navigator.of(context).push(new MaterialPageRoute(
                               builder: (context) => ProductDiscription(
                                 child: "Products",
@@ -661,7 +623,7 @@ class _AllProductsState extends State<AllProducts>
                                 catagory_id:
                                 _products_list[index].categoryId,
                               )));
-                        },*//*
+                        },*/ /*
                   child: Padding(
                     padding: EdgeInsets.all(8),
                     child: Container(
