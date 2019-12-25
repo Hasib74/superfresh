@@ -45,12 +45,12 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.monu.supper_fresh_stores"
+        applicationId "com.colorbangla.supper_fresh_stores"
         minSdkVersion 21
         targetSdkVersion 29
        // versionCode flutterVersionCode.toInteger()
-        versionCode 4
-        versionName "1.4"
+        versionCode 6
+        versionName "1.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 

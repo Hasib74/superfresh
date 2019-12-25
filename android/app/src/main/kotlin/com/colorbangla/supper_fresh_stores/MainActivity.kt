@@ -1,4 +1,4 @@
-package com.monu.supper_fresh_stores
+package com.colorbangla.supper_fresh_stores
 
 import android.os.Bundle
 import io.flutter.app.FlutterActivity

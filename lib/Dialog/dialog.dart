@@ -942,9 +942,9 @@ class _LogInAndRegistationPageDialogState
               }).then((_) {
                 print("Add product to chart");
 
-                setState(() {
-                  is_loading = false;
-                });
+
+                uploadFile();
+
               });
             }
           });
@@ -960,82 +960,127 @@ class _LogInAndRegistationPageDialogState
   }
 
   Future uploadFile() async {
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('images/${DateTime.now().toString()}');
-    StorageUploadTask uploadTask = storageReference.putFile(_profile_image);
-    await uploadTask.onComplete;
-    print('File Uploaded');
-    storageReference.getDownloadURL().then((fileURL) {
-      setState(() {
-        _uploadedFileURL = fileURL;
 
-        print("Image Urlllllllllllllll   $_uploadedFileURL ");
-      });
 
-      FirebaseDatabase.instance
-          .reference()
-          .child(Common.user)
-          .child(
-              _email_controller_for_registation.value.text.replaceAll(".", ""))
-          .child(Common.basic_info)
-          .update({
-        "Image": _uploadedFileURL != null ? _uploadedFileURL : "",
-      }).then((_) {
-        print("Image upload  Success");
+    print("AOKKKKKKKKKKKKKKKKK0");
 
-        if (widget.current_state == null) {
-          Common.store_registaterInfo_into_sp(
-                  _email_controller_for_registation.value.text)
-              .then((_) {
-            FirebaseDatabase.instance
-                .reference()
-                .child(Common.user)
-                .child(_email_controller_for_registation.value.text
-                    .replaceAll(".", ""))
-                .child(Common.basic_info)
-                .update({"login": "true"}).then((_) {
-              setState(() {
-                is_loading = false;
+    if(_profile_image!=null){
+
+      StorageReference storageReference = FirebaseStorage.instance
+          .ref()
+          .child('images/${DateTime.now().toString()}');
+      StorageUploadTask uploadTask = storageReference.putFile(_profile_image);
+      await uploadTask.onComplete;
+      print('File Uploaded');
+      storageReference.getDownloadURL().then((fileURL) {
+        setState(() {
+          _uploadedFileURL = fileURL;
+
+          print("Image Urlllllllllllllll   $_uploadedFileURL ");
+        });
+
+        FirebaseDatabase.instance
+            .reference()
+            .child(Common.user)
+            .child(
+            _email_controller_for_registation.value.text.replaceAll(".", ""))
+            .child(Common.basic_info)
+            .update({
+          "Image": _uploadedFileURL != null ? _uploadedFileURL : "",
+        }).then((_) {
+          print("Image upload  Success");
+
+          if (widget.current_state == null) {
+            Common.store_registaterInfo_into_sp(
+                _email_controller_for_registation.value.text)
+                .then((_) {
+              FirebaseDatabase.instance
+                  .reference()
+                  .child(Common.user)
+                  .child(_email_controller_for_registation.value.text
+                  .replaceAll(".", ""))
+                  .child(Common.basic_info)
+                  .update({"login": "true"}).then((_) {
+                setState(() {
+                  is_loading = false;
+                });
+
+                //  Navigator.of(context).pop();
               });
 
-              //  Navigator.of(context).pop();
+              Common.gmail = _email_controller_for_registation.value.text;
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/HomePlate', (Route<dynamic> route) => false);
             });
+          } else {
+            Common.store_registaterInfo_into_sp(
+                _email_controller_for_registation.value.text)
+                .then((_) {
+              Common.gmail = _email_controller_for_registation.value.text;
 
-            Common.gmail = _email_controller_for_registation.value.text;
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                '/HomePlate', (Route<dynamic> route) => false);
-          });
-        } else {
-          Common.store_registaterInfo_into_sp(
-                  _email_controller_for_registation.value.text)
-              .then((_) {
-            Common.gmail = _email_controller_for_registation.value.text;
+              FirebaseDatabase.instance
+                  .reference()
+                  .child(Common.user)
+                  .child(_email_controller_for_registation.value.text
+                  .replaceAll(".", ""))
+                  .child(Common.basic_info)
+                  .update({"login": "true"}).then((_) {
+                setState(() {
+                  is_loading = false;
+                });
 
-            FirebaseDatabase.instance
-                .reference()
-                .child(Common.user)
-                .child(_email_controller_for_registation.value.text
-                    .replaceAll(".", ""))
-                .child(Common.basic_info)
-                .update({"login": "true"}).then((_) {
-              setState(() {
-                is_loading = false;
+                Navigator.of(context).pop();
               });
 
-              Navigator.of(context).pop();
+
             });
+          }
 
-            /*  Navigator.of(context).pushNamedAndRemoveUntil(
-                '/Profile', (Route<dynamic> route) => false);*/
-          });
-        }
-
-        // Navigator.pop(context);
-      }).catchError((e) {
-        print(e);
+          // Navigator.pop(context);
+        }).catchError((e) {
+          print(e);
+        });
       });
-    });
+
+    }else{
+
+
+     // Navigator.of(context).pop();
+
+      print("AOKKKKKKKKKKKKKKKKK0");
+
+
+
+      Common.store_registaterInfo_into_sp(
+          _email_controller_for_registation.value.text)
+          .then((_) {
+        Common.gmail = _email_controller_for_registation.value.text;
+
+        FirebaseDatabase.instance
+            .reference()
+            .child(Common.user)
+            .child(_email_controller_for_registation.value.text
+            .replaceAll(".", ""))
+            .child(Common.basic_info)
+            .update({"login": "true"}).then((_) {
+
+
+          setState(() {
+            is_loading = false;
+          });
+
+          print("Fnisheddddddddddddddddddddddddddddd");
+
+          Navigator.of(context).pop();
+        });
+
+
+      });
+
+
+    }
+
+
   }
 }
 

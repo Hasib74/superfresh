@@ -1,10 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_star_rating/flutter_star_rating.dart';
 import 'package:supper_fresh_stores/Common.dart';
 import 'package:supper_fresh_stores/Display/HomePlate.dart';
 import 'package:supper_fresh_stores/Display/ProductDiscription.dart';
 import 'package:supper_fresh_stores/Model/Banner.dart';
+import 'package:supper_fresh_stores/Model/Comment.dart';
 import 'package:supper_fresh_stores/Model/Popular.dart';
 
 class Home extends StatefulWidget {
@@ -17,13 +19,32 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  String _prev_search_text = "";
+  String _search_text = "";
+
+  List<Popular> _popular_list = new List();
+
+  List<Popular> _search_popular_list = new List();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _load();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xffF6F6F6),
       body: Stack(
         children: <Widget>[
-          _body(),
+          _serch_bar(),
+          Padding(
+            padding: const EdgeInsets.only(top: 70),
+            child: _search_text == "" ? _body() : _search_list(),
+          ),
         ],
       ),
     );
@@ -227,6 +248,7 @@ class _HomeState extends State<Home> {
                   });
 
                   return ListView.builder(
+                      physics: BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemCount: _image.length,
@@ -255,6 +277,7 @@ class _HomeState extends State<Home> {
                                     width: 65,
                                     height: 65,
                                     decoration: BoxDecoration(
+                                      color: Colors.white,
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
                                           fit: BoxFit.cover,
@@ -328,41 +351,20 @@ class _HomeState extends State<Home> {
                     itemBuilder: (context, int index) {
                       return InkWell(
                         onTap: () {
-
-                          print("Keyyyyyyyyyyy   ${ _key[index]}");
-
-                          /*
-                          *  ProductDiscription(
-      {this.previous_price,
-      this.id,
-      this.image,
-      this.name,
-      this.child,
-      this.price,
-      this.discreption,
-      this.offer,
-      this.rating,
-      this.index,
-      this.catagory_id});
-
-                          * 
-                          * */
-
                           Navigator.of(context).push(new MaterialPageRoute(
                               builder: (context) => ProductDiscription(
                                     previous_price: "5.6",
                                     id: _key[index],
                                     image: _popular_list[index].image,
-
-                                   name: _popular_list[index].name,
-                                   child: Common.popular,
-                                   price: _popular_list[index].price,
-                                   discreption: _popular_list[index].description,
-                                   offer: "10",
-                                   rating: "4",
-                                   catagory_id:_popular_list[index].categoryId ,
-
-
+                                    name: _popular_list[index].name,
+                                    child: Common.popular,
+                                    price: _popular_list[index].price,
+                                    discreption:
+                                        _popular_list[index].description,
+                                    offer: "10",
+                                    rating: "4",
+                                    catagory_id:
+                                        _popular_list[index].categoryId,
                                   )));
                         },
                         child: Padding(
@@ -381,14 +383,18 @@ class _HomeState extends State<Home> {
                                     context, index, _popular_list[index]),
                                 _offer(_popular_list[index]),
                                 _add(_popular_list[index]),
-                              Common.gmail!=null ?_fav(_popular_list[index], _key[index]):Positioned(right: 10,
-                                  top: 10,child: Opacity(
-                                    opacity: 0.5,
-                                    child: new Icon(
-                                      Icons.favorite_border,
-                                      color: Common.orange_color,
-                                    ),
-                                  )),
+                                Common.gmail != null
+                                    ? _fav(_popular_list[index], _key[index])
+                                    : Positioned(
+                                        right: 10,
+                                        top: 10,
+                                        child: Opacity(
+                                          opacity: 0.5,
+                                          child: new Icon(
+                                            Icons.favorite_border,
+                                            color: Common.orange_color,
+                                          ),
+                                        )),
                               ],
                             ),
                           ),
@@ -554,52 +560,9 @@ class _HomeState extends State<Home> {
         top: 10,
         child: InkWell(
           onTap: () {
-
-
-           // favoutie(popular, key);
+            // favoutie(popular, key);
 
             favoutie(popular, key);
-
-/*
-
-            print("Voddaa");
-
-
-
-
-            if(Common.gmail==null){
-
-              print("Nullll");
-            }else{
-
-
-              StreamBuilder(
-                  stream: FirebaseDatabase.instance
-                      .reference()
-                      .child(Common.user)
-                      .child(Common.gmail.replaceAll(".", ""))
-                      .child(Common.basic_info)
-                      .child("login")
-                      .onValue,
-                  builder: (context, snapshot) {
-
-
-                    print("Log in info   ${snapshot.data.snapshot.value}");
-
-                    if (snapshot.data != null ||
-                        snapshot.data.snapshot.value != null) {
-                      if (snapshot.data.snapshot.value == "true") {
-                        print("Clicked.....");
-
-
-                      }
-                    }
-                  });
-
-            }*/
-
-
-
           },
           child: StreamBuilder(
               stream: FirebaseDatabase.instance
@@ -623,8 +586,6 @@ class _HomeState extends State<Home> {
                     );
                   }
                 }
-
-
               }),
         ));
   }
@@ -667,6 +628,202 @@ class _HomeState extends State<Home> {
         });
       }
     }).catchError((err) => print(err));
+  }
+
+  _serch_bar() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Container(
+        decoration: BoxDecoration(
+            border: Border.all(color: Color(0xffFF5126), width: 1),
+            borderRadius: BorderRadius.all(Radius.circular(0.0)),
+            color: Color(0xffE9EBEE)),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 15, right: 0.0),
+          child: TextField(
+            //controller: _text_controller,
+            onChanged: (text) {
+              print("Text  onChange ${text}");
+
+              setState(() {
+                _search_text = text;
+
+                _search_popular_list.clear();
+
+                for (int i = 0; i < _popular_list.length; i++) {
+                  if (_popular_list[i].name.toString().contains(_search_text)) {
+                    _search_popular_list.add(_popular_list[i]);
+                  }
+                }
+              });
+            },
+
+            decoration: InputDecoration(
+              disabledBorder: InputBorder.none,
+              hintText: "Search Product",
+              suffixIcon: Container(
+                width: 30,
+                decoration: BoxDecoration(color: Common.orange_color),
+                child: Icon(
+                  Icons.search,
+                  color: Colors.white,
+                ),
+              ),
+              border: InputBorder.none,
+              /*  enabledBorder: const OutlineInputBorder(
+
+                          borderSide: const BorderSide(color: Colors.blue, width: 1.0),
+
+                        ),
+*/
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  _search_list() {
+    return GridView.builder(
+        //controller: _scrollController,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: MediaQuery.of(context).size.width /
+              (MediaQuery.of(context).size.height / 1.4),
+        ),
+        itemCount: _search_popular_list.length,
+        itemBuilder: (context, int index) {
+          return InkWell(
+            onTap: () {
+              Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (context) => ProductDiscription(
+                        child: "Products",
+                        image: _search_popular_list[index].image,
+                        name: _search_popular_list[index].name,
+                        id: _search_popular_list[index].id,
+                        price: _search_popular_list[index].price,
+                        previous_price:
+                            _search_popular_list[index].previous_price,
+                        discreption: _search_popular_list[index].description,
+                        rating: "3.5",
+                        catagory_id: _search_popular_list[index].categoryId,
+                      )));
+            },
+            child: Padding(
+              padding: EdgeInsets.all(8),
+              child: Container(
+                decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                  BoxShadow(
+                      color: Colors.black12, spreadRadius: 1, blurRadius: 1)
+                ]),
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 2,
+                      child: new Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: NetworkImage(
+                                  _search_popular_list[index].image),
+                              fit: BoxFit.cover),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            new Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "${_search_popular_list[index].name}",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Container(
+                                  child: StarRating(
+                                      rating: double.parse("3"),
+                                      spaceBetween: 0.0,
+                                      starConfig: StarConfig(
+                                        fillColor: Colors.yellow,
+                                        size: 15,
+
+                                        // other props
+                                      )),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    Text(
+                                      "\$${_search_popular_list[index].price}",
+                                      style: TextStyle(
+                                          color: Colors.orange,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      " \$${_search_popular_list[index].previous_price}",
+                                      style: TextStyle(
+                                        decoration: TextDecoration.lineThrough,
+                                        decorationColor: Colors.black,
+                                        decorationStyle:
+                                            TextDecorationStyle.solid,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            Icon(Icons.add_shopping_cart),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  void _load() {
+    _popular_list.clear();
+
+    FirebaseDatabase.instance
+        .reference()
+        .child(Common.popular)
+        .once()
+        .then((v) {
+      if (v.value != null) {
+        Map<dynamic, dynamic> popular = v.value;
+
+        popular.forEach((k, v) {
+          _popular_list.add(new Popular(
+              categoryId: v["categoryId"],
+              description: v["description"],
+              discount: ["discount"],
+              image: v["image"],
+              name: v["name"],
+              previous_price: v["previous_price"],
+              price: v["price"],
+              rating: v["rating"],
+              id: k));
+        });
+      }
+    });
   }
 
 /*  void favoutie(Popular  popular,key) {

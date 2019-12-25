@@ -27,7 +27,7 @@ class _AllProductsState extends State<AllProducts>
     super.initState();
 
     _tabController =
-        new TabController(length: 6, vsync: this, initialIndex: widget.index);
+        new TabController(length: 4, vsync: this, initialIndex: widget.index);
   }
 
   //var possition;
@@ -37,18 +37,7 @@ class _AllProductsState extends State<AllProducts>
   String _prev_search_text = "";
   String _search_text = "";
 
-  /*
-  * name: v["name"],
-                    image: v["image"],
-                    price: v["price"],
-                    previous_price: v["previous_price"],
-                    categoryId: v["categoryId"],
-                    description: v["description"],
-                    discount: v["discount"],
-                    rating: v["rating"],
-                    id: k
-  *
-  * */
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +69,7 @@ class _AllProductsState extends State<AllProducts>
           tabs(),
           list_view(),
 
-          //_search_text == "" ? Container() :  search_list(),
+
         ],
       ),
     );
@@ -305,14 +294,7 @@ class _AllProductsState extends State<AllProducts>
                     }
                   }
                 } else {
-                  /*  _search_name.clear();
-                  _search_image.clear();
-                  _search_price.clear();
-                  _search_previous_price.clear();
-                  _search_categoryId.clear();
-                  _search_description.clear();
-                  _search_discount.clear();
-                  _search_id.clear();*/
+
 
                 }
               }
@@ -459,8 +441,6 @@ class _AllProductsState extends State<AllProducts>
                       ),
                       itemCount: _search_price.length,
                       itemBuilder: (context, int index) {
-                        print(
-                            "....................................................  ${_search_name.length}");
 
                         return InkWell(
                           onTap: () {
@@ -585,149 +565,5 @@ class _AllProductsState extends State<AllProducts>
     );
   }
 
-/* search_list(){
 
-   return  Padding(
-
-     padding: EdgeInsets.only(top: 100,bottom: 0.0),
-
-     child: Container(
-
-       color: Colors.white,
-       child: GridView.builder(
-              controller: _scrollController,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: MediaQuery.of(context).size.width /
-                    (MediaQuery.of(context).size.height / 1.4),
-              ),
-              itemCount: _search_name.length,
-              itemBuilder: (context, int index) {
-
-                print("....................................................  ${_search_name.length}");
-
-                return InkWell(
-                  */ /*  onTap: () {
-                          Navigator.of(context).push(new MaterialPageRoute(
-                              builder: (context) => ProductDiscription(
-                                child: "Products",
-                                image: _products_list[index].image,
-                                name: _products_list[index].name,
-                                id: _products_list[index].id,
-                                price: _products_list[index].price,
-                                previous_price:
-                                _products_list[index].previous_price,
-                                discreption:
-                                _products_list[index].description,
-                                rating: _products_list[index].rating,
-                                catagory_id:
-                                _products_list[index].categoryId,
-                              )));
-                        },*/ /*
-                  child: Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black12,
-                                spreadRadius: 1,
-                                blurRadius: 1)
-                          ]),
-                      child: Column(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 2,
-                            child: new Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                        _search_image[index]),
-                                    fit: BoxFit.cover),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment:
-                                CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        "${_search_name[index]}",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16,
-                                            fontWeight:
-                                            FontWeight.bold),
-                                      ),
-                                      Container(
-                                        child: StarRating(
-                                            rating: double.parse("3"),
-                                            spaceBetween: 0.0,
-                                            starConfig: StarConfig(
-                                              fillColor: Colors.yellow,
-                                              size: 15,
-
-                                              // other props
-                                            )),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .spaceAround,
-                                        children: <Widget>[
-                                          Text(
-                                            "\$${_search_price[index]}",
-                                            style: TextStyle(
-                                                color: Colors.orange,
-                                                fontSize: 20,
-                                                fontWeight:
-                                                FontWeight.bold),
-                                          ),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            " \$${_search_previous_price[index]}",
-                                            style: TextStyle(
-                                              decoration: TextDecoration
-                                                  .lineThrough,
-                                              decorationColor:
-                                              Colors.black,
-                                              decorationStyle:
-                                              TextDecorationStyle
-                                                  .solid,
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  Icon(Icons.add_shopping_cart),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              }),
-     ),
-   );
-
-  }*/
 }

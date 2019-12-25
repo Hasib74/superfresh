@@ -52,10 +52,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
 
   @override
   Widget build(BuildContext context) {
-    print("Priceeeee  ${widget.price}");
 
-    print("Catagory id   ${widget.catagory_id}");
-    print("product   id   ${widget.id}");
     return Scaffold(
       backgroundColor: Common.background_color,
       body: Stack(
@@ -124,26 +121,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
 
                   favoutie();
 
-                  /*   Common.gmail != null
-                        ? StreamBuilder(
-                            stream: FirebaseDatabase.instance
-                                .reference()
-                                .child(Common.user)
-                                .child(Common.gmail.replaceAll(".", ""))
-                                .child(Common.basic_info)
-                                .child("login")
-                                .onValue,
-                            builder: (context, snapshot) {
-                              if (snapshot.data != null ||
-                                  snapshot.data.snapshot.value != null) {
-                                if (snapshot.data.snapshot.value == "true") {
-                                  print("Clicked.....");
 
-
-                                }
-                              }
-                            })
-                        : print("notttt");*/
                 },
                 child: Common.gmail != null
                     ? StreamBuilder(
@@ -273,108 +251,23 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                         .child(Common.gmail.replaceAll(".", ""))
                         .onValue,
                     builder: (context, snapshot) {
-                      List<String> _id = new List();
 
-                      List<String> _child_list = new List();
-                      var productChartBefor = 0;
 
-                      if (snapshot.data.snapshot.value == null) {
-                        return Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Common.orange_color,
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
-                              onTap: () {
-                                _add_to_chart();
-                              },
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.add_shopping_cart,
-                                    color: Colors.white,
-                                  ),
-                                  Text(
-                                    " Add To Cart ",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      } else {
-                        Map<dynamic, dynamic> _chart =
-                            snapshot.data.snapshot.value;
+                      if(snapshot.data==null){
 
-                        _chart.forEach((k, v) {
-                          print("Valueeeee  ${v}");
-                          _id.add(v["id"]);
+                        return Container();
+                      }else{
+                        List<String> _id = new List();
 
-                          _child_list.add(v["child"]);
-                        });
+                        List<String> _child_list = new List();
+                        var productChartBefor = 0;
 
-                        /* for (int i = 0; i < _chart.length; i++) {
-                          if (_chart[i] != null) {
-
-                            print("${_chart[i]["id"] }         =====             ${widget.id}");
-
-                            if (_chart[i]["id"] == widget.id && widget.child == _chart[i]["child"]) {
-                              productChartBefor = 1;
-                            }
-                          }
-                        }
-*/
-                        for (int i = 0; i < _id.length; i++) {
-                          print(
-                              "Child.........................  ${_child_list[i]}  ${widget.child} ==  ${_id[i]} ${widget.id} ");
-
-                          if (_id[i] == widget.id &&
-                              widget.child == _child_list[i]) {
-                            productChartBefor = 1;
-                          }
-                        }
-                        if (productChartBefor == 1) {
-                          return Opacity(
-                            opacity: 0.6,
-                            child: Container(
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: Common.orange_color,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.add_shopping_cart,
-                                      color: Colors.white,
-                                    ),
-                                    Text(
-                                      " Add To Cart ",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        } else {
+                        if (snapshot.data.snapshot.value == null) {
                           return Container(
                             height: 50,
                             decoration: BoxDecoration(
                               color: Common.orange_color,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -399,8 +292,93 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                               ),
                             ),
                           );
+                        } else {
+                          Map<dynamic, dynamic> _chart =
+                              snapshot.data.snapshot.value;
+
+                          _chart.forEach((k, v) {
+                            print("Valueeeee  ${v}");
+                            _id.add(v["id"]);
+
+                            _child_list.add(v["child"]);
+                          });
+
+
+                          for (int i = 0; i < _id.length; i++) {
+                            print(
+                                "Child.........................  ${_child_list[i]}  ${widget.child} ==  ${_id[i]} ${widget.id} ");
+
+                            if (_id[i] == widget.id &&
+                                widget.child == _child_list[i]) {
+                              productChartBefor = 1;
+                            }
+                          }
+                          if (productChartBefor == 1) {
+                            return Opacity(
+                              opacity: 0.6,
+                              child: Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: Common.orange_color,
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.add_shopping_cart,
+                                        color: Colors.white,
+                                      ),
+                                      Text(
+                                        " Add To Cart ",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            return Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Common.orange_color,
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(5)),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    _add_to_chart();
+                                  },
+                                  child: Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.add_shopping_cart,
+                                        color: Colors.white,
+                                      ),
+                                      Text(
+                                        " Add To Cart ",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
                         }
+
+
                       }
+
                     })
                 : Container(
                     height: 50,
@@ -501,9 +479,9 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                 .child("Comments")
                 .onValue,
             builder: (context, snp) {
-              print("Indexxxx  ${snp.data.snapshot.value}");
 
-              if (snp.data == null) {
+
+              if (snp.data == null || snp.data.snapshot==null || snp.data.snapshot.value==null) {
                 return Container();
               } else {
                 Map<dynamic, dynamic> _comments = snp.data.snapshot.value;
@@ -660,7 +638,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                 print("Valueeeee  ${v}");
                 _id.add(v["id"]);
 
-                _child_id.add(k);
+                _child_id.add(v["child"]);
               });
 
               /*   for (int i = 0; i < _chart.length; i++) {
@@ -675,7 +653,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
               }*/
 
               for (int i = 0; i < _id.length; i++) {
-                if (_id[i] == widget.id) {
+                if (_id[i] == widget.id   && _child_id[i] ==widget.child ) {
                   productChartBefor = 1;
                 }
               }

@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:417002954934:android:ac9a782561181897d58617",
         "android_client_info": {
-          "package_name": "com.monu.supper_fresh_stores"
+          "package_name": "com.colorbangla.supper_fresh_stores"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "417002954934-he7qmjodq07pqlo4rpgvi44tibibmi70.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.monu.supper_fresh_stores",
+            "package_name": "com.colorbangla.supper_fresh_stores",
             "certificate_hash": "4ec92a5b05b7528bbb3bdbb0d1193e659d035baa"
           }
         },
