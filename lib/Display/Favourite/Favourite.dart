@@ -49,7 +49,7 @@ class _FavouriteState extends State<Favourite> {
 
 
 
-                    if(snapshot.data==null){
+                    if(snapshot.data==null  ||snapshot.data.snapshot.value==null){
                       return Container();
 
                     }else{

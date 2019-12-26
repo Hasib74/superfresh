@@ -8,6 +8,7 @@ import 'package:supper_fresh_stores/Display/ProductDiscription.dart';
 import 'package:supper_fresh_stores/Model/Banner.dart';
 import 'package:supper_fresh_stores/Model/Comment.dart';
 import 'package:supper_fresh_stores/Model/Popular.dart';
+import 'package:supper_fresh_stores/Model/Product.dart';
 
 class Home extends StatefulWidget {
   final Function(int) chnage_to_list;
@@ -22,9 +23,9 @@ class _HomeState extends State<Home> {
   String _prev_search_text = "";
   String _search_text = "";
 
-  List<Popular> _popular_list = new List();
+  List<Product> _popular_list = new List();
 
-  List<Popular> _search_popular_list = new List();
+  List<Product> _search_popular_list = new List();
 
   @override
   void initState() {
@@ -92,15 +93,21 @@ class _HomeState extends State<Home> {
                   description: v["description"],
                   rating: v["rating"],
                   id: k.toString(),
-                  catagory_id: v["id"]));
+                  catagory_id: v["catagory_id"]));
             });
 
             return CarouselSlider(
               height: 150,
               items: _banner_list.map((item) {
+
+
+               // print(item.price);
                 return Builder(builder: (BuildContext context) {
                   return InkWell(
                     onTap: () {
+
+
+                      print("Catagory idddddddddddddddd  ${item.catagory_id}");
                       Navigator.of(context).push(new MaterialPageRoute(
                           builder: (context) => ProductDiscription(
                                 image: item.image,
@@ -337,7 +344,7 @@ class _HomeState extends State<Home> {
                       image: v["image"],
                       price: v["price"],
                       previous_price: v["previous_price"],
-                      categoryId: v["categoryId"],
+                      categoryId: v["catagory_id"],
                       description: v["description"],
                       discount: v["discount"]));
 
@@ -381,11 +388,11 @@ class _HomeState extends State<Home> {
                               children: <Widget>[
                                 _product_image_catagoryName_rating_price(
                                     context, index, _popular_list[index]),
-                                _offer(_popular_list[index]),
-                                _add(_popular_list[index]),
-                                Common.gmail != null
-                                    ? _fav(_popular_list[index], _key[index])
-                                    : Positioned(
+                                  _offer(_popular_list[index]),
+                                  _add(_popular_list[index]),
+                                  Common.gmail != null
+                                      ? _fav(_popular_list[index], _key[index])
+                                      : Positioned(
                                         right: 10,
                                         top: 10,
                                         child: Opacity(
@@ -445,7 +452,7 @@ class _HomeState extends State<Home> {
                           .child(popular.categoryId)
                           .onValue,
                       builder: (context, snapshot) {
-                        if (snapshot.data == null) {
+                        if ( snapshot.data == null || snapshot.data.snapshot.value == null) {
                           return Container();
                         } else {
                           return Text(
@@ -651,6 +658,9 @@ class _HomeState extends State<Home> {
                 _search_popular_list.clear();
 
                 for (int i = 0; i < _popular_list.length; i++) {
+
+                  print("Product listtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt   ${_popular_list[i].name}");
+
                   if (_popular_list[i].name.toString().contains(_search_text)) {
                     _search_popular_list.add(_popular_list[i]);
                   }
@@ -804,15 +814,15 @@ class _HomeState extends State<Home> {
 
     FirebaseDatabase.instance
         .reference()
-        .child(Common.popular)
+        .child(Common.products)
         .once()
         .then((v) {
       if (v.value != null) {
         Map<dynamic, dynamic> popular = v.value;
 
         popular.forEach((k, v) {
-          _popular_list.add(new Popular(
-              categoryId: v["categoryId"],
+          _popular_list.add(new Product(
+              categoryId: v["catagory_id"],
               description: v["description"],
               discount: ["discount"],
               image: v["image"],

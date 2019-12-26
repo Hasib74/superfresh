@@ -45,6 +45,10 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
     // TODO: implement initState
     super.initState();
 
+
+
+   // print("Priceeeeeeeeeeeeeeee  ${widget.price}");
+
     setState(() {
       price = widget.price;
     });
@@ -183,7 +187,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                 children: <Widget>[
                   Container(
                     child: StarRating(
-                        rating: double.parse(widget.rating.toString()),
+                        rating: widget.rating !=null ?  double.parse(widget.rating.toString()) : 0,
                         spaceBetween: 0.0,
                         starConfig: StarConfig(
                           fillColor: Colors.yellow,
@@ -196,7 +200,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                     width: 15,
                   ),
                   Text(
-                    "${widget.rating}",
+                    "${widget.rating !=null ? widget.rating  : 0}",
                     style: TextStyle(
                         color: Color(0xffB4B3B1), fontWeight: FontWeight.bold),
                   ),
@@ -236,7 +240,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
         child: Row(
           children: <Widget>[
             Text(
-              "    \$ ${int.parse(quantity.toString()) == 0 ? 1 : int.parse(quantity.toString()) * double.parse(widget.price)}",
+              "    \$ ${int.parse(quantity.toString()) == 0 ? 1 : int.parse(quantity.toString()) * double.parse(widget.price.toString())}",
               style: TextStyle(
                   color: Common.orange_color,
                   fontSize: 17,
@@ -305,9 +309,9 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
 
 
                           for (int i = 0; i < _id.length; i++) {
-                            print(
+                         /*   print(
                                 "Child.........................  ${_child_list[i]}  ${widget.child} ==  ${_id[i]} ${widget.id} ");
-
+*/
                             if (_id[i] == widget.id &&
                                 widget.child == _child_list[i]) {
                               productChartBefor = 1;
@@ -602,12 +606,19 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
               .once()
               .then((v) {
             if (v.value == null) {
+
+
+
+
+
               FirebaseDatabase.instance
                   .reference()
                   .child(Common.chart)
                   .child(gmail.replaceAll(".", ""))
                   .push()
                   .set({
+
+              //  "catagory_id":widget.catagory_id
                 "id": widget.id,
                 "image": widget.image,
                 "name": widget.name,
@@ -659,6 +670,10 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
               }
 
               if (productChartBefor == 0) {
+
+
+
+                print("Category               id  ${widget.catagory_id}");
                 Common.get_user().then((gmail) {
                   if (gmail != null) {
                     FirebaseDatabase.instance

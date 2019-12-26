@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:supper_fresh_stores/Common.dart';
 import 'package:supper_fresh_stores/Display/HomePlate.dart';
+import 'package:supper_fresh_stores/MyStore/MyStore.dart';
 
 class NavigationDrawer extends StatelessWidget {
   // final key;
@@ -50,8 +51,9 @@ class NavigationDrawer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-
-                  SizedBox(height: 30,),
+                  SizedBox(
+                    height: 30,
+                  ),
                   Center(
                       child: Image(
                     image: AssetImage(
@@ -190,7 +192,7 @@ class NavigationDrawer extends StatelessWidget {
                         SizedBox(
                           width: 10,
                         ),
-                        Text("Order",
+                        Text("Products",
                             style: TextStyle(
                                 color: Common.orange_color,
                                 fontSize: 18,
@@ -293,12 +295,23 @@ class NavigationDrawer extends StatelessWidget {
                       SizedBox(
                         width: 10,
                       ),
-                      Text("My Store",
-                          style: TextStyle(
-                              color: Common.orange_color,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 0.8)),
+                  InkWell(
+                    onTap: (){
+
+                      closeDrawer();
+
+                      Navigator.of(context).push(new MaterialPageRoute(builder: (context)=>MyStore()));
+
+
+                    },
+
+                     child: new   Text("My Store",
+                            style: TextStyle(
+                                color: Common.orange_color,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.8)),
+                   ),
                     ],
                   ),
                   SizedBox(

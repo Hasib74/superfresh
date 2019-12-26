@@ -21,13 +21,56 @@ class _AllProductsState extends State<AllProducts>
 
   ScrollController _scrollController = new ScrollController();
 
+  bool isload = false;
+
+  List<String> _tem_category=List();
+  var seleted_postion=0;
+
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    _tabController =
-        new TabController(length: 4, vsync: this, initialIndex: widget.index);
+
+    _length().then((v) {
+      // print("Valueeeeeeeeeeeeeeeeeeeeeeee  ${v}");
+
+      if (v != null) {
+        setState(() {
+          isload = true;
+
+
+
+          if(widget.index==null){
+
+
+            _tabController = new TabController(
+                length: v.length, vsync: this,initialIndex: 0);
+          }else{
+
+
+            _tabController = new TabController(
+                length: v.length, vsync: this,initialIndex: widget.index);
+
+          }
+
+
+
+          print(v[0]);
+
+          setState(() {
+
+            _tem_category=v;
+
+          });
+
+
+        });
+      }
+    });
+
+
   }
 
   //var possition;
@@ -37,39 +80,41 @@ class _AllProductsState extends State<AllProducts>
   String _prev_search_text = "";
   String _search_text = "";
 
-
-
   @override
   Widget build(BuildContext context) {
     print("index is  ${widget.index}");
 
-    _scrollController.addListener(() {
-      print(_scrollController.position.userScrollDirection);
 
-      if (_scrollController.position.userScrollDirection.toString() ==
-          "ScrollDirection.forward") {
-        print("forward");
 
-        setState(() {
-          scroll_direction = "forward";
-        });
-      } else {
-        print("reverse");
 
-        setState(() {
-          scroll_direction = "reverse";
-        });
-      }
-    });
+
+    if (isload == true) {
+      _scrollController.addListener(() {
+        print(_scrollController.position.userScrollDirection);
+
+        if (_scrollController.position.userScrollDirection.toString() ==
+            "ScrollDirection.forward") {
+          print("forward");
+
+          setState(() {
+            scroll_direction = "forward";
+          });
+        } else {
+          print("reverse");
+
+          setState(() {
+            scroll_direction = "reverse";
+          });
+        }
+      });
+    }
 
     return Scaffold(
       backgroundColor: Color(0xffF6F6F6),
       body: Stack(
         children: <Widget>[
-          tabs(),
-          list_view(),
-
-
+          isload ? tabs() : Container(),
+          isload ? list_view() : Container(),
         ],
       ),
     );
@@ -109,7 +154,7 @@ class _AllProductsState extends State<AllProducts>
                     isScrollable: true,
                     onTap: (possition) {
                       setState(() {
-                        possition = possition;
+                        seleted_postion = possition;
                       });
                     },
                     tabs: _catagory_list.map<Widget>((catagory) {
@@ -240,7 +285,7 @@ class _AllProductsState extends State<AllProducts>
               List<Product> _products_list = new List();
 
               product.forEach((k, v) {
-                if (v["categoryId"] == "0${_tabController.index + 1}") {
+                if (v["catagory_id"] == _tem_category[seleted_postion]) {
                   _products_list.add(
                     new Product(
                         name: v["name"],
@@ -293,10 +338,7 @@ class _AllProductsState extends State<AllProducts>
                       _search_id.add(_products_list[i].id);
                     }
                   }
-                } else {
-
-
-                }
+                } else {}
               }
 
               return _search_text == ""
@@ -377,10 +419,10 @@ class _AllProductsState extends State<AllProducts>
                                               ),
                                               Container(
                                                 child: StarRating(
-                                                    rating: double.parse(
+                                                    rating:_products_list[index].rating != null ?  double.parse(
                                                         _products_list[index]
                                                             .rating
-                                                            .toString()),
+                                                            .toString()):0,
                                                     spaceBetween: 0.0,
                                                     starConfig: StarConfig(
                                                       fillColor: Colors.yellow,
@@ -441,7 +483,6 @@ class _AllProductsState extends State<AllProducts>
                       ),
                       itemCount: _search_price.length,
                       itemBuilder: (context, int index) {
-
                         return InkWell(
                           onTap: () {
                             Navigator.of(context).push(new MaterialPageRoute(
@@ -565,5 +606,33 @@ class _AllProductsState extends State<AllProducts>
     );
   }
 
+  Future< List<String>> _length() async {
 
+
+    List<String> _temp_list = List();
+
+    await FirebaseDatabase.instance
+        .reference()
+        .child(Common.category)
+        .once()
+        .then((v) {
+      //    length = v.value.length;
+
+
+
+
+      Map<dynamic, dynamic> catagory = v.value;
+
+      catagory.forEach((k, v) {
+        _temp_list
+            .add(k);
+      });
+
+
+
+
+    });
+
+    return _temp_list;
+  }
 }

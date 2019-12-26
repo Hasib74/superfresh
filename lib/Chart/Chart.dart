@@ -16,44 +16,35 @@ class _ChartsState extends State<Charts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
         backgroundColor: Color(0xffF6F6F6),
-
         appBar: AppBar(
-        backgroundColor: Color(0xffF6F6F6),
-
-
-        elevation: 0.0,
-        leading: InkWell(
-
-            onTap: (){
-
-              Navigator.of(context).pop();
-
-            },
-            child: new Icon(Icons.arrow_back,color: Colors.black87,)),
-        
-        
-      ),
-      
-      body:  Common.gmail!=null ?  Stack(
-        children: <Widget>[
-          
-          
-          
-          
-          Padding(
-            padding: EdgeInsets.only(bottom: 60),
-            child: list(),
-          ),
-          bottom_bar()
-        ],
-      ):Center(
-        
-        child: Text("Please Sing up or log in first",style: TextStyle(color: Common.orange_color),),
-        
-      )
-    );
+          backgroundColor: Color(0xffF6F6F6),
+          elevation: 0.0,
+          leading: InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: new Icon(
+                Icons.arrow_back,
+                color: Colors.black87,
+              )),
+        ),
+        body: Common.gmail != null
+            ? Stack(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 60),
+                    child: list(),
+                  ),
+                  bottom_bar()
+                ],
+              )
+            : Center(
+                child: Text(
+                  "Please Sing up or log in first",
+                  style: TextStyle(color: Common.orange_color),
+                ),
+              ));
   }
 
   _image_display(image) {
@@ -83,10 +74,10 @@ class _ChartsState extends State<Charts> {
                 .child(Common.gmail.replaceAll(".", ""))
                 .onValue,
             builder: (context, snapshot) {
+              //   print("Dattttttttttttttttttttttttttttttttttaaa  ${snapshot.data.snapshot.value}");
 
-           //   print("Dattttttttttttttttttttttttttttttttttaaa  ${snapshot.data.snapshot.value}");
-
-              if (snapshot.data.snapshot.value == null  ||  snapshot.data==null) {
+              if (snapshot.data.snapshot.value == null ||
+                  snapshot.data == null) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -160,7 +151,9 @@ class _ChartsState extends State<Charts> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          _order();
+                        },
                         child: Container(
                             height: 50,
                             decoration: BoxDecoration(
@@ -197,22 +190,19 @@ class _ChartsState extends State<Charts> {
             .child(Common.gmail.replaceAll(".", ""))
             .onValue,
         builder: (context, snp) {
+          // print("Snapppppppppppppppppppppppppppppppppppp  ${snp.data}");
 
+          //  print("Gmaillllll  ${Common.gmail}");
 
-         // print("Snapppppppppppppppppppppppppppppppppppp  ${snp.data}");
+          //   print("Snapshot data...................  ${snp.data.snapshot.value}");
 
-
-        //  print("Gmaillllll  ${Common.gmail}");
-
-
-       //   print("Snapshot data...................  ${snp.data.snapshot.value}");
-
-          if (snp.data.snapshot.value == null  || snp.data==null || snp.hasData==false || snp==null || snp.data.snapshot==null) {
+          if (snp.data.snapshot.value == null ||
+              snp.data == null ||
+              snp.hasData == false ||
+              snp == null ||
+              snp.data.snapshot == null) {
             return Container();
           } else {
-
-
-
             List<String> _price = new List();
             List<String> _catagory_id = new List();
             List<String> _child = new List();
@@ -229,18 +219,12 @@ class _ChartsState extends State<Charts> {
 
             List<String> _buy_price = new List();
 
+            Map<dynamic, dynamic> _chart = snp.data.snapshot.value;
 
-            Map<dynamic,dynamic> _chart = snp.data.snapshot.value;
-
-
-            _chart.forEach((k,v){
-
-
+            _chart.forEach((k, v) {
               print("Keyyyy  ${k}");
 
-
               print("Valueee  ${v}");
-
 
               _price.add(v["price"].toString());
               _catagory_id.add(v["catagory_id"].toString());
@@ -254,11 +238,9 @@ class _ChartsState extends State<Charts> {
               _buy_price.add(v["buy_price"].toString());
 
               _key.add(k);
-
-
             });
 
- /*           Map<dynamic,dynamic> _chart = snp.data.snapshot.value;
+            /*           Map<dynamic,dynamic> _chart = snp.data.snapshot.value;
 
 
 
@@ -299,7 +281,7 @@ class _ChartsState extends State<Charts> {
               _key.add(k);
             });*/
 
-        //   return Container();
+            //   return Container();
 
             //  _total_price.clear();
 
@@ -356,7 +338,9 @@ class _ChartsState extends State<Charts> {
                                         return Container();
                                       } else {
                                         return Text(
-                                            snapshot.data.snapshot.value==null? "" : snapshot.data.snapshot.value,
+                                            snapshot.data.snapshot.value == null
+                                                ? ""
+                                                : snapshot.data.snapshot.value,
                                             style: TextStyle(
                                                 color: Color(0xff868686),
                                                 fontSize: 13,
@@ -402,7 +386,8 @@ class _ChartsState extends State<Charts> {
                                 ),
 
                                 count(
-                                  quantity: int.parse(_quantity[index].toString()),
+                                  quantity:
+                                      int.parse(_quantity[index].toString()),
 
                                   ongetQuantity: ((count) {
                                     FirebaseDatabase.instance
@@ -434,6 +419,41 @@ class _ChartsState extends State<Charts> {
                 });
           }
         });
+  }
+
+  void _order() {
+    FirebaseDatabase.instance
+        .reference()
+        .child(Common.chart)
+        .child(Common.gmail.replaceAll(".", ""))
+        .once()
+        .then((v) {
+      Map<dynamic, dynamic> _carty_list = v.value;
+
+      _carty_list.forEach((k, v) {
+        FirebaseDatabase.instance
+            .reference()
+            .child(Common.order)
+            .child(Common.gmail.replaceAll(".", ""))
+            .push()
+            .set({
+          "buy_price": v["buy_price"],
+          "catagory_id": v["catagory_id"],
+          "child": v["child"],
+          "discription": v["discription"],
+          "image": v["image"],
+          "name": v["name"],
+          "price": v["price"],
+          "quantiry": v["quantiry"],
+          "rating": v["rating"],
+        }).catchError((err) => print(err)).then((_){
+
+          FirebaseDatabase.instance.reference().child(Common.chart).child(Common.gmail.replaceAll(".", "")).child(k).remove();
+
+
+        });
+      });
+    });
   }
 }
 
