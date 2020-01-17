@@ -77,7 +77,7 @@ class _HomeState extends State<Home> {
         builder: (context, snapshot) {
           List<BannerM> _banner_list = new List();
 
-          if (snapshot.data == null) {
+          if (snapshot.data == null || snapshot.data.snapshot.value == null ) {
             return Container(
               height: 150,
             );
@@ -99,14 +99,10 @@ class _HomeState extends State<Home> {
             return CarouselSlider(
               height: 150,
               items: _banner_list.map((item) {
-
-
-               // print(item.price);
+                // print(item.price);
                 return Builder(builder: (BuildContext context) {
                   return InkWell(
                     onTap: () {
-
-
                       print("Catagory idddddddddddddddd  ${item.catagory_id}");
                       Navigator.of(context).push(new MaterialPageRoute(
                           builder: (context) => ProductDiscription(
@@ -333,7 +329,8 @@ class _HomeState extends State<Home> {
               List<String> _key = new List();
               List<Popular> _popular_list = new List();
 
-              if (snapshot.data == null) {
+              if (snapshot.data == null ||
+                  snapshot.data.snapshot.value == null) {
                 return Container();
               } else {
                 Map<dynamic, dynamic> popular = snapshot.data.snapshot.value;
@@ -388,11 +385,11 @@ class _HomeState extends State<Home> {
                               children: <Widget>[
                                 _product_image_catagoryName_rating_price(
                                     context, index, _popular_list[index]),
-                                  _offer(_popular_list[index]),
-                                  _add(_popular_list[index]),
-                                  Common.gmail != null
-                                      ? _fav(_popular_list[index], _key[index])
-                                      : Positioned(
+                                _offer(_popular_list[index]),
+                                _add(_popular_list[index]),
+                                Common.gmail != null
+                                    ? _fav(_popular_list[index], _key[index])
+                                    : Positioned(
                                         right: 10,
                                         top: 10,
                                         child: Opacity(
@@ -452,7 +449,8 @@ class _HomeState extends State<Home> {
                           .child(popular.categoryId)
                           .onValue,
                       builder: (context, snapshot) {
-                        if ( snapshot.data == null || snapshot.data.snapshot.value == null) {
+                        if (snapshot.data == null ||
+                            snapshot.data.snapshot.value == null) {
                           return Container();
                         } else {
                           return Text(
@@ -658,8 +656,8 @@ class _HomeState extends State<Home> {
                 _search_popular_list.clear();
 
                 for (int i = 0; i < _popular_list.length; i++) {
-
-                  print("Product listtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt   ${_popular_list[i].name}");
+                  print(
+                      "Product listtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt   ${_popular_list[i].name}");
 
                   if (_popular_list[i].name.toString().contains(_search_text)) {
                     _search_popular_list.add(_popular_list[i]);

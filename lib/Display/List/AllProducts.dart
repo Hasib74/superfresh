@@ -23,15 +23,13 @@ class _AllProductsState extends State<AllProducts>
 
   bool isload = false;
 
-  List<String> _tem_category=List();
-  var seleted_postion=0;
-
+  List<String> _tem_category = List();
+  var seleted_postion = 0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
 
     _length().then((v) {
       // print("Valueeeeeeeeeeeeeeeeeeeeeeee  ${v}");
@@ -40,37 +38,22 @@ class _AllProductsState extends State<AllProducts>
         setState(() {
           isload = true;
 
-
-
-          if(widget.index==null){
-
-
+          if (widget.index == null) {
             _tabController = new TabController(
-                length: v.length, vsync: this,initialIndex: 0);
-          }else{
-
-
+                length: v.length, vsync: this, initialIndex: 0);
+          } else {
             _tabController = new TabController(
-                length: v.length, vsync: this,initialIndex: widget.index);
-
+                length: v.length, vsync: this, initialIndex: widget.index);
           }
-
-
 
           print(v[0]);
 
           setState(() {
-
-            _tem_category=v;
-
+            _tem_category = v;
           });
-
-
         });
       }
     });
-
-
   }
 
   //var possition;
@@ -83,10 +66,6 @@ class _AllProductsState extends State<AllProducts>
   @override
   Widget build(BuildContext context) {
     print("index is  ${widget.index}");
-
-
-
-
 
     if (isload == true) {
       _scrollController.addListener(() {
@@ -266,11 +245,16 @@ class _AllProductsState extends State<AllProducts>
               .child(Common.products)
               .onValue,
           builder: (context, snapshot) {
-            if (snapshot.data == null) {
+            if (snapshot.data == null || snapshot.data.snapshot.value == null) {
+              // print("Valueeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee  ${snapshot.data.snapshot.value}");
+
               return Center(
-                child: CircularProgressIndicator(),
+                child: Container(),
               );
             } else {
+              print(
+                  "Valueeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee  ${snapshot.data.snapshot.value}");
+
               List _search_name = new List();
               List _search_image = new List();
               List _search_price = new List();
@@ -419,10 +403,16 @@ class _AllProductsState extends State<AllProducts>
                                               ),
                                               Container(
                                                 child: StarRating(
-                                                    rating:_products_list[index].rating != null ?  double.parse(
+                                                    rating:
                                                         _products_list[index]
-                                                            .rating
-                                                            .toString()):0,
+                                                                    .rating !=
+                                                                null
+                                                            ? double.parse(
+                                                                _products_list[
+                                                                        index]
+                                                                    .rating
+                                                                    .toString())
+                                                            : 0,
                                                     spaceBetween: 0.0,
                                                     starConfig: StarConfig(
                                                       fillColor: Colors.yellow,
@@ -606,9 +596,7 @@ class _AllProductsState extends State<AllProducts>
     );
   }
 
-  Future< List<String>> _length() async {
-
-
+  Future<List<String>> _length() async {
     List<String> _temp_list = List();
 
     await FirebaseDatabase.instance
@@ -618,19 +606,11 @@ class _AllProductsState extends State<AllProducts>
         .then((v) {
       //    length = v.value.length;
 
-
-
-
       Map<dynamic, dynamic> catagory = v.value;
 
       catagory.forEach((k, v) {
-        _temp_list
-            .add(k);
+        _temp_list.add(k);
       });
-
-
-
-
     });
 
     return _temp_list;
