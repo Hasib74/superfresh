@@ -1,13 +1,16 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:supper_fresh_stores/Chart/Chart.dart';
 import 'package:supper_fresh_stores/Common.dart';
+import 'package:supper_fresh_stores/Display/Category/AllProducts.dart';
 import 'package:supper_fresh_stores/Display/Favourite/Favourite.dart';
 import 'package:supper_fresh_stores/Display/Home/Home.dart';
-import 'package:supper_fresh_stores/Display/List/AllProducts.dart';
 import 'package:supper_fresh_stores/Display/Profile/Profile.dart';
 import 'package:supper_fresh_stores/Drawer/NaviationDrawer.dart';
 
@@ -28,6 +31,92 @@ class _HomePlateState extends State<HomePlate> {
   int variable = 0;
 
   GlobalKey<ScaffoldState> _globalKey = new GlobalKey();
+
+  FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      new FlutterLocalNotificationsPlugin();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+
+
+    registerNotification();
+    configLocalNotification();
+
+  }
+
+  void configLocalNotification() {
+    var initializationSettingsAndroid =
+        new AndroidInitializationSettings('app_icon');
+    var initializationSettingsIOS = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(
+        initializationSettingsAndroid, initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  void registerNotification() {
+
+
+
+    firebaseMessaging.requestNotificationPermissions();
+
+
+    firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
+      print('onMessage: $message');
+
+
+     // if()
+
+      showNotification(message['data']);
+
+
+
+      return;
+    }, onResume: (Map<String, dynamic> message) {
+      print('onResume: $message');
+      return;
+    }, onLaunch: (Map<String, dynamic> message) {
+      print('onLaunch: $message');
+      return;
+    });
+
+
+
+    firebaseMessaging.getToken().then((token) {
+      print('token: $token');
+
+      FirebaseDatabase.instance
+          .reference()
+          .child("Token")
+          .child(Common.gmail.replaceAll(".", ""))
+          .set({"token": token}).then((_) {
+        print("Token Update");
+      }).catchError((err) => print(err));
+    }).catchError((err) {
+      print(err);
+    });
+  }
+
+  void showNotification(message) async {
+    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+      Platform.isAndroid ? 'com.dfa.flutterchatdemo': 'com.duytq.flutterchatdemo',
+      'Flutter chat demo',
+      'your channel description',
+      playSound: true,
+      enableVibration: true,
+      importance: Importance.Max,
+      priority: Priority.High,
+    );
+    var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+    var platformChannelSpecifics =
+    new NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+        0, message['title'].toString(), message['body'].toString(), platformChannelSpecifics,
+        payload: json.encode(message));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +142,11 @@ class _HomePlateState extends State<HomePlate> {
             drawer: NavigationDrawer(HomePlate().key, close_drawer, fun_fav,
                 fun_home, fun_profile, fun_chart, fun_allproduct),
             appBar: new AppBar(
-              
-              title: Text("Super fresh",style: TextStyle(color: Color(0xffFF5126) , fontWeight: FontWeight.bold ),),
+              title: Text(
+                "Super fresh",
+                style: TextStyle(
+                    color: Color(0xffFF5126), fontWeight: FontWeight.bold),
+              ),
               centerTitle: true,
               elevation: 0.0,
               backgroundColor: Color(0xffF6F6F6),

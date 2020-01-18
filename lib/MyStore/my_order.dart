@@ -16,10 +16,7 @@ class _MyOrderState extends State<MyOrder> {
     // TODO: implement initState
     super.initState();
 
-
     if (Common.gmail != null) {
-
-
       print("Gmail.....................   ${Common.gmail}");
 
       FirebaseDatabase.instance
@@ -31,7 +28,6 @@ class _MyOrderState extends State<MyOrder> {
         Map<dynamic, dynamic> _order = value.value;
 
         _order.forEach((k, v) {
-
           print("Keyyyyyyyyyyyyyyy   ${k}");
 
           print("Valueeeeeeeeeeeeeeeeeeee  ${v}");
@@ -59,8 +55,8 @@ class _MyOrderState extends State<MyOrder> {
     return _order_list != null
         ? list()
         : Center(
-      child: Text("You have no order"),
-    );
+            child: Text("You have no order"),
+          );
   }
 
   list() {
@@ -135,60 +131,6 @@ class _MyOrderState extends State<MyOrder> {
                         Text("Quantity : ${_order_list[index].quantiry}"),
                       ],
                     ),
-                    /*   Spacer(),*/
-                    // _delete_count(quantity,_quantity,index),
-
-                    //TODO image delete button +count
-                    /* Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        InkWell(
-                            onTap: () {
-                              FirebaseDatabase.instance
-                                  .reference()
-                                  .child(Common.chart)
-                                  .child(
-                                  Common.gmail.replaceAll(".", ""))
-                                  .child(_key[index])
-                                  .remove()
-                                  .then((_) {
-                                print("Deleted successfully...");
-                              });
-                            },
-                            child: Icon(Icons.delete_outline)),
-
-                        //Spacer(),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        count(
-                          quantity:
-                          int.parse(_quantity[index].toString()),
-
-                          ongetQuantity: ((count) {
-                            FirebaseDatabase.instance
-                                .reference()
-                                .child(Common.chart)
-                                .child(Common.gmail.replaceAll(".", ""))
-                                .child(_key[index])
-                                .update({
-                              "quantiry": count,
-                              "price":
-                              (double.parse(_buy_price[index]) *
-                                  count)
-                                  .toString()
-                            }).then((_) {
-                              print("Updated");
-                            });
-                          }),
-
-                          // key: Charts().key,
-                        ),
-                        //  Counter(),
-                      ],
-                    ),*/
                   ],
                 ),
               ),

@@ -1,7 +1,12 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:supper_fresh_stores/Common.dart';
 import 'package:supper_fresh_stores/Library/Counter.dart';
+import 'package:http/http.dart' as http;
 
 class Charts extends StatefulWidget {
   @override
@@ -12,6 +17,32 @@ class _ChartsState extends State<Charts> {
   //var quantity;
 
   //var total_price=0.0;
+
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+
+  var serverToken =
+      "AAAAYRdQILY:APA91bFzhd7EoGvrXC8Z6-FrbtAEvvSwzb0MtDZQrUzwkzsFmRp94cK_J0ChBWBMSvB309n-CcfsckMPemjoVrQopmb45SVgguUOupj3FeCMswEmmzBf3zv20adhZmirCmGOE5JgdxZt";
+
+  String _name;
+  String _address;
+
+  String _image;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _getUserDetails().then((_user_list) {
+      setState(() {
+        _name = _user_list[0];
+
+        _address = _user_list[1];
+
+        _image = _user_list[2];
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -437,25 +468,99 @@ class _ChartsState extends State<Charts> {
             .child(Common.gmail.replaceAll(".", ""))
             .push()
             .set({
-          "buy_price": v["buy_price"],
-          "catagory_id": v["catagory_id"],
-          "child": v["child"],
-          "discription": v["discription"],
-          "image": v["image"],
-          "name": v["name"],
-          "price": v["price"],
-          "quantiry": v["quantiry"],
-          "rating": v["rating"],
-        }).catchError((err) => print(err)).then((_){
+              "buy_price": v["buy_price"],
+              "catagory_id": v["catagory_id"],
+              "child": v["child"],
+              "discription": v["discription"],
+              "image": v["image"],
+              "name": v["name"],
+              "price": v["price"],
+              "quantiry": v["quantiry"],
+              "rating": v["rating"],
+            })
+            .catchError((err) => print(err))
+            .then((_) {
+              FirebaseDatabase.instance
+                  .reference()
+                  .child(Common.chart)
+                  .child(Common.gmail.replaceAll(".", ""))
+                  .child(k)
+                  .remove();
 
-          FirebaseDatabase.instance.reference().child(Common.chart).child(Common.gmail.replaceAll(".", "")).child(k).remove();
+              //_sendNotifictation();
 
-
-        });
+              sendAndRetrieveMessage();
+            });
       });
     });
   }
+
+  Future<Map<String, dynamic>> sendAndRetrieveMessage() async {
+    await firebaseMessaging.requestNotificationPermissions(
+      const IosNotificationSettings(
+          sound: true, badge: true, alert: true, provisional: false),
+    );
+
+    await http.post(
+      'https://fcm.googleapis.com/fcm/send',
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'key=$serverToken',
+      },
+      body: jsonEncode(
+        <String, dynamic>{
+//          'notification': <String, dynamic>{
+//            'body': 'this is a body',
+//            'title': 'this is a title'
+//          },
+          'priority': 'high',
+          'data': <String, dynamic>{
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'type': 'order_send',
+            'name': _name,
+            'address': _address,
+            'image': _image
+          },
+          'to': await firebaseMessaging.getToken(),
+        },
+      ),
+    );
+
+    final Completer<Map<String, dynamic>> completer =
+        Completer<Map<String, dynamic>>();
+
+    firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        completer.complete(message);
+      },
+    );
+
+    return completer.future;
+  }
+
+  Future<List<String>> _getUserDetails() async {
+    List<String> _user_list = new List();
+
+    FirebaseDatabase.instance
+        .reference()
+        .child(Common.user)
+        .child(Common.gmail)
+        .once()
+        .then((user) {
+      if (user.value != null) {
+        _user_list.add(user.value["name"]);
+
+        _user_list.add(user.value["address"]);
+
+        _user_list.add(user.value["Image"]);
+      }
+    });
+
+    return _user_list;
+  }
 }
+
+//Count library function create
 
 typedef getQuantity = int Function(int quantity);
 

@@ -295,23 +295,20 @@ class NavigationDrawer extends StatelessWidget {
                       SizedBox(
                         width: 10,
                       ),
-                  InkWell(
-                    onTap: (){
+                      InkWell(
+                        onTap: () {
+                          closeDrawer();
 
-                      closeDrawer();
-
-                      Navigator.of(context).push(new MaterialPageRoute(builder: (context)=>MyStore()));
-
-
-                    },
-
-                     child: new   Text("My Store",
+                          Navigator.of(context).push(new MaterialPageRoute(
+                              builder: (context) => MyStore()));
+                        },
+                        child: new Text("My Store",
                             style: TextStyle(
                                 color: Common.orange_color,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 0.8)),
-                   ),
+                      ),
                     ],
                   ),
                   SizedBox(

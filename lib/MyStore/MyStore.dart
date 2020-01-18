@@ -16,8 +16,7 @@ class _MyStoreState extends State<MyStore> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-
-       /* appBar: new AppBar(
+        /* appBar: new AppBar(
           
           leading: InkWell(onTap: (){
 
@@ -27,33 +26,28 @@ class _MyStoreState extends State<MyStore> {
           },  child:
           
         ),*/
-        
-        body: Column(
 
+        body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-
-           InkWell(
-
-             onTap: (){
-
-               Navigator.of(context).pop();
-
-             },
-
-               child: Padding(
-                 padding: const EdgeInsets.all(8.0),
-                 child: new  Icon(Icons.arrow_back,color: Colors.black38,),
-               )),
-
+            InkWell(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: new Icon(
+                    Icons.arrow_back,
+                    color: Colors.black38,
+                  ),
+                )),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 height: 30,
                 child: ListView(
-
-                 // shrinkWrap: true,
+                  // shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
                     Column(
@@ -65,7 +59,12 @@ class _MyStoreState extends State<MyStore> {
                 ),
               ),
             ),
-            Expanded(child: seltected_tab=="1"  ?  new MyOrder() : seltected_tab=="2" ? new ConfirmOrder() : ReceivedOrder() )
+            Expanded(
+                child: seltected_tab == "1"
+                    ? new MyOrder()
+                    : seltected_tab == "2"
+                        ? new ConfirmOrder()
+                        : ReceivedOrder())
           ],
         ),
       ),
