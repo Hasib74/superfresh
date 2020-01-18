@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -41,11 +42,8 @@ class _HomePlateState extends State<HomePlate> {
     // TODO: implement initState
     super.initState();
 
-
-
     registerNotification();
     configLocalNotification();
-
   }
 
   void configLocalNotification() {
@@ -58,21 +56,14 @@ class _HomePlateState extends State<HomePlate> {
   }
 
   void registerNotification() {
-
-
-
     firebaseMessaging.requestNotificationPermissions();
-
 
     firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
       print('onMessage: $message');
 
+      // if()
 
-     // if()
-
-      showNotification(message['data']);
-
-
+      showNotification(message['notification']);
 
       return;
     }, onResume: (Map<String, dynamic> message) {
@@ -82,8 +73,6 @@ class _HomePlateState extends State<HomePlate> {
       print('onLaunch: $message');
       return;
     });
-
-
 
     firebaseMessaging.getToken().then((token) {
       print('token: $token');
@@ -102,7 +91,9 @@ class _HomePlateState extends State<HomePlate> {
 
   void showNotification(message) async {
     var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
-      Platform.isAndroid ? 'com.dfa.flutterchatdemo': 'com.duytq.flutterchatdemo',
+      Platform.isAndroid
+          ? 'com.dfa.flutterchatdemo'
+          : 'com.duytq.flutterchatdemo',
       'Flutter chat demo',
       'your channel description',
       playSound: true,
@@ -111,10 +102,10 @@ class _HomePlateState extends State<HomePlate> {
       priority: Priority.High,
     );
     var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
-    var platformChannelSpecifics =
-    new NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-        0, message['title'].toString(), message['body'].toString(), platformChannelSpecifics,
+    var platformChannelSpecifics = new NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show( new Random().nextInt(1000), message['title'].toString(),
+        message['body'].toString(), platformChannelSpecifics,
         payload: json.encode(message));
   }
 

@@ -20,7 +20,10 @@ class _ChartsState extends State<Charts> {
 
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
 
-  var serverToken =
+  String adminToken =
+      "eblRbFMWGAM:APA91bFojyfOfROfsoS00oK0uj7iikVfCVxbUR41BVScUcjcryqKwtwm0wEL_oXI1m2S9fBIw828ega-y3JnxsipJo60hM43fKu1YJEtyJf39EnDGrek0QzDP-2mmpvkhdXYdbRi6XPw";
+
+  String serverToken =
       "AAAAYRdQILY:APA91bFzhd7EoGvrXC8Z6-FrbtAEvvSwzb0MtDZQrUzwkzsFmRp94cK_J0ChBWBMSvB309n-CcfsckMPemjoVrQopmb45SVgguUOupj3FeCMswEmmzBf3zv20adhZmirCmGOE5JgdxZt";
 
   String _name;
@@ -34,12 +37,22 @@ class _ChartsState extends State<Charts> {
     super.initState();
 
     _getUserDetails().then((_user_list) {
+
+
+      print(_user_list);
+
       setState(() {
         _name = _user_list[0];
 
         _address = _user_list[1];
 
         _image = _user_list[2];
+
+        print("Name  ${_user_list}");
+
+        print(_address);
+
+        print(_image);
       });
     });
   }
@@ -485,11 +498,21 @@ class _ChartsState extends State<Charts> {
                   .child(Common.chart)
                   .child(Common.gmail.replaceAll(".", ""))
                   .child(k)
-                  .remove();
+                  .remove()
+                  .then((_) {
+                print("Sending notification... ");
+
+                sendAndRetrieveMessage().then((value) {
+                  Map<String, dynamic> _v = value;
+
+                  _v.forEach((k, v) {
+                    print("Key  ${k}");
+                    print("Value ${v}");
+                  });
+                });
+              });
 
               //_sendNotifictation();
-
-              sendAndRetrieveMessage();
             });
       });
     });
@@ -509,10 +532,10 @@ class _ChartsState extends State<Charts> {
       },
       body: jsonEncode(
         <String, dynamic>{
-//          'notification': <String, dynamic>{
-//            'body': 'this is a body',
-//            'title': 'this is a title'
-//          },
+          'notification': <String, dynamic>{
+            'body': 'New Order from  ${_name}',
+            'title': 'New Order'
+          },
           'priority': 'high',
           'data': <String, dynamic>{
             'click_action': 'FLUTTER_NOTIFICATION_CLICK',
@@ -521,7 +544,7 @@ class _ChartsState extends State<Charts> {
             'address': _address,
             'image': _image
           },
-          'to': await firebaseMessaging.getToken(),
+          'to': '$adminToken',
         },
       ),
     );
@@ -541,16 +564,20 @@ class _ChartsState extends State<Charts> {
   Future<List<String>> _getUserDetails() async {
     List<String> _user_list = new List();
 
-    FirebaseDatabase.instance
+   await  FirebaseDatabase.instance
         .reference()
         .child(Common.user)
-        .child(Common.gmail)
+        .child(Common.gmail.replaceAll(".", ""))
+        .child(Common.basic_info)
         .once()
         .then((user) {
       if (user.value != null) {
+
+        print("Valueeeeeeeeeeeeeeee ${user.value["name"]}");
+
         _user_list.add(user.value["name"]);
 
-        _user_list.add(user.value["address"]);
+        _user_list.add(user.value["Address"]);
 
         _user_list.add(user.value["Image"]);
       }
