@@ -37,8 +37,6 @@ class _ChartsState extends State<Charts> {
     super.initState();
 
     _getUserDetails().then((_user_list) {
-
-
       print(_user_list);
 
       setState(() {
@@ -564,7 +562,7 @@ class _ChartsState extends State<Charts> {
   Future<List<String>> _getUserDetails() async {
     List<String> _user_list = new List();
 
-   await  FirebaseDatabase.instance
+    await FirebaseDatabase.instance
         .reference()
         .child(Common.user)
         .child(Common.gmail.replaceAll(".", ""))
@@ -572,7 +570,6 @@ class _ChartsState extends State<Charts> {
         .once()
         .then((user) {
       if (user.value != null) {
-
         print("Valueeeeeeeeeeeeeeee ${user.value["name"]}");
 
         _user_list.add(user.value["name"]);

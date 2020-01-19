@@ -259,7 +259,7 @@ class _HomeState extends State<Home> {
 
                 List<String> _name = new List();
 
-                if (snapshot.data == null) {
+                if (snapshot.data == null || snapshot.data.snapshot.value == null) {
                   return Container();
                 } else {
                   Map<dynamic, dynamic> _category =
