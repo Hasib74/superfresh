@@ -20,9 +20,7 @@ class _ChartsState extends State<Charts> {
 
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
 
-  String adminToken =
-      "eblRbFMWGAM:APA91bFojyfOfROfsoS00oK0uj7iikVfCVxbUR41BVScUcjcryqKwtwm0wEL_oXI1m2S9fBIw828ega-y3JnxsipJo60hM43fKu1YJEtyJf39EnDGrek0QzDP-2mmpvkhdXYdbRi6XPw";
-
+  String adminToken ;
   String serverToken =
       "AAAAYRdQILY:APA91bFzhd7EoGvrXC8Z6-FrbtAEvvSwzb0MtDZQrUzwkzsFmRp94cK_J0ChBWBMSvB309n-CcfsckMPemjoVrQopmb45SVgguUOupj3FeCMswEmmzBf3zv20adhZmirCmGOE5JgdxZt";
 
@@ -52,6 +50,19 @@ class _ChartsState extends State<Charts> {
 
         print(_image);
       });
+    });
+
+    _adminToken().then((v){
+
+      setState(() {
+
+
+        adminToken = v;
+
+      });
+
+
+
     });
   }
 
@@ -581,6 +592,28 @@ class _ChartsState extends State<Charts> {
     });
 
     return _user_list;
+  }
+
+  Future<String> _adminToken() async {
+
+    String token;
+
+    await FirebaseDatabase.instance
+        .reference()
+        .child("Token")
+        .reference()
+        .child("Admin")
+        .child("token")
+        .once()
+        .then((v) {
+
+          token  = v.value;
+
+    })
+        .catchError((err) => print(err));
+
+    return token;
+
   }
 }
 
