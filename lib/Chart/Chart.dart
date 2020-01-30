@@ -20,7 +20,8 @@ class _ChartsState extends State<Charts> {
 
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
 
-  String adminToken ;
+  String adminToken;
+
   String serverToken =
       "AAAAYRdQILY:APA91bFzhd7EoGvrXC8Z6-FrbtAEvvSwzb0MtDZQrUzwkzsFmRp94cK_J0ChBWBMSvB309n-CcfsckMPemjoVrQopmb45SVgguUOupj3FeCMswEmmzBf3zv20adhZmirCmGOE5JgdxZt";
 
@@ -52,17 +53,10 @@ class _ChartsState extends State<Charts> {
       });
     });
 
-    _adminToken().then((v){
-
+    _adminToken().then((v) {
       setState(() {
-
-
         adminToken = v;
-
       });
-
-
-
     });
   }
 
@@ -595,7 +589,6 @@ class _ChartsState extends State<Charts> {
   }
 
   Future<String> _adminToken() async {
-
     String token;
 
     await FirebaseDatabase.instance
@@ -606,14 +599,10 @@ class _ChartsState extends State<Charts> {
         .child("token")
         .once()
         .then((v) {
-
-          token  = v.value;
-
-    })
-        .catchError((err) => print(err));
+      token = v.value;
+    }).catchError((err) => print(err));
 
     return token;
-
   }
 }
 

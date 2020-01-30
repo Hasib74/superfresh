@@ -57,9 +57,10 @@ class _LogInAndRegistationPageDialogState
   var _email_controller_for_registation = TextEditingController();
   var _password_controller_for_registation = TextEditingController();
   var _confirm_password_controller = TextEditingController();
-  var _phone_controller = TextEditingController();
 
-  var _address_controller = TextEditingController();
+  //var _phone_controller = TextEditingController();
+
+  // var _address_controller = TextEditingController();
 
   double _sigmaX = 0.9; // from 0-10
   double _sigmaY = 0.9; // from 0-10
@@ -442,13 +443,13 @@ class _LogInAndRegistationPageDialogState
             SizedBox(
               height: 5,
             ),
-            Padding(
+            /*     Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 decoration: BoxDecoration(
                   color: Color(0xffF7F7F7),
-                  /*  borderRadius:
-                               BorderRadius.all(Radius.circular(50)),*/
+                  */ /*  borderRadius:
+                               BorderRadius.all(Radius.circular(50)),*/ /*
                 ),
                 child: TextField(
                   controller: _phone_controller,
@@ -460,7 +461,7 @@ class _LogInAndRegistationPageDialogState
                   ),
                 ),
               ),
-            ),
+            ),*/
             SizedBox(
               height: 5,
             ),
@@ -487,13 +488,13 @@ class _LogInAndRegistationPageDialogState
               height: 5,
             ),
 
-            Padding(
+            /*  Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 decoration: BoxDecoration(
                   color: Color(0xffF7F7F7),
-                  /*  borderRadius:
-                               BorderRadius.all(Radius.circular(50)),*/
+                  */ /*  borderRadius:
+                               BorderRadius.all(Radius.circular(50)),*/ /*
                 ),
                 child: TextField(
                   controller: _address_controller,
@@ -505,7 +506,7 @@ class _LogInAndRegistationPageDialogState
                   ),
                 ),
               ),
-            ),
+            ),*/
 
             SizedBox(
               height: 5,
@@ -603,7 +604,7 @@ class _LogInAndRegistationPageDialogState
 
   void _registaion_operation_and_storage_data_to_firebase() {
     if (_name_controller.value.text.isNotEmpty &&
-            _phone_controller.value.text.isNotEmpty &&
+            /* _phone_controller.value.text.isNotEmpty &&*/
             _email_controller_for_registation.value.text.isNotEmpty &&
             _password_controller_for_registation.value.text.isNotEmpty &&
             _confirm_password_controller
@@ -636,8 +637,8 @@ class _LogInAndRegistationPageDialogState
                   "email": _email_controller_for_registation.value.text,
                   "name": _name_controller.value.text,
                   "password": _password_controller_for_registation.value.text,
-                  "phone": _phone_controller.value.text,
-                  "Address": _address_controller.value.text
+                  // "phone": _phone_controller.value.text,
+                  // "Address": _address_controller.value.text
                 }).then((_) {
                   Common.gmail = _email_controller_for_registation.value.text;
 
@@ -942,9 +943,7 @@ class _LogInAndRegistationPageDialogState
               }).then((_) {
                 print("Add product to chart");
 
-
                 uploadFile();
-
               });
             }
           });
@@ -960,12 +959,9 @@ class _LogInAndRegistationPageDialogState
   }
 
   Future uploadFile() async {
-
-
     print("AOKKKKKKKKKKKKKKKKK0");
 
-    if(_profile_image!=null){
-
+    if (_profile_image != null) {
       StorageReference storageReference = FirebaseStorage.instance
           .ref()
           .child('images/${DateTime.now().toString()}');
@@ -982,8 +978,8 @@ class _LogInAndRegistationPageDialogState
         FirebaseDatabase.instance
             .reference()
             .child(Common.user)
-            .child(
-            _email_controller_for_registation.value.text.replaceAll(".", ""))
+            .child(_email_controller_for_registation.value.text
+                .replaceAll(".", ""))
             .child(Common.basic_info)
             .update({
           "Image": _uploadedFileURL != null ? _uploadedFileURL : "",
@@ -992,13 +988,13 @@ class _LogInAndRegistationPageDialogState
 
           if (widget.current_state == null) {
             Common.store_registaterInfo_into_sp(
-                _email_controller_for_registation.value.text)
+                    _email_controller_for_registation.value.text)
                 .then((_) {
               FirebaseDatabase.instance
                   .reference()
                   .child(Common.user)
                   .child(_email_controller_for_registation.value.text
-                  .replaceAll(".", ""))
+                      .replaceAll(".", ""))
                   .child(Common.basic_info)
                   .update({"login": "true"}).then((_) {
                 setState(() {
@@ -1014,7 +1010,7 @@ class _LogInAndRegistationPageDialogState
             });
           } else {
             Common.store_registaterInfo_into_sp(
-                _email_controller_for_registation.value.text)
+                    _email_controller_for_registation.value.text)
                 .then((_) {
               Common.gmail = _email_controller_for_registation.value.text;
 
@@ -1022,7 +1018,7 @@ class _LogInAndRegistationPageDialogState
                   .reference()
                   .child(Common.user)
                   .child(_email_controller_for_registation.value.text
-                  .replaceAll(".", ""))
+                      .replaceAll(".", ""))
                   .child(Common.basic_info)
                   .update({"login": "true"}).then((_) {
                 setState(() {
@@ -1031,8 +1027,6 @@ class _LogInAndRegistationPageDialogState
 
                 Navigator.of(context).pop();
               });
-
-
             });
           }
 
@@ -1041,18 +1035,13 @@ class _LogInAndRegistationPageDialogState
           print(e);
         });
       });
-
-    }else{
-
-
-     // Navigator.of(context).pop();
+    } else {
+      // Navigator.of(context).pop();
 
       print("AOKKKKKKKKKKKKKKKKK0");
 
-
-
       Common.store_registaterInfo_into_sp(
-          _email_controller_for_registation.value.text)
+              _email_controller_for_registation.value.text)
           .then((_) {
         Common.gmail = _email_controller_for_registation.value.text;
 
@@ -1060,11 +1049,9 @@ class _LogInAndRegistationPageDialogState
             .reference()
             .child(Common.user)
             .child(_email_controller_for_registation.value.text
-            .replaceAll(".", ""))
+                .replaceAll(".", ""))
             .child(Common.basic_info)
             .update({"login": "true"}).then((_) {
-
-
           setState(() {
             is_loading = false;
           });
@@ -1073,14 +1060,8 @@ class _LogInAndRegistationPageDialogState
 
           Navigator.of(context).pop();
         });
-
-
       });
-
-
     }
-
-
   }
 }
 

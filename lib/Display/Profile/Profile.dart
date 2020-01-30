@@ -13,7 +13,6 @@ class _ProfileState extends State<Profile> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
 
   @override
@@ -148,7 +147,7 @@ class _ProfileState extends State<Profile> {
         padding: const EdgeInsets.all(13.0),
         child: ListView(
           children: <Widget>[
-            number(),
+            //number(),
 
             Divider(
               color: Colors.black12,
@@ -162,11 +161,11 @@ class _ProfileState extends State<Profile> {
             Divider(
               color: Colors.black12,
             ),
-            SizedBox(
+            /*  SizedBox(
               height: 8,
             ),
-
-            address(),
+*/
+            //   address(),
 
             Divider(
               color: Colors.black12,
