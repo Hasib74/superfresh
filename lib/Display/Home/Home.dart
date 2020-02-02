@@ -114,7 +114,7 @@ class _HomeState extends State<Home> {
             });
 
             return CarouselSlider(
-              height: 150,
+              height: 145,
               items: _banner_list.map((item) {
                 // print(item.price);
                 return Builder(builder: (BuildContext context) {
@@ -169,18 +169,18 @@ class _HomeState extends State<Home> {
                                         item.discount,
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 25,
+                                            fontSize: 20,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
                                         "Offer",
                                         style: TextStyle(
-                                            color: Colors.white, fontSize: 15),
+                                            color: Colors.white, fontSize: 12),
                                       ),
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 5,
+                                    height: 3,
                                   ),
                                   Column(
                                     children: <Widget>[
@@ -188,24 +188,24 @@ class _HomeState extends State<Home> {
                                         "Big Offers",
                                         style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 18,
+                                            fontSize: 14,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
                                         "For Limited Time",
                                         style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 13,
+                                          fontSize: 10,
                                         ),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
+
+                                  Spacer(),
+
                                   new Container(
                                     width: 100,
-                                    height: 30,
+                                    height: 24,
                                     decoration: BoxDecoration(
                                       color: Color(0xffFF5126),
                                     ),

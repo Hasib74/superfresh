@@ -331,7 +331,7 @@ class _AllProductsState extends State<AllProducts>
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: MediaQuery.of(context).size.width /
-                            (MediaQuery.of(context).size.height / 1.4),
+                            (MediaQuery.of(context).size.height / 1.3),
                       ),
                       itemCount: _products_list.length,
                       itemBuilder: (context, int index) {
@@ -367,7 +367,7 @@ class _AllProductsState extends State<AllProducts>
                               child: Column(
                                 children: <Widget>[
                                   Expanded(
-                                    flex: 2,
+                                    flex: 3,
                                     child: new Container(
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
@@ -378,7 +378,7 @@ class _AllProductsState extends State<AllProducts>
                                     ),
                                   ),
                                   Expanded(
-                                    flex: 1,
+                                    flex: 2,
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(
@@ -469,7 +469,7 @@ class _AllProductsState extends State<AllProducts>
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: MediaQuery.of(context).size.width /
-                            (MediaQuery.of(context).size.height / 1.4),
+                            (MediaQuery.of(context).size.height / 1.3),
                       ),
                       itemCount: _search_price.length,
                       itemBuilder: (context, int index) {
@@ -503,7 +503,7 @@ class _AllProductsState extends State<AllProducts>
                               child: Column(
                                 children: <Widget>[
                                   Expanded(
-                                    flex: 2,
+                                    flex: 3,
                                     child: new Container(
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
@@ -514,7 +514,7 @@ class _AllProductsState extends State<AllProducts>
                                     ),
                                   ),
                                   Expanded(
-                                    flex: 1,
+                                    flex: 2,
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Row(

@@ -121,10 +121,10 @@ class _ChartsState extends State<Charts> {
                 .child(Common.gmail.replaceAll(".", ""))
                 .onValue,
             builder: (context, snapshot) {
-              //   print("Dattttttttttttttttttttttttttttttttttaaa  ${snapshot.data.snapshot.value}");
-
-              if (snapshot.data.snapshot.value == null ||
-                  snapshot.data == null) {
+              if (snapshot == null ||
+                  snapshot.data.snapshot.value == null ||
+                  snapshot.data == null ||
+                  snapshot.hasError == true) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -247,7 +247,8 @@ class _ChartsState extends State<Charts> {
               snp.data == null ||
               snp.hasData == false ||
               snp == null ||
-              snp.data.snapshot == null) {
+              snp.data.snapshot == null ||
+              snp.hasError) {
             return Container();
           } else {
             List<String> _price = new List();

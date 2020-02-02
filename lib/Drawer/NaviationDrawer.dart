@@ -127,7 +127,7 @@ class NavigationDrawer extends StatelessWidget {
                           width: 10,
                         ),
                         Flexible(
-                          child: Text("Shoping Cart",
+                          child: Text("Shopping Cart",
                               style: TextStyle(
                                   color: Common.orange_color,
                                   fontSize: 18,
