@@ -744,7 +744,10 @@ class _LogInAndRegistationPageDialogState
                 .update({"login": "true"}).then((_) {
               print("Succcessssssssssssssssssssssssssssssssssssssss");
 
-              Navigator.of(context).pop();
+              //Navigator.of(context).pop();
+
+
+              Navigator.pop(context, "Hello world");
 
               setState(() {
                 is_loading = false;

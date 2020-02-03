@@ -13,21 +13,34 @@ class _ProfileState extends State<Profile> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    print("initState ");
   }
 
   @override
   Widget build(BuildContext context) {
+    print("onBuild ");
+/*
+    Common.isLogIn().then((value) => print(
+        "Log in infoooooooooooooooooooooooooooooooooooooooooooo  ${value}"));*/
+
+    print("Okk");
+
     return Scaffold(
         body: Common.gmail == null
             ? Center(
                 child: InkWell(
                   onTap: () {
-                    Navigator.of(context).push(PageRouteBuilder(
+
+
+                    goToSecondScreen(context);
+
+                    /*Navigator.of(context).push(PageRouteBuilder(
                         opaque: false,
                         pageBuilder: (BuildContext context, _, __) =>
                             LogInAndRegistationPageDialog(
                               current_state: "profile",
-                            )));
+                            )));*/
                   },
                   child: Text(
                     "Sign In Or Sing Up",
@@ -41,6 +54,26 @@ class _ProfileState extends State<Profile> {
             : profile_display());
   }
 
+
+
+
+
+
+  void goToSecondScreen(_context)async {
+    var result = await Navigator.push(_context, new MaterialPageRoute(
+      builder: (BuildContext context) =>
+      new LogInAndRegistationPageDialog(
+        current_state: "profile",
+      ),
+      fullscreenDialog: true,)
+    );
+
+    print(result);
+
+   // Scaffold.of(_context).showSnackBar(SnackBar(content: Text("$result"),duration: Duration(seconds: 3),));
+
+  }
+
   profile_display() {
     return StreamBuilder(
         stream: FirebaseDatabase.instance
@@ -51,9 +84,6 @@ class _ProfileState extends State<Profile> {
             .child("login")
             .onValue,
         builder: (context, snapshot) {
-          print(
-              "SnapShottttttttttttttttttttttttttttttttttttt  prifile   ${snapshot.data}");
-
           if (snapshot.data == null) {
             return Container();
           } else {
