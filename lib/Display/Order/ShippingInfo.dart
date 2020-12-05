@@ -210,7 +210,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: const Text(
               'Address Field can not be empty',
-              style: TextStyle(color: Colors.orange),
+              // style: TextStyle(color: Common.orange_color),
             ),
             duration: const Duration(seconds: 1),
           ));

@@ -172,7 +172,7 @@ class _LogInAndRegistationPageDialogState
                 margin: EdgeInsets.only(left: 8, right: 8),
                 width: MediaQuery.of(context).size.width,
                 height: 40,
-                decoration: BoxDecoration(color: Color(0xffFF5126)),
+                decoration: BoxDecoration(color: Common.orange_color),
                 child: Center(
                   child: Text(
                     "Login",
@@ -248,7 +248,7 @@ class _LogInAndRegistationPageDialogState
                   child: Text(
                     " Sign Up",
                     style: TextStyle(
-                        color: Color(0xffF5A180),
+                        color: Common.orange_color.withOpacity(0.6),
                         fontSize: 15,
                         fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
@@ -316,7 +316,7 @@ class _LogInAndRegistationPageDialogState
       _scaffoldKey.currentState.showSnackBar(new SnackBar(
           content: new Text(
         'Empty',
-        style: TextStyle(color: Colors.red),
+        style: TextStyle(color: Common.orange_color),
       )));
     }
   }
@@ -384,7 +384,7 @@ class _LogInAndRegistationPageDialogState
                     padding: const EdgeInsets.only(top: 40.0),
                     child: Icon(
                       Icons.photo_size_select_actual,
-                      color: Colors.deepOrangeAccent,
+                      color: Common.orange_color,
                     )),
               ),
             ),
@@ -566,7 +566,7 @@ class _LogInAndRegistationPageDialogState
                 margin: EdgeInsets.only(left: 8, right: 8),
                 width: MediaQuery.of(context).size.width,
                 height: 40,
-                decoration: BoxDecoration(color: Color(0xffFF5126)),
+                decoration: BoxDecoration(color: Common.orange_color),
                 child: Center(
                   child: Text(
                     "Sign Up",
@@ -656,8 +656,8 @@ class _LogInAndRegistationPageDialogState
                 });
                 _scaffoldKey.currentState.showSnackBar(new SnackBar(
                     content: new Text(
-                  'You Are Alrady Regisatred',
-                  style: TextStyle(color: Colors.red),
+                  'You Are Already Registered',
+                  style: TextStyle(color: Common.orange_color),
                 )));
               }
             });
@@ -668,7 +668,7 @@ class _LogInAndRegistationPageDialogState
             _scaffoldKey.currentState.showSnackBar(new SnackBar(
                 content: new Text(
               'Password is not match',
-              style: TextStyle(color: Colors.red),
+              style: TextStyle(color: Common.orange_color),
             )));
           }
         } else {
@@ -678,7 +678,7 @@ class _LogInAndRegistationPageDialogState
           _scaffoldKey.currentState.showSnackBar(new SnackBar(
               content: new Text(
             'Password should be more then 5 character',
-            style: TextStyle(color: Colors.red),
+            style: TextStyle(color: Common.orange_color),
           )));
         }
       } else {
@@ -688,7 +688,7 @@ class _LogInAndRegistationPageDialogState
         _scaffoldKey.currentState.showSnackBar(new SnackBar(
             content: new Text(
           'Email should  contain @',
-          style: TextStyle(color: Colors.red),
+          style: TextStyle(color:Common.orange_color),
         )));
       }
     } else {
@@ -698,7 +698,7 @@ class _LogInAndRegistationPageDialogState
       _scaffoldKey.currentState.showSnackBar(new SnackBar(
           content: new Text(
         'Field Empty',
-        style: TextStyle(color: Colors.red),
+        style: TextStyle(color: Common.orange_color),
       )));
     }
   }
@@ -829,7 +829,7 @@ class _LogInAndRegistationPageDialogState
             _scaffoldKey.currentState.showSnackBar(new SnackBar(
                 content: new Text(
               'Product alrady added to chart',
-              style: TextStyle(color: Colors.red),
+              style: TextStyle(color: Common.orange_color),
             )));
           }
         }

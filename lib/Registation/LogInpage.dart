@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:supper_fresh_stores/Registation/Registation_page.dart';
 
+import '../Common.dart';
+
 class LogInPage extends StatefulWidget {
   @override
   _LogInPageState createState() => _LogInPageState();
@@ -14,8 +16,7 @@ class _LogInPageState extends State<LogInPage> {
   var _email_controller = new TextEditingController();
   var _password_controller = new TextEditingController();
 
-
-  var _isPressLogIn=false;
+  var _isPressLogIn = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,49 +25,36 @@ class _LogInPageState extends State<LogInPage> {
       home: SafeArea(
         child: Scaffold(
           body: Stack(
-            children: <Widget>[
-              _top(),
-              _bottom()
-
-            ],
+            children: <Widget>[_top(), _bottom()],
           ),
         ),
       ),
     );
   }
 
-
-  Widget _top(){
-
+  Widget _top() {
     return Positioned(
-      top: 0.0,
-      child: Stack(
-       children: <Widget>[
-         Container(
-           width: MediaQuery.of(context).size.width,
-           height: MediaQuery.of(context).size.height / 2 + 50,
-           decoration: BoxDecoration(
-             color: Color.fromRGBO(255, 255, 255, 0.19),
-             image: DecorationImage(
-                 colorFilter: new ColorFilter.mode(
-                     Colors.black.withOpacity(1), BlendMode.dstATop),
-                 fit: BoxFit.cover,
-                 image: AssetImage("Img/grosory.jpeg")),
-           ),
+        top: 0.0,
+        child: Stack(
+          children: <Widget>[
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 2 + 50,
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 255, 255, 0.19),
+                image: DecorationImage(
+                    colorFilter: new ColorFilter.mode(
+                        Colors.black.withOpacity(1), BlendMode.dstATop),
+                    fit: BoxFit.cover,
+                    image: AssetImage("Img/grosory.jpeg")),
+              ),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+                child: Container(),
+              ),
+            ),
 
-
-           child: BackdropFilter(
-             filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-             child: Container(
-
-
-
-             ),
-           ),
-         ),
-
-
-       /*  Positioned(
+            /*  Positioned(
            top: 50,
 
            child: Column(
@@ -123,17 +111,12 @@ class _LogInPageState extends State<LogInPage> {
 
            ),
          )*/
-
-       ],
-      )
-    );
-
+          ],
+        ));
   }
 
-
-  Widget _bottom(){
-
-    return  Positioned(
+  Widget _bottom() {
+    return Positioned(
         bottom: 0.0,
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -141,23 +124,17 @@ class _LogInPageState extends State<LogInPage> {
           decoration: BoxDecoration(
             color: Color(0xffF7F7F7),
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20)),
+                topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _isPressLogIn ?  _otpCode()  :_logIn() ,
+            child: _isPressLogIn ? _otpCode() : _logIn(),
           ),
-        )
-    );
-
+        ));
   }
 
-
-
-  Widget _logIn(){
-
-    return  Column(
+  Widget _logIn() {
+    return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -178,8 +155,7 @@ class _LogInPageState extends State<LogInPage> {
           height: 14,
         ),
         Padding(
-          padding:
-          const EdgeInsets.only(left: 8.0, right: 8.0),
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
           child: Column(
             //  mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -187,8 +163,7 @@ class _LogInPageState extends State<LogInPage> {
               Container(
                 decoration: BoxDecoration(
                   color: Color(0xffF7F7F7),
-                  borderRadius:
-                  BorderRadius.all(Radius.circular(50)),
+                  borderRadius: BorderRadius.all(Radius.circular(50)),
                 ),
                 child: TextField(
                   controller: _email_controller,
@@ -206,8 +181,7 @@ class _LogInPageState extends State<LogInPage> {
               Container(
                 decoration: BoxDecoration(
                   color: Color(0xffF7F7F7),
-                  borderRadius:
-                  BorderRadius.all(Radius.circular(50)),
+                  borderRadius: BorderRadius.all(Radius.circular(50)),
                 ),
                 child: TextField(
                   controller: _password_controller,
@@ -232,32 +206,21 @@ class _LogInPageState extends State<LogInPage> {
         ),
         Spacer(),
         InkWell(
-
-          onTap: (){
-
-
+          onTap: () {
             setState(() {
-
-
-              _isPressLogIn=true;
-
-
+              _isPressLogIn = true;
             });
-
-
           },
-
           child: Container(
             margin: EdgeInsets.only(left: 8, right: 8),
             width: MediaQuery.of(context).size.width,
             height: 40,
-            decoration: BoxDecoration(color: Color(0xffFF5126)),
+            decoration: BoxDecoration(color: Common.orange_color),
             child: Center(
               child: Text(
                 "Login",
                 style: TextStyle(
-                    color: Color(0xffFDEBE3),
-                    fontWeight: FontWeight.bold),
+                    color: Color(0xffFDEBE3), fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -266,43 +229,37 @@ class _LogInPageState extends State<LogInPage> {
         Center(
           child: new Container(
               child: InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                      new MaterialPageRoute(
-                          builder: (context) =>
-                              RegistationPage()));
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "Don't have an account?",
-                      style: TextStyle(color: Color(0xffCFD0D5)),
-                    ),
-                    Text(
-                      "Sing Up",
-                      style: TextStyle(color: Color(0xffF5A180)),
-                    ),
-                  ],
+            onTap: () {
+              Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (context) => RegistationPage()));
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "Don't have an account?",
+                  style: TextStyle(color: Color(0xffCFD0D5)),
                 ),
-              )),
+                Text(
+                  "Sing Up",
+                  style: TextStyle(color: Common.orange_color.withOpacity(0.6)),
+                ),
+              ],
+            ),
+          )),
         ),
         SizedBox(
           height: 5,
         ),
       ],
     );
-
   }
 
-  Widget _otpCode(){
-
+  Widget _otpCode() {
     return Column(
-crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-
-
         SizedBox(
           height: 14,
         ),
@@ -316,40 +273,32 @@ crossAxisAlignment: CrossAxisAlignment.start,
                 fontWeight: FontWeight.bold),
           ),
         ),
-
-
         SizedBox(
           height: 25,
         ),
-
-       Padding(
-         padding: const EdgeInsets.all(10.0),
-         child: Container(
-
-           padding: EdgeInsets.all(10),
-           child: Center(
-
-             child: PinPut( inputDecoration: InputDecoration(
-               focusedBorder: OutlineInputBorder(
-                 borderSide: BorderSide(color: Color(0xffFF5126), width: 1.0),
-               ),
-               enabledBorder: OutlineInputBorder(
-                 borderSide: BorderSide(color: Color(0xffFF5126), width: 1.0),
-               ),
-
-             ), onSubmit: (v)=>print(v), fieldsCount: 4,),
-
-           ),
-         ),
-       )
-
-
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Container(
+            padding: EdgeInsets.all(10),
+            child: Center(
+              child: PinPut(
+                inputDecoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Common.orange_color, width: 1.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Common.orange_color, width: 1.0),
+                  ),
+                ),
+                onSubmit: (v) => print(v),
+                fieldsCount: 4,
+              ),
+            ),
+          ),
+        )
       ],
-
     );
-
   }
-
-
-
 }

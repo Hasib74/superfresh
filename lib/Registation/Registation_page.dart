@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:pinput/pin_put/pin_put_bloc.dart';
 import 'package:pinput/pin_put/pin_put_state.dart';
+import 'package:supper_fresh_stores/Common.dart';
 
 class RegistationPage extends StatelessWidget {
   var _name_controller = TextEditingController();
@@ -113,7 +114,7 @@ class RegistationPage extends StatelessWidget {
                 margin: EdgeInsets.only(left: 8, right: 8),
                 width: MediaQuery.of(context).size.width,
                 height: 40,
-                decoration: BoxDecoration(color: Color(0xffFF5126)),
+                decoration: BoxDecoration(color: Common.orange_color),
                 child: Center(
                   child: Text(
                     "Sign Up",

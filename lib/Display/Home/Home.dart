@@ -194,7 +194,7 @@ class _HomeState extends State<Home> {
                                     width: 100,
                                     height: 24,
                                     decoration: BoxDecoration(
-                                      color: Color(0xffFF5126),
+                                      color:Common.orange_color,
                                     ),
                                     child: Center(
                                       child: Text(
@@ -475,27 +475,27 @@ class _HomeState extends State<Home> {
                     children: <Widget>[
                       Icon(
                         Icons.star,
-                        color: Colors.orange,
+                        color: Common.orange_color,
                         size: 14,
                       ),
                       Icon(
                         Icons.star,
-                        color: Colors.orange,
+                        color: Common.orange_color,
                         size: 14,
                       ),
                       Icon(
                         Icons.star,
-                        color: Colors.orange,
+                        color: Common.orange_color,
                         size: 14,
                       ),
                       Icon(
                         Icons.star,
-                        color: Colors.orange,
+                        color:Common.orange_color,
                         size: 14,
                       ),
                       Icon(
                         Icons.star,
-                        color: Colors.orange,
+                        color:Common.orange_color,
                         size: 14,
                       )
                     ],
@@ -505,7 +505,7 @@ class _HomeState extends State<Home> {
                       Text(
                         "${popular.price == null ? "" : popular.price} tk",
                         style: TextStyle(
-                            color: Colors.orange,
+                            color: Common.orange_color,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),
@@ -533,7 +533,7 @@ class _HomeState extends State<Home> {
       width: 70,
       height: 20,
       decoration: BoxDecoration(
-        color: Color(0xffFF5126),
+        color: Common.orange_color,
         borderRadius: BorderRadius.only(
             bottomRight: Radius.circular(15), topLeft: Radius.circular(15)),
       ),
@@ -554,7 +554,7 @@ class _HomeState extends State<Home> {
         height: 35,
         width: 45,
         decoration: BoxDecoration(
-            color: Color(0xffFF5126),
+            color:Common.orange_color,
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20),
                 bottomRight: Radius.circular(15))),
@@ -657,7 +657,7 @@ class _HomeState extends State<Home> {
       padding: const EdgeInsets.all(10.0),
       child: Container(
         decoration: BoxDecoration(
-            border: Border.all(color: Color(0xffFF5126), width: 1),
+            border: Border.all(color: Common.orange_color, width: 1),
             borderRadius: BorderRadius.all(Radius.circular(0.0)),
             color: Color(0xffE9EBEE)),
         child: Padding(
@@ -791,7 +791,7 @@ class _HomeState extends State<Home> {
                                     Text(
                                       "${_search_popular_list[index].price} tk",
                                       style: TextStyle(
-                                          color: Colors.orange,
+                                          color: Common.orange_color,
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold),
                                     ),

@@ -366,7 +366,7 @@ class _ChartsState extends State<Charts> {
                                   Text(
                                     "${_price[index]} tk",
                                     style: TextStyle(
-                                        color: Colors.orange,
+                                        color: Common.orange_color,
                                         fontSize: 13,
                                         fontWeight: FontWeight.bold),
                                   ),

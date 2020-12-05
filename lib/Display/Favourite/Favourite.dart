@@ -167,27 +167,27 @@ class _FavouriteState extends State<Favourite> {
                     children: <Widget>[
                       Icon(
                         Icons.star,
-                        color: Colors.orange,
+                        color: Common.orange_color,
                         size: 14,
                       ),
                       Icon(
                         Icons.star,
-                        color: Colors.orange,
+                        color:Common.orange_color,
                         size: 14,
                       ),
                       Icon(
                         Icons.star,
-                        color: Colors.orange,
+                        color:Common.orange_color,
                         size: 14,
                       ),
                       Icon(
                         Icons.star,
-                        color: Colors.orange,
+                        color:Common.orange_color,
                         size: 14,
                       ),
                       Icon(
                         Icons.star,
-                        color: Colors.orange,
+                        color:Common.orange_color,
                         size: 14,
                       )
                     ],
@@ -197,7 +197,7 @@ class _FavouriteState extends State<Favourite> {
                       Text(
                         "${price == null ? "" : price} tk",
                         style: TextStyle(
-                            color: Colors.orange,
+                            color: Common.orange_color,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),

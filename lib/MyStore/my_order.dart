@@ -126,7 +126,7 @@ class _MyOrderState extends State<MyOrder> {
                         Text(
                           "${_order_list[index].price} tk",
                           style: TextStyle(
-                              color: Colors.orange,
+                              color: Common.orange_color,
                               fontSize: 13,
                               fontWeight: FontWeight.bold),
                         ),

@@ -142,7 +142,7 @@ class _AllProductsState extends State<AllProducts>
                         decoration: BoxDecoration(
                             color: _catagory_list.indexOf(catagory) ==
                                     _tabController.index
-                                ? Color(0xffFF5126)
+                                ? Common.orange_color
                                 : Colors.grey,
                             borderRadius: BorderRadius.all(Radius.circular(50)),
                             boxShadow: [
@@ -166,7 +166,7 @@ class _AllProductsState extends State<AllProducts>
             padding: const EdgeInsets.all(10.0),
             child: Container(
               decoration: BoxDecoration(
-                  border: Border.all(color: Color(0xffFF5126), width: 1),
+                  border: Border.all(color: Common.orange_color, width: 1),
                   borderRadius: BorderRadius.all(Radius.circular(50)),
                   color: Color(0xffE9EBEE)),
               child: Padding(
@@ -217,7 +217,7 @@ class _AllProductsState extends State<AllProducts>
                     hintText: "Search Product",
                     suffixIcon: Icon(
                       Icons.search,
-                      color: Color(0xffFF5126),
+                      color:Common.orange_color,
                     ),
                     border: InputBorder.none,
                     /*  enabledBorder: const OutlineInputBorder(
@@ -429,7 +429,7 @@ class _AllProductsState extends State<AllProducts>
                                                   Text(
                                                     "${_products_list[index].price} tk",
                                                     style: TextStyle(
-                                                        color: Colors.orange,
+                                                        color: Common.orange_color,
                                                         fontSize: 20,
                                                         fontWeight:
                                                             FontWeight.bold),
@@ -556,7 +556,7 @@ class _AllProductsState extends State<AllProducts>
                                                   Text(
                                                     "${_search_price[index]} tk",
                                                     style: TextStyle(
-                                                        color: Colors.orange,
+                                                        color:Common.orange_color,
                                                         fontSize: 20,
                                                         fontWeight:
                                                             FontWeight.bold),
