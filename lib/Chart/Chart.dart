@@ -5,8 +5,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:supper_fresh_stores/Common.dart';
+import 'package:supper_fresh_stores/Display/Order/ShippingInfo.dart';
 import 'package:supper_fresh_stores/Library/Counter.dart';
 import 'package:http/http.dart' as http;
+import 'package:supper_fresh_stores/Model/Address.dart';
 
 class Charts extends StatefulWidget {
   @override
@@ -131,7 +133,7 @@ class _ChartsState extends State<Charts> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "Total Price : \$ 0.0",
+                        "Total Price : 0.0 tk",
                         style: TextStyle(
                             color: Common.orange_color,
                             fontSize: 16,
@@ -188,7 +190,7 @@ class _ChartsState extends State<Charts> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "Total Price : \$${price}",
+                        "Total Price : ${price} tk",
                         style: TextStyle(
                             color: Common.orange_color,
                             fontSize: 16,
@@ -199,7 +201,23 @@ class _ChartsState extends State<Charts> {
                       padding: const EdgeInsets.all(8.0),
                       child: InkWell(
                         onTap: () {
-                          _order();
+                          //_order();
+                          showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                    backgroundColor:
+                                        Colors.white.withOpacity(0.6),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10.0))),
+                                    contentPadding: EdgeInsets.all(0.0),
+                                    content: ShippingInfo(),
+                                  )).then((value) {
+                            if (value != null) {
+                              print("Returned Value is  ${value}");
+                              _order(value);
+                            }
+                          });
                         },
                         child: Container(
                             height: 50,
@@ -237,239 +255,204 @@ class _ChartsState extends State<Charts> {
             .child(Common.gmail.replaceAll(".", ""))
             .onValue,
         builder: (context, snp) {
-          // print("Snapppppppppppppppppppppppppppppppppppp  ${snp.data}");
-
-          //  print("Gmaillllll  ${Common.gmail}");
-
-          //   print("Snapshot data...................  ${snp.data.snapshot.value}");
-
-          if (snp.data.snapshot.value == null ||
-              snp.data == null ||
-              snp.hasData == false ||
-              snp == null ||
-              snp.data.snapshot == null ||
-              snp.hasError) {
-            return Container();
+          if (snp == null) {
+            return CircularProgressIndicator();
           } else {
-            List<String> _price = new List();
-            List<String> _catagory_id = new List();
-            List<String> _child = new List();
-            List<String> _discription = new List();
-            List<String> _id = new List();
-            List<String> _image = new List();
-            List<String> _offer = new List();
-            List<String> _quantity = new List();
-            List<String> _rating = new List();
+            if (snp.data.snapshot.value == null ||
+                snp.data == null ||
+                snp.hasData == false ||
+                snp == null ||
+                snp.data.snapshot == null ||
+                snp.hasError) {
+              return Container();
+            } else {
+              List<String> _price = new List();
+              List<String> _catagory_id = new List();
+              List<String> _child = new List();
+              List<String> _discription = new List();
+              List<String> _id = new List();
+              List<String> _image = new List();
+              List<String> _offer = new List();
+              List<String> _quantity = new List();
+              List<String> _rating = new List();
 
-            List<String> _name = new List();
+              List<String> _name = new List();
 
-            List<String> _key = new List();
+              List<String> _key = new List();
 
-            List<String> _buy_price = new List();
+              List<String> _buy_price = new List();
 
-            Map<dynamic, dynamic> _chart = snp.data.snapshot.value;
+              Map<dynamic, dynamic> _chart = snp.data.snapshot.value;
 
-            _chart.forEach((k, v) {
-              print("Keyyyy  ${k}");
+              _chart.forEach((k, v) {
+                print("Keyyyy  ${k}");
 
-              print("Valueee  ${v}");
+                print("Valueee  ${v}");
 
-              _price.add(v["price"].toString());
-              _catagory_id.add(v["catagory_id"].toString());
-              _child.add(v["child"].toString());
-              _discription.add(v["discription"].toString());
-              _image.add(v["image"].toString());
-              _name.add(v["name"].toString());
-              _offer.add(v["offer"].toString());
-              _quantity.add(v["quantiry"].toString());
-              _rating.add(v["rating"].toString());
-              _buy_price.add(v["buy_price"].toString());
+                _price.add(v["price"].toString());
+                _catagory_id.add(v["catagory_id"].toString());
+                _child.add(v["child"].toString());
+                _discription.add(v["discription"].toString());
+                _image.add(v["image"].toString());
+                _name.add(v["name"].toString());
+                _offer.add(v["offer"].toString());
+                _quantity.add(v["quantiry"].toString());
+                _rating.add(v["rating"].toString());
+                _buy_price.add(v["buy_price"].toString());
 
-              _key.add(k);
-            });
+                _key.add(k);
+              });
 
-            /*           Map<dynamic,dynamic> _chart = snp.data.snapshot.value;
+              return ListView.builder(
+                  itemCount: _name.length,
+                  itemBuilder: (context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(4)),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black12,
+                                  spreadRadius: 0.5,
+                                  blurRadius: 0.5)
+                            ]),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: <Widget>[
+                              //TODO image
+                              _image_display(_image[index]),
+                              SizedBox(
+                                width: 10,
+                              ),
 
+                              //TODO name catagory price quanity
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    _name[index],
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  StreamBuilder(
+                                      stream: FirebaseDatabase.instance
+                                          .reference()
+                                          .child(Common.category)
+                                          .child(_catagory_id[index])
+                                          .child("name")
+                                          .onValue,
+                                      builder: (context, snapshot) {
+                                        if (snapshot.data == null) {
+                                          return Container();
+                                        } else {
+                                          return Text(
+                                              snapshot.data.snapshot.value ==
+                                                      null
+                                                  ? ""
+                                                  : snapshot
+                                                      .data.snapshot.value,
+                                              style: TextStyle(
+                                                  color: Color(0xff868686),
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.bold));
+                                        }
+                                      }),
+                                  Text(
+                                    "${_price[index]} tk",
+                                    style: TextStyle(
+                                        color: Colors.orange,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Text("Quantity : ${_quantity[index]}"),
+                                ],
+                              ),
+                              Spacer(),
+                              // _delete_count(quantity,_quantity,index),
 
+                              //TODO image delete button +count
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: <Widget>[
+                                  InkWell(
+                                      onTap: () {
+                                        FirebaseDatabase.instance
+                                            .reference()
+                                            .child(Common.chart)
+                                            .child(Common.gmail
+                                                .replaceAll(".", ""))
+                                            .child(_key[index])
+                                            .remove()
+                                            .then((_) {
+                                          print("Deleted successfully...");
+                                        });
+                                      },
+                                      child: Icon(Icons.delete_outline)),
 
+                                  //Spacer(),
 
+                                  SizedBox(
+                                    height: 10,
+                                  ),
 
+                                  count(
+                                    quantity:
+                                        int.parse(_quantity[index].toString()),
 
-
-           // print("Printtttttttttttttttttttttttttt  ${_chart[2]}");
-
-
-
-
-            //List<String> _price=new List();
-            List<String> _quantity = new List();
-            List<String> _rating = new List();
-
-            List<String> _name = new List();
-
-            List<String> _key = new List();
-
-            List<String> _buy_price = new List();
-
-            _chart.forEach((k, v) {
-              print("key..... ${k}");
-              print("Value..... ${v.value}");
-
-              _price.add(v["price"].toString());
-              _catagory_id.add(v["catagory_id"].toString());
-              _child.add(v["child"].toString());
-              _discription.add(v["discription"].toString());
-              _image.add(v["image"].toString());
-              _name.add(v["name"].toString());
-              _offer.add(v["offer"].toString());
-              _quantity.add(v["quantiry"].toString());
-              _rating.add(v["rating"].toString());
-              _buy_price.add(v["buy_price"].toString());
-
-              _key.add(k);
-            });*/
-
-            //   return Container();
-
-            //  _total_price.clear();
-
-            //  totalPrice(_price);
-
-            //   _total_price=_price;
-
-            return ListView.builder(
-                itemCount: _name.length,
-                itemBuilder: (context, int index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black12,
-                                spreadRadius: 0.5,
-                                blurRadius: 0.5)
-                          ]),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: <Widget>[
-                            //TODO image
-                            _image_display(_image[index]),
-                            SizedBox(
-                              width: 10,
-                            ),
-
-                            //TODO name catagory price quanity
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  _name[index],
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                StreamBuilder(
-                                    stream: FirebaseDatabase.instance
-                                        .reference()
-                                        .child(Common.category)
-                                        .child(_catagory_id[index])
-                                        .child("name")
-                                        .onValue,
-                                    builder: (context, snapshot) {
-                                      if (snapshot.data == null) {
-                                        return Container();
-                                      } else {
-                                        return Text(
-                                            snapshot.data.snapshot.value == null
-                                                ? ""
-                                                : snapshot.data.snapshot.value,
-                                            style: TextStyle(
-                                                color: Color(0xff868686),
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.bold));
-                                      }
-                                    }),
-                                Text(
-                                  "\$${_price[index]}",
-                                  style: TextStyle(
-                                      color: Colors.orange,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text("Quantity : ${_quantity[index]}"),
-                              ],
-                            ),
-                            Spacer(),
-                            // _delete_count(quantity,_quantity,index),
-
-                            //TODO image delete button +count
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-                                InkWell(
-                                    onTap: () {
+                                    ongetQuantity: ((count) {
                                       FirebaseDatabase.instance
                                           .reference()
                                           .child(Common.chart)
                                           .child(
                                               Common.gmail.replaceAll(".", ""))
                                           .child(_key[index])
-                                          .remove()
-                                          .then((_) {
-                                        print("Deleted successfully...");
+                                          .update({
+                                        "quantiry": count,
+                                        "price":
+                                            (double.parse(_buy_price[index]) *
+                                                    count)
+                                                .toString()
+                                      }).then((_) {
+                                        print("Updated");
                                       });
-                                    },
-                                    child: Icon(Icons.delete_outline)),
+                                    }),
 
-                                //Spacer(),
-
-                                SizedBox(
-                                  height: 10,
-                                ),
-
-                                count(
-                                  quantity:
-                                      int.parse(_quantity[index].toString()),
-
-                                  ongetQuantity: ((count) {
-                                    FirebaseDatabase.instance
-                                        .reference()
-                                        .child(Common.chart)
-                                        .child(Common.gmail.replaceAll(".", ""))
-                                        .child(_key[index])
-                                        .update({
-                                      "quantiry": count,
-                                      "price":
-                                          (double.parse(_buy_price[index]) *
-                                                  count)
-                                              .toString()
-                                    }).then((_) {
-                                      print("Updated");
-                                    });
-                                  }),
-
-                                  // key: Charts().key,
-                                ),
-                                //  Counter(),
-                              ],
-                            ),
-                          ],
+                                    // key: Charts().key,
+                                  ),
+                                  //  Counter(),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                });
+                    );
+                  });
+            }
           }
         });
   }
 
-  void _order() {
+  void _order(Address address) {
+    FirebaseDatabase.instance
+        .reference()
+        .child(Common.order)
+        .child(Common.gmail.replaceAll(".", ""))
+        .child(Common.shipping_address)
+        .set({
+      "House Number": address.house_number,
+      "Road Number": address.road_number,
+      "Zip Code": address.zip_code,
+      "Thana Name": address.thana_name,
+    });
+
     FirebaseDatabase.instance
         .reference()
         .child(Common.chart)

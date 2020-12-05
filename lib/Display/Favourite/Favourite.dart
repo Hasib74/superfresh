@@ -11,121 +11,110 @@ class _FavouriteState extends State<Favourite> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        body: Common.gmail != null
+            ? StreamBuilder(
+                stream: FirebaseDatabase.instance
+                    .reference()
+                    .child(Common.user)
+                    .child(Common.gmail.replaceAll(".", ""))
+                    .child(Common.basic_info)
+                    .child("login")
+                    .onValue,
+                builder: (context, snapshot) {
+                  if (snapshot.data == null ||
+                      snapshot.data.snapshot.value == null) {
+                    return Container();
+                  } else {
+                    if (snapshot.data.snapshot.value == "true") {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: StreamBuilder(
+                            stream: FirebaseDatabase.instance
+                                .reference()
+                                .child(Common.favourite)
+                                .child(Common.gmail.replaceAll(".", ""))
 
-      body:Common.gmail!=null ?  StreamBuilder(
-          stream:  FirebaseDatabase.instance
-              .reference()
-              .child(Common.user)
-              .child(Common.gmail.replaceAll(".", ""))
-              .child(Common.basic_info)
-              .child("login")
-              .onValue,
-          builder: (context, snapshot) {
+                                .onValue,
+                            builder: (context, snapshot) {
+                              List<String> _name_list = new List();
+                              List<String> _price_list = new List();
+                              List<String> _discription_list = new List();
+                              List<String> _image_list = new List();
+                              List<String> _rating_list = new List();
 
+                              List<String> _id_list = new List();
 
-            if(snapshot.data ==null || snapshot.data.snapshot.value==null){
-              return Container();
+                              List<String> _catagory_list = new List();
+                              //  List<String> _name=new List();
 
-            }else{
+                              if (snapshot.data == null ||
+                                  snapshot.data.snapshot.value == null) {
+                                return Container();
+                              } else {
+                                Map<dynamic, dynamic> fav_list =
+                                    snapshot.data.snapshot.value;
 
-              if(snapshot.data.snapshot.value=="true"){
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: StreamBuilder(stream: FirebaseDatabase.instance.reference().child(Common.favourite).onValue ,builder: (context,snapshot){
+                                fav_list.forEach((k, v) {
+                                  _name_list.add(v["name"].toString());
 
+                                  _price_list.add(v["price"].toString());
 
-                    List<String> _name_list=new List();
-                    List<String> _price_list=new List();
-                    List<String> _discription_list=new List();
-                    List<String> _image_list=new List();
-                    List<String> _rating_list=new List();
+                                  _rating_list.add(v["rating"].toString());
 
-                    List<String> _id_list=new List();
+                                  _image_list.add(v["image"].toString());
 
+                                  _id_list.add(v["id"].toString());
 
-                    List<String>  _catagory_list=new List();
-                    //  List<String> _name=new List();
+                                  _catagory_list
+                                      .add(v["catagory_id"].toString());
+                                });
 
-
-
-
-                    if(snapshot.data==null  ||snapshot.data.snapshot.value==null){
+                                return ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: _name_list.length,
+                                    // physics: NeverScrollableScrollPhysics(),
+                                    itemBuilder: (context, int index) {
+                                      return Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffFFFFFF),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15)),
+                                            border: Border.all(
+                                                color: Colors.black12,
+                                                width: 1),
+                                          ),
+                                          child: Stack(
+                                            children: <Widget>[
+                                              _product_image_catagoryName_rating_price(
+                                                  context,
+                                                  index,
+                                                  _name_list[index],
+                                                  _image_list[index],
+                                                  _catagory_list[index],
+                                                  _price_list[index]),
+                                              //_offer(_popular_list[index]),
+                                              // _add(_popular_list[index]),
+                                              // _fav(_popular_list[index],_key[index]),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    });
+                              }
+                            }),
+                      );
+                    } else {
                       return Container();
-
-                    }else{
-
-                      Map<dynamic,dynamic> fav_list=snapshot.data.snapshot.value;
-
-
-                      fav_list.forEach((k,v){
-
-
-                        _name_list.add(v["name"].toString());
-
-                        _price_list.add(v["price"].toString());
-
-                        _rating_list.add(v["rating"].toString());
-
-                        _image_list.add(v["image"].toString());
-
-                        _id_list.add(v["id"].toString());
-
-                        _catagory_list.add(v["catagory_id"].toString());
-
-
-
-
-
-                      });
-
-
-                      return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: _name_list.length,
-                          // physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, int index) {
-                            return Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Color(0xffFFFFFF),
-                                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                                  border: Border.all(color: Colors.black12, width: 1),
-                                ),
-                                child: Stack(
-                                  children: <Widget>[
-                                    _product_image_catagoryName_rating_price(context, index, _name_list[index],_image_list[index],_catagory_list[index],_price_list[index]),
-                                    //_offer(_popular_list[index]),
-                                    // _add(_popular_list[index]),
-                                    // _fav(_popular_list[index],_key[index]),
-                                  ],
-                                ),
-                              ),
-                            );
-                          });
-
                     }
-
-                  }),
-                );
-
-              }else{
-
-                return Container();
-
-
-              }
-
-            }
-
-          }
-      ) : Container()
-
-    );
+                  }
+                })
+            : Container());
   }
 
   Widget _product_image_catagoryName_rating_price(
-      context, index, name,image,catagoyId,price) {
+      context, index, name, image, catagoyId, price) {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 100,
@@ -149,7 +138,7 @@ class _FavouriteState extends State<Favourite> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    name== null ? Container() : name,
+                    name == null ? Container() : name,
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -166,7 +155,7 @@ class _FavouriteState extends State<Favourite> {
                           return Container();
                         } else {
                           return Text(
-                            snapshot.data.snapshot.value["name"],
+                            snapshot.data.snapshot.value["name"] ?? "",
                             style: TextStyle(
                                 color: Color(0xff868686),
                                 fontSize: 13,
@@ -206,14 +195,14 @@ class _FavouriteState extends State<Favourite> {
                   Row(
                     children: <Widget>[
                       Text(
-                        "\$${price == null ? "" : price}",
+                        "${price == null ? "" : price} tk",
                         style: TextStyle(
                             color: Colors.orange,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        "\$4.5",
+                        "4.5 tk",
                         style: TextStyle(
                           decoration: TextDecoration.lineThrough,
                           decorationColor: Colors.black,
@@ -231,5 +220,5 @@ class _FavouriteState extends State<Favourite> {
     );
   }
 
-  /*_add(popular_list) {}*/
+/*_add(popular_list) {}*/
 }

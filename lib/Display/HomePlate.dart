@@ -24,7 +24,8 @@ class HomePlate extends StatefulWidget {
   _HomePlateState createState() => _HomePlateState();
 }
 
-class _HomePlateState extends State<HomePlate> {
+class _HomePlateState extends State<HomePlate>
+    with AutomaticKeepAliveClientMixin {
   var current_selected_page = "home";
 
   Widget current_page;
@@ -104,8 +105,11 @@ class _HomePlateState extends State<HomePlate> {
     var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
     var platformChannelSpecifics = new NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show( new Random().nextInt(1000), message['title'].toString(),
-        message['body'].toString(), platformChannelSpecifics,
+    await flutterLocalNotificationsPlugin.show(
+        new Random().nextInt(1000),
+        message['title'].toString(),
+        message['body'].toString(),
+        platformChannelSpecifics,
         payload: json.encode(message));
   }
 
@@ -408,4 +412,8 @@ class _HomePlateState extends State<HomePlate> {
       current_selected_page = "AllProducts";
     });
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

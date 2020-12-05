@@ -427,7 +427,7 @@ class _AllProductsState extends State<AllProducts>
                                                         .spaceAround,
                                                 children: <Widget>[
                                                   Text(
-                                                    "\$${_products_list[index].price}",
+                                                    "${_products_list[index].price} tk",
                                                     style: TextStyle(
                                                         color: Colors.orange,
                                                         fontSize: 20,
@@ -438,7 +438,7 @@ class _AllProductsState extends State<AllProducts>
                                                     width: 10,
                                                   ),
                                                   Text(
-                                                    " \$${_products_list[index].previous_price}",
+                                                    " ${_products_list[index].previous_price} tk",
                                                     style: TextStyle(
                                                       decoration: TextDecoration
                                                           .lineThrough,
@@ -554,7 +554,7 @@ class _AllProductsState extends State<AllProducts>
                                                         .spaceAround,
                                                 children: <Widget>[
                                                   Text(
-                                                    "\$${_search_price[index]}",
+                                                    "${_search_price[index]} tk",
                                                     style: TextStyle(
                                                         color: Colors.orange,
                                                         fontSize: 20,
@@ -565,7 +565,7 @@ class _AllProductsState extends State<AllProducts>
                                                     width: 10,
                                                   ),
                                                   Text(
-                                                    " \$${_search_previous_price[index]}",
+                                                    " ${_search_previous_price[index]} tk",
                                                     style: TextStyle(
                                                       decoration: TextDecoration
                                                           .lineThrough,

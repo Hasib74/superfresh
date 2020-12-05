@@ -32,19 +32,21 @@ class _MyOrderState extends State<MyOrder> {
 
           print("Valueeeeeeeeeeeeeeeeeeee  ${v}");
 
-          setState(() {
-            _order_list.add(new Order(
-                child: v["child"],
-                rating: v["rating"],
-                price: v["price"],
-                id: k,
-                image: v["image"],
-                name: v["name"],
-                buy_price: v["buy_price"],
-                catagory_id: v["catagory_id"],
-                discription: v["discription"],
-                quantiry: v["quantiry"]));
-          });
+          if (k != "Shipping Address") {
+            setState(() {
+              _order_list.add(new Order(
+                  child: v["child"] ?? "",
+                  rating: v["rating"] ?? "",
+                  price: v["price"] ?? "",
+                  id: k ?? "",
+                  image: v["image"] ?? "",
+                  name: v["name"] ?? "",
+                  buy_price: v["buy_price"] ?? "",
+                  catagory_id: v["catagory_id"] ?? "",
+                  discription: v["discription"] ?? "",
+                  quantiry: v["quantiry"] ?? ""));
+            });
+          }
         });
       });
     }
@@ -122,7 +124,7 @@ class _MyOrderState extends State<MyOrder> {
                               }
                             }),
                         Text(
-                          "\$${_order_list[index].price}",
+                          "${_order_list[index].price} tk",
                           style: TextStyle(
                               color: Colors.orange,
                               fontSize: 13,

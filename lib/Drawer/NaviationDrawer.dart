@@ -82,13 +82,18 @@ class NavigationDrawer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Image(
+                        /*Image(
                           image: AssetImage(
                             "Img/home.png",
                           ),
                           width: 20,
                           height: 20,
                           color: Common.orange_color,
+                        ),*/
+                        Icon(
+                          Icons.home_outlined,
+                          color: Common.orange_color,
+                          size: 25,
                         ),
                         SizedBox(
                           width: 10,
@@ -115,13 +120,18 @@ class NavigationDrawer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Image(
+                        /*Image(
                           image: AssetImage(
                             "Img/cart.png",
                           ),
                           width: 20,
                           height: 20,
                           color: Common.orange_color,
+                        ),*/
+                        Icon(
+                          Icons.shopping_cart_outlined,
+                          color: Common.orange_color,
+                          size: 25,
                         ),
                         SizedBox(
                           width: 10,
@@ -153,13 +163,10 @@ class NavigationDrawer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Image(
-                          image: AssetImage(
-                            "Img/favourite.png",
-                          ),
-                          width: 20,
-                          height: 20,
+                        Icon(
+                          Icons.favorite_border,
                           color: Common.orange_color,
+                          size: 25,
                         ),
                         SizedBox(
                           width: 10,
@@ -187,7 +194,7 @@ class NavigationDrawer extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Icon(
-                          Icons.playlist_add_check,
+                          Icons.list_alt_sharp,
                           size: 28,
                           color: Common.orange_color,
                         ),
@@ -267,7 +274,7 @@ class NavigationDrawer extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Icon(
-                        Icons.chat,
+                        Icons.messenger_outline,
                         size: 25,
                         color: Common.orange_color,
                       ),
@@ -290,8 +297,8 @@ class NavigationDrawer extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Icon(
-                        Icons.store_mall_directory,
-                        size: 28,
+                        Icons.storefront,
+                        size: 25,
                         color: Common.orange_color,
                       ),
                       SizedBox(

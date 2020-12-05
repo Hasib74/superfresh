@@ -38,16 +38,10 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
 
-
-
-
     super.initState();
 
     _load();
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -87,10 +81,7 @@ class _HomeState extends State<Home> {
   Widget _banner_display() {
     return StreamBuilder(
         stream:
-        FirebaseDatabase.instance
-            .reference()
-            .child(Common.banner)
-            .onValue,
+            FirebaseDatabase.instance.reference().child(Common.banner).onValue,
         builder: (context, snapshot) {
           List<BannerM> _banner_list = new List();
 
@@ -114,16 +105,17 @@ class _HomeState extends State<Home> {
             });
 
             return CarouselSlider(
-              height: 145,
+              options: CarouselOptions(
+                autoPlay: true,
+                height: 145,
+              ),
               items: _banner_list.map((item) {
                 // print(item.price);
                 return Builder(builder: (BuildContext context) {
                   return InkWell(
                     onTap: () {
-                      print("Catagory idddddddddddddddd  ${item.catagory_id}");
                       Navigator.of(context).push(new MaterialPageRoute(
-                          builder: (context) =>
-                              ProductDiscription(
+                          builder: (context) => ProductDiscription(
                                 image: item.image,
                                 name: item.name,
                                 child: "Bannar",
@@ -137,16 +129,13 @@ class _HomeState extends State<Home> {
                               )));
                     },
                     child: Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
+                      width: MediaQuery.of(context).size.width,
                       margin: EdgeInsets.symmetric(horizontal: 5.0),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           image: DecorationImage(
 
-                            /* colorFilter: new ColorFilter.mode(
+                              /* colorFilter: new ColorFilter.mode(
                                 Colors.orange.withOpacity(0.8), BlendMode.dstATop),*/
                               fit: BoxFit.cover,
                               image: NetworkImage(item.image))),
@@ -166,7 +155,7 @@ class _HomeState extends State<Home> {
                                   Column(
                                     children: <Widget>[
                                       Text(
-                                        item.discount,
+                                        item.discount ?? "",
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 20,
@@ -200,9 +189,7 @@ class _HomeState extends State<Home> {
                                       ),
                                     ],
                                   ),
-
                                   Spacer(),
-
                                   new Container(
                                     width: 100,
                                     height: 24,
@@ -259,7 +246,8 @@ class _HomeState extends State<Home> {
 
                 List<String> _name = new List();
 
-                if (snapshot.data == null || snapshot.data.snapshot.value == null) {
+                if (snapshot.data == null ||
+                    snapshot.data.snapshot.value == null) {
                   return Container();
                 } else {
                   Map<dynamic, dynamic> _category =
@@ -377,8 +365,7 @@ class _HomeState extends State<Home> {
                       return InkWell(
                         onTap: () {
                           Navigator.of(context).push(new MaterialPageRoute(
-                              builder: (context) =>
-                                  ProductDiscription(
+                              builder: (context) => ProductDiscription(
                                     previous_price: "5.6",
                                     id: _key[index],
                                     image: _popular_list[index].image,
@@ -386,11 +373,11 @@ class _HomeState extends State<Home> {
                                     child: Common.popular,
                                     price: _popular_list[index].price,
                                     discreption:
-                                    _popular_list[index].description,
+                                        _popular_list[index].description,
                                     offer: "10",
                                     rating: "4",
                                     catagory_id:
-                                    _popular_list[index].categoryId,
+                                        _popular_list[index].categoryId,
                                   )));
                         },
                         child: Padding(
@@ -399,9 +386,9 @@ class _HomeState extends State<Home> {
                             decoration: BoxDecoration(
                               color: Color(0xffFFFFFF),
                               borderRadius:
-                              BorderRadius.all(Radius.circular(15)),
+                                  BorderRadius.all(Radius.circular(15)),
                               border:
-                              Border.all(color: Colors.black12, width: 1),
+                                  Border.all(color: Colors.black12, width: 1),
                             ),
                             child: Stack(
                               children: <Widget>[
@@ -412,15 +399,15 @@ class _HomeState extends State<Home> {
                                 Common.gmail != null
                                     ? _fav(_popular_list[index], _key[index])
                                     : Positioned(
-                                    right: 10,
-                                    top: 10,
-                                    child: Opacity(
-                                      opacity: 0.5,
-                                      child: new Icon(
-                                        Icons.favorite_border,
-                                        color: Common.orange_color,
-                                      ),
-                                    )),
+                                        right: 10,
+                                        top: 10,
+                                        child: Opacity(
+                                          opacity: 0.5,
+                                          child: new Icon(
+                                            Icons.favorite_border,
+                                            color: Common.orange_color,
+                                          ),
+                                        )),
                               ],
                             ),
                           ),
@@ -433,13 +420,10 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _product_image_catagoryName_rating_price(context, index,
-      Popular popular) {
+  Widget _product_image_catagoryName_rating_price(
+      context, index, Popular popular) {
     return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
+      width: MediaQuery.of(context).size.width,
       height: 100,
       child: Padding(
         padding: const EdgeInsets.only(left: 50.0),
@@ -519,15 +503,14 @@ class _HomeState extends State<Home> {
                   Row(
                     children: <Widget>[
                       Text(
-                        "\$${popular.price == null ? "" : popular.price}",
+                        "${popular.price == null ? "" : popular.price} tk",
                         style: TextStyle(
                             color: Colors.orange,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        "\$${popular.previous_price == null ? "" : popular
-                            .previous_price}",
+                        "${popular.previous_price == null ? "" : popular.previous_price} tk",
                         style: TextStyle(
                           decoration: TextDecoration.lineThrough,
                           decorationColor: Colors.black,
@@ -556,10 +539,10 @@ class _HomeState extends State<Home> {
       ),
       child: Center(
           child: Text(
-            "${popular.discount == null ? "" : popular.discount} % OFF",
-            style: TextStyle(
-                color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
-          )),
+        "${popular.discount == null ? "" : popular.discount} % OFF",
+        style: TextStyle(
+            color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+      )),
     );
   }
 
@@ -599,6 +582,8 @@ class _HomeState extends State<Home> {
               stream: FirebaseDatabase.instance
                   .reference()
                   .child(Common.favourite)
+                  .child(Common.gmail.replaceAll(".", ""))
+
                   .child("${Common.popular}${key}")
                   .onValue,
               builder: (context, snapshot) {
@@ -625,6 +610,8 @@ class _HomeState extends State<Home> {
     FirebaseDatabase.instance
         .reference()
         .child(Common.favourite)
+        .child(Common.gmail.replaceAll(".", ""))
+
         .child("${Common.popular}${key}")
         .once()
         .then((v) {
@@ -632,6 +619,8 @@ class _HomeState extends State<Home> {
         FirebaseDatabase.instance
             .reference()
             .child(Common.favourite)
+            .child(Common.gmail.replaceAll(".", ""))
+
             .child("${Common.popular}${key}")
             .set({
           "id": key,
@@ -647,11 +636,13 @@ class _HomeState extends State<Home> {
           "buy_price": popular.price,
           //  "quantiry": popular.
         }).catchError((err) =>
-            print("Errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr  ${err}"));
+                print("Errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr  ${err}"));
       } else {
         FirebaseDatabase.instance
             .reference()
             .child(Common.favourite)
+            .child(Common.gmail.replaceAll(".", ""))
+
             .child("${Common.popular}${key}")
             .remove()
             .then((_) {
@@ -683,8 +674,7 @@ class _HomeState extends State<Home> {
 
                 for (int i = 0; i < _popular_list.length; i++) {
                   print(
-                      "Product listtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt   ${_popular_list[i]
-                          .name}");
+                      "Product listtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt   ${_popular_list[i].name}");
 
                   if (_popular_list[i].name.toString().contains(_search_text)) {
                     _search_popular_list.add(_popular_list[i]);
@@ -720,32 +710,25 @@ class _HomeState extends State<Home> {
 
   _search_list() {
     return GridView.builder(
-      //controller: _scrollController,
+        //controller: _scrollController,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: MediaQuery
-              .of(context)
-              .size
-              .width /
-              (MediaQuery
-                  .of(context)
-                  .size
-                  .height / 1.4),
+          childAspectRatio: MediaQuery.of(context).size.width /
+              (MediaQuery.of(context).size.height / 1.4),
         ),
         itemCount: _search_popular_list.length,
         itemBuilder: (context, int index) {
           return InkWell(
             onTap: () {
               Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (context) =>
-                      ProductDiscription(
+                  builder: (context) => ProductDiscription(
                         child: "Products",
                         image: _search_popular_list[index].image,
                         name: _search_popular_list[index].name,
                         id: _search_popular_list[index].id,
                         price: _search_popular_list[index].price,
                         previous_price:
-                        _search_popular_list[index].previous_price,
+                            _search_popular_list[index].previous_price,
                         discreption: _search_popular_list[index].description,
                         rating: "3.5",
                         catagory_id: _search_popular_list[index].categoryId,
@@ -803,10 +786,10 @@ class _HomeState extends State<Home> {
                                 ),
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
+                                      MainAxisAlignment.spaceAround,
                                   children: <Widget>[
                                     Text(
-                                      "\$${_search_popular_list[index].price}",
+                                      "${_search_popular_list[index].price} tk",
                                       style: TextStyle(
                                           color: Colors.orange,
                                           fontSize: 20,
@@ -816,13 +799,12 @@ class _HomeState extends State<Home> {
                                       width: 10,
                                     ),
                                     Text(
-                                      " \$${_search_popular_list[index]
-                                          .previous_price}",
+                                      " ${_search_popular_list[index].previous_price} tk",
                                       style: TextStyle(
                                         decoration: TextDecoration.lineThrough,
                                         decorationColor: Colors.black,
                                         decorationStyle:
-                                        TextDecorationStyle.solid,
+                                            TextDecorationStyle.solid,
                                       ),
                                     ),
                                   ],

@@ -16,6 +16,7 @@ class Common {
   static String chart = "Chart";
 
   static String order = "Order";
+  static String shipping_address = "Shipping Address";
 
   static String gmail = null;
 

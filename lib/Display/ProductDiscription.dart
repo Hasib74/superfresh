@@ -45,9 +45,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
     // TODO: implement initState
     super.initState();
 
-
-
-   // print("Priceeeeeeeeeeeeeeee  ${widget.price}");
+    // print("Priceeeeeeeeeeeeeeee  ${widget.price}");
 
     setState(() {
       price = widget.price;
@@ -56,7 +54,6 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Common.background_color,
       body: Stack(
@@ -124,14 +121,13 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                   print("Favourite....");
 
                   favoutie();
-
-
                 },
                 child: Common.gmail != null
                     ? StreamBuilder(
                         stream: FirebaseDatabase.instance
                             .reference()
                             .child(Common.favourite)
+                            .child(Common.gmail.replaceAll(".", ""))
                             .child("${widget.child}${widget.id}")
                             .onValue,
                         builder: (context, snapshot) {
@@ -187,7 +183,9 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                 children: <Widget>[
                   Container(
                     child: StarRating(
-                        rating: widget.rating !=null ?  double.parse(widget.rating.toString()) : 0,
+                        rating: widget.rating != null
+                            ? double.parse(widget.rating.toString())
+                            : 0,
                         spaceBetween: 0.0,
                         starConfig: StarConfig(
                           fillColor: Colors.yellow,
@@ -200,7 +198,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                     width: 15,
                   ),
                   Text(
-                    "${widget.rating !=null ? widget.rating  : 0}",
+                    "${widget.rating != null ? widget.rating : 0}",
                     style: TextStyle(
                         color: Color(0xffB4B3B1), fontWeight: FontWeight.bold),
                   ),
@@ -240,7 +238,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
         child: Row(
           children: <Widget>[
             Text(
-              "    \$ ${int.parse(quantity.toString()) == 0 ? 1 : int.parse(quantity.toString()) * double.parse(widget.price.toString())}",
+              "    ${int.parse(quantity.toString()) == 0 ? 1 : int.parse(quantity.toString()) * double.parse(widget.price.toString())} tk",
               style: TextStyle(
                   color: Common.orange_color,
                   fontSize: 17,
@@ -255,12 +253,9 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                         .child(Common.gmail.replaceAll(".", ""))
                         .onValue,
                     builder: (context, snapshot) {
-
-
-                      if(snapshot.data==null){
-
+                      if (snapshot.data == null) {
                         return Container();
-                      }else{
+                      } else {
                         List<String> _id = new List();
 
                         List<String> _child_list = new List();
@@ -271,7 +266,8 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                             height: 50,
                             decoration: BoxDecoration(
                               color: Common.orange_color,
-                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -307,9 +303,8 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                             _child_list.add(v["child"]);
                           });
 
-
                           for (int i = 0; i < _id.length; i++) {
-                         /*   print(
+                            /*   print(
                                 "Child.........................  ${_child_list[i]}  ${widget.child} ==  ${_id[i]} ${widget.id} ");
 */
                             if (_id[i] == widget.id &&
@@ -325,7 +320,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                                 decoration: BoxDecoration(
                                   color: Common.orange_color,
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
+                                      BorderRadius.all(Radius.circular(5)),
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -352,7 +347,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                               decoration: BoxDecoration(
                                 color: Common.orange_color,
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(5)),
+                                    BorderRadius.all(Radius.circular(5)),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -379,10 +374,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                             );
                           }
                         }
-
-
                       }
-
                     })
                 : Container(
                     height: 50,
@@ -483,9 +475,9 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                 .child("Comments")
                 .onValue,
             builder: (context, snp) {
-
-
-              if (snp.data == null || snp.data.snapshot==null || snp.data.snapshot.value==null) {
+              if (snp.data == null ||
+                  snp.data.snapshot == null ||
+                  snp.data.snapshot.value == null) {
                 return Container();
               } else {
                 Map<dynamic, dynamic> _comments = snp.data.snapshot.value;
@@ -501,7 +493,6 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                 if (_comments != null) {
                   _comments.forEach((k, v) {
                     print(v["comments"]);
-
                     comments_list.add(v["comments"]);
                     gmail_list.add(v["gmail"]);
                     image_list.add(v["image"]);
@@ -606,19 +597,13 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
               .once()
               .then((v) {
             if (v.value == null) {
-
-
-
-
-
               FirebaseDatabase.instance
                   .reference()
                   .child(Common.chart)
                   .child(gmail.replaceAll(".", ""))
                   .push()
                   .set({
-
-              //  "catagory_id":widget.catagory_id
+                //  "catagory_id":widget.catagory_id
                 "id": widget.id,
                 "image": widget.image,
                 "name": widget.name,
@@ -664,15 +649,12 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
               }*/
 
               for (int i = 0; i < _id.length; i++) {
-                if (_id[i] == widget.id   && _child_id[i] ==widget.child ) {
+                if (_id[i] == widget.id && _child_id[i] == widget.child) {
                   productChartBefor = 1;
                 }
               }
 
               if (productChartBefor == 0) {
-
-
-
                 print("Category               id  ${widget.catagory_id}");
                 Common.get_user().then((gmail) {
                   if (gmail != null) {
@@ -741,6 +723,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
     FirebaseDatabase.instance
         .reference()
         .child(Common.favourite)
+        .child(Common.gmail.replaceAll(".", ""))
         .child("${widget.child}${widget.id}")
         .once()
         .then((v) {
@@ -748,6 +731,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
         FirebaseDatabase.instance
             .reference()
             .child(Common.favourite)
+            .child(Common.gmail.replaceAll(".", ""))
             .child("${widget.child}${widget.id}")
             .set({
           "id": widget.id,
@@ -768,6 +752,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
         FirebaseDatabase.instance
             .reference()
             .child(Common.favourite)
+            .child(Common.gmail.replaceAll(".", ""))
             .child("${widget.child}${widget.id}")
             .remove()
             .then((_) {
