@@ -5,7 +5,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:supper_fresh_stores/Common.dart';
-import 'package:supper_fresh_stores/Display/HomePlate.dart';
 
 class LogInAndRegistationPageDialog extends StatefulWidget {
   final child;
@@ -69,8 +68,8 @@ class _LogInAndRegistationPageDialogState
   bool isRegistation = false;
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  File _profile_image;
-  String _uploadedFileURL;
+  File? _profile_image;
+  String? _uploadedFileURL;
 
   bool is_loading = false;
 
@@ -270,14 +269,14 @@ class _LogInAndRegistationPageDialogState
           .child(Common.basic_info)
           .once()
           .then((v) {
-        print(v.value);
+        print(v.snapshot.value);
 
-        if (v.value != null) {
+        if (v.snapshot.exists) {
           print(
-              "Passworddddd  ${_password_controller.value.text}    ${v.value["password"].toString()}");
+              "Passworddddd  ${_password_controller.value.text}    ${v.snapshot.child("password").toString()}");
 
           if (_password_controller.value.text ==
-              v.value["password"].toString()) {
+              v.snapshot.child("password").toString()) {
             print("You are log in");
 
             if (widget.current_state == null) {
@@ -292,8 +291,14 @@ class _LogInAndRegistationPageDialogState
               is_loading = false;
             });
 
-            _scaffoldKey.currentState.showSnackBar(
-                new SnackBar(content: new Text('Wrong Password!!!')));
+            /*    _scaffoldKey.currentState.showSnackBar(
+                new SnackBar(content: new Text('Wrong Password!!!')));*/
+
+            ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+                content: new Text(
+              'Wrong Password!!!',
+              style: TextStyle(color: Colors.red),
+            )));
           }
         } else {
           print("You are not allowed ");
@@ -302,8 +307,13 @@ class _LogInAndRegistationPageDialogState
             is_loading = false;
           });
 
-          _scaffoldKey.currentState.showSnackBar(
-              new SnackBar(content: new Text('Failed To Log In !!!')));
+          /* _scaffoldKey.currentState.showSnackBar(
+              new SnackBar(content: new Text('Failed To Log In !!!')));*/
+          ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+              content: new Text(
+            'Failed To Log In !!!',
+            style: TextStyle(color: Colors.red),
+          )));
         }
       });
     } else {
@@ -313,7 +323,7 @@ class _LogInAndRegistationPageDialogState
         is_loading = false;
       });
 
-      _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
           content: new Text(
         'Empty',
         style: TextStyle(color: Colors.red),
@@ -335,11 +345,11 @@ class _LogInAndRegistationPageDialogState
     );
   }
 
-  Future chooseFile() async {
-    await ImagePicker.pickImage(source: ImageSource.gallery).then((img) {
+  hooseFile() async {
+    await ImagePicker().pickImage(source: ImageSource.gallery).then((img) {
       setState(() {
-        print("Imageeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee  ${img}");
-        _profile_image = img;
+        print("Imageeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee  $img");
+        _profile_image = File(img!.path);
       });
     });
   }
@@ -356,7 +366,7 @@ class _LogInAndRegistationPageDialogState
             InkWell(
               onTap: () {
                 //uploadFile();
-                chooseFile();
+                hooseFile();
               },
               child: new Container(
                 width: 100,
@@ -367,7 +377,7 @@ class _LogInAndRegistationPageDialogState
                     image: DecorationImage(
                         fit: BoxFit.cover,
                         image: _profile_image != null
-                            ? FileImage(_profile_image)
+                            ? AssetImage(_profile_image!.path)
                             : AssetImage("Img/icon_student.png"))),
               ),
             ),
@@ -620,15 +630,15 @@ class _LogInAndRegistationPageDialogState
             });
 
             FirebaseDatabase.instance
-                .reference()
+                .ref()
                 .child(Common.user)
                 .child(_email_controller_for_registation.value.text
                     .replaceAll(".", ""))
                 .once()
-                .then((value) {
-              if (value.value == null) {
+                .then((DatabaseEvent value) {
+              if (value.snapshot.value == null) {
                 FirebaseDatabase.instance
-                    .reference()
+                    .ref()
                     .child(Common.user)
                     .child(_email_controller_for_registation.value.text
                         .replaceAll(".", ""))
@@ -654,18 +664,23 @@ class _LogInAndRegistationPageDialogState
                 setState(() {
                   is_loading = false;
                 });
-                _scaffoldKey.currentState.showSnackBar(new SnackBar(
-                    content: new Text(
-                  'You Are Alrady Regisatred',
-                  style: TextStyle(color: Colors.red),
-                )));
+                // _scaffoldKey.currentState.showSnackBar(new SnackBar(
+                //     content: new Text(
+                //   'You Are Alrady Regisatred',
+                //   style: TextStyle(color: Colors.red),
+                // )));
+
+                ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+                  content: Text("You Are Alrady Regisatred"),
+                ));
               }
             });
           } else {
             setState(() {
               is_loading = false;
             });
-            _scaffoldKey.currentState.showSnackBar(new SnackBar(
+
+            ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
                 content: new Text(
               'Password is not match',
               style: TextStyle(color: Colors.red),
@@ -675,7 +690,7 @@ class _LogInAndRegistationPageDialogState
           setState(() {
             is_loading = false;
           });
-          _scaffoldKey.currentState.showSnackBar(new SnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
               content: new Text(
             'Password should be more then 5 character',
             style: TextStyle(color: Colors.red),
@@ -685,7 +700,8 @@ class _LogInAndRegistationPageDialogState
         setState(() {
           is_loading = false;
         });
-        _scaffoldKey.currentState.showSnackBar(new SnackBar(
+
+        ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
             content: new Text(
           'Email should  contain @',
           style: TextStyle(color: Colors.red),
@@ -695,7 +711,8 @@ class _LogInAndRegistationPageDialogState
       setState(() {
         is_loading = false;
       });
-      _scaffoldKey.currentState.showSnackBar(new SnackBar(
+
+      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
           content: new Text(
         'Field Empty',
         style: TextStyle(color: Colors.red),
@@ -714,8 +731,8 @@ class _LogInAndRegistationPageDialogState
           .child(Common.chart)
           .child(_email_controller.value.text.replaceAll(".", ""))
           .once()
-          .then((v) {
-        if (v.value == null) {
+          .then((DatabaseEvent v) {
+        if (v.snapshot.value == null) {
           FirebaseDatabase.instance
               .reference()
               .child(Common.chart)
@@ -746,7 +763,6 @@ class _LogInAndRegistationPageDialogState
 
               //Navigator.of(context).pop();
 
-
               Navigator.pop(context, "Hello world");
 
               setState(() {
@@ -756,14 +772,15 @@ class _LogInAndRegistationPageDialogState
             print("Add product to chart");
           });
         } else {
-          Map<dynamic, dynamic> _chart = v.value;
+          Map<dynamic, dynamic> _chart =
+              v.snapshot.value as Map<dynamic, dynamic>;
 
-          List<String> _id = new List();
+          List<String> _id = [];
 
           var productChartBefor = 0;
 
           _chart.forEach((k, v) {
-            print("Valueeeee  ${v}");
+            print("Valueeeee  $v");
             _id.add(v["id"]);
           });
 
@@ -775,36 +792,34 @@ class _LogInAndRegistationPageDialogState
 
           if (productChartBefor == 0) {
             Common.get_user().then((gmail) {
-              if (gmail != null) {
+              FirebaseDatabase.instance
+                  .ref()
+                  .child(Common.chart)
+                  .child(gmail?.replaceAll(".", "") ?? "")
+                  .once()
+                  .then((v) {
                 FirebaseDatabase.instance
-                    .reference()
+                    .ref()
                     .child(Common.chart)
-                    .child(gmail.replaceAll(".", ""))
-                    .once()
-                    .then((v) {
-                  FirebaseDatabase.instance
-                      .reference()
-                      .child(Common.chart)
-                      .child(gmail.replaceAll(".", ""))
-                      .push()
-                      .set({
-                    "id": widget.id,
-                    "image": widget.image,
-                    "name": widget.name,
-                    "child": widget.child,
-                    "price": widget.price,
-                    "discription": widget.discreption,
-                    "offer": widget.offer,
-                    "rating": widget.rating,
-                    "index": widget.index,
-                    "catagory_id": widget.catagory_id,
-                    "buy_price": widget.buy_price.toString(),
-                    "quantiry": widget.quantity.toString()
-                  });
-                }).then((_) {
-                  print("Add product to chart");
+                    .child(gmail?.replaceAll(".", "") ?? "")
+                    .push()
+                    .set({
+                  "id": widget.id,
+                  "image": widget.image,
+                  "name": widget.name,
+                  "child": widget.child,
+                  "price": widget.price,
+                  "discription": widget.discreption,
+                  "offer": widget.offer,
+                  "rating": widget.rating,
+                  "index": widget.index,
+                  "catagory_id": widget.catagory_id,
+                  "buy_price": widget.buy_price.toString(),
+                  "quantiry": widget.quantity.toString()
                 });
-              }
+              }).then((_) {
+                print("Add product to chart");
+              });
             });
           } else {
             print("Product alrady added to chart");
@@ -826,7 +841,7 @@ class _LogInAndRegistationPageDialogState
               });
             });
 
-            _scaffoldKey.currentState.showSnackBar(new SnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
                 content: new Text(
               'Product alrady added to chart',
               style: TextStyle(color: Colors.red),
@@ -867,14 +882,14 @@ class _LogInAndRegistationPageDialogState
 
   void store_to_chart() {
     FirebaseDatabase.instance
-        .reference()
+        .ref()
         .child(Common.chart)
         .child(_email_controller_for_registation.value.text.replaceAll(".", ""))
         .once()
         .then((v) {
-      if (v.value == null) {
+      if (v.snapshot.value == null) {
         FirebaseDatabase.instance
-            .reference()
+            .ref()
             .child(Common.chart)
             .child(_email_controller_for_registation.value.text
                 .replaceAll(".", ""))
@@ -898,14 +913,15 @@ class _LogInAndRegistationPageDialogState
           uploadFile();
         });
       } else {
-        Map<dynamic, dynamic> _chart = v.value;
+        Map<dynamic, dynamic> _chart =
+            v.snapshot.value as Map<dynamic, dynamic>;
 
-        List<String> _id = new List();
+        List<String> _id = [];
 
         var productChartBefor = 0;
 
         _chart.forEach((k, v) {
-          print("Valueeeee  ${v}");
+          print("Valueeeee  $v");
           _id.add(v["id"]);
         });
 
@@ -916,40 +932,36 @@ class _LogInAndRegistationPageDialogState
         }
 
         if (productChartBefor == 0) {
-          Common.get_user().then((gmail) {
-            if (gmail != null) {
-              FirebaseDatabase.instance
-                  .reference()
-                  .child(Common.chart)
-                  .child(gmail.replaceAll(".", ""))
-                  .once()
-                  .then((v) {
-                FirebaseDatabase.instance
-                    .reference()
-                    .child(Common.chart)
-                    .child(gmail.replaceAll(".", ""))
-                    .child((v.value.length + 1).toString())
-                    .set({
-                  "id": widget.id,
-                  "image": widget.image,
-                  "name": widget.name,
-                  "child": widget.child,
-                  "price": widget.price,
-                  "discription": widget.discreption,
-                  "offer": widget.offer,
-                  "rating": widget.rating,
-                  "index": widget.index,
-                  "catagory_id": widget.catagory_id,
-                  "buy_price": widget.buy_price.toString(),
-                  "quantiry": widget.quantity.toString()
-                });
-              }).then((_) {
-                print("Add product to chart");
+      /*    Common.get_user().then((gmail) {
+            FirebaseDatabase.instance
+                .ref()
+                .child(Common.chart)
+                .child(gmail?.replaceAll(".", "" ).once().then((v) {
+                  FirebaseDatabase.instance
+                      .ref()
+                      .child(Common.chart)
+                      .child(gmail.replaceAll(".", ""))
+                      .child((v.value.length + 1).toString())
+                      .set({
+                    "id": widget.id,
+                    "image": widget.image,
+                    "name": widget.name,
+                    "child": widget.child,
+                    "price": widget.price,
+                    "discription": widget.discreption,
+                    "offer": widget.offer,
+                    "rating": widget.rating,
+                    "index": widget.index,
+                    "catagory_id": widget.catagory_id,
+                    "buy_price": widget.buy_price.toString(),
+                    "quantiry": widget.quantity.toString()
+                  });
+                }).then((_) {
+                  print("Add product to chart");
 
-                uploadFile();
-              });
-            }
-          });
+                  uploadFile();
+                }));
+          });*/
         } else {
           print("Product alrady added to chart");
 
@@ -961,15 +973,15 @@ class _LogInAndRegistationPageDialogState
     });
   }
 
-  Future uploadFile() async {
+   uploadFile() async {
     print("AOKKKKKKKKKKKKKKKKK0");
 
     if (_profile_image != null) {
-      StorageReference storageReference = FirebaseStorage.instance
+      var storageReference = FirebaseStorage.instance
           .ref()
           .child('images/${DateTime.now().toString()}');
-      StorageUploadTask uploadTask = storageReference.putFile(_profile_image);
-      await uploadTask.onComplete;
+      var uploadTask = storageReference.putFile(_profile_image!);
+      await uploadTask.whenComplete(() => null);
       print('File Uploaded');
       storageReference.getDownloadURL().then((fileURL) {
         setState(() {

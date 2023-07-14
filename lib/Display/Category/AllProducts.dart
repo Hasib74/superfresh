@@ -1,6 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_star_rating/flutter_star_rating.dart';
 import 'package:supper_fresh_stores/Common.dart';
 import 'package:supper_fresh_stores/Display/ProductDiscription.dart';
 import 'package:supper_fresh_stores/Model/Category.dart';
@@ -17,13 +16,13 @@ class AllProducts extends StatefulWidget {
 
 class _AllProductsState extends State<AllProducts>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  TabController? _tabController;
 
   ScrollController _scrollController = new ScrollController();
 
   bool isload = false;
 
-  List<String> _tem_category = List();
+  List<String> _tem_category = [];
   var seleted_postion = 0;
 
   @override
@@ -34,25 +33,23 @@ class _AllProductsState extends State<AllProducts>
     _length().then((v) {
       // print("Valueeeeeeeeeeeeeeeeeeeeeeee  ${v}");
 
-      if (v != null) {
+      setState(() {
+        isload = true;
+
+        if (widget.index == null) {
+          _tabController =
+              new TabController(length: v.length, vsync: this, initialIndex: 0);
+        } else {
+          _tabController = new TabController(
+              length: v.length, vsync: this, initialIndex: widget.index);
+        }
+
+        print(v[0]);
+
         setState(() {
-          isload = true;
-
-          if (widget.index == null) {
-            _tabController = new TabController(
-                length: v.length, vsync: this, initialIndex: 0);
-          } else {
-            _tabController = new TabController(
-                length: v.length, vsync: this, initialIndex: widget.index);
-          }
-
-          print(v[0]);
-
-          setState(() {
-            _tem_category = v;
-          });
+          _tem_category = v;
         });
-      }
+      });
     });
   }
 
@@ -111,16 +108,17 @@ class _AllProductsState extends State<AllProducts>
         children: <Widget>[
           StreamBuilder(
               stream: FirebaseDatabase.instance
-                  .reference()
+                  .ref()
                   .child(Common.category)
                   .onValue,
-              builder: (context, snapshot) {
-                List<Category> _catagory_list = new List();
+              builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+                List<Category> _catagory_list = [];
 
                 if (snapshot.data == null) {
                   return Container();
                 } else {
-                  Map<dynamic, dynamic> catagory = snapshot.data.snapshot.value;
+                  Map<dynamic, dynamic> catagory =
+                      snapshot.data?.snapshot.value as Map<dynamic, dynamic>;
 
                   catagory.forEach((k, v) {
                     _catagory_list
@@ -141,7 +139,7 @@ class _AllProductsState extends State<AllProducts>
                         height: 25,
                         decoration: BoxDecoration(
                             color: _catagory_list.indexOf(catagory) ==
-                                    _tabController.index
+                                    _tabController?.index
                                 ? Color(0xffFF5126)
                                 : Colors.grey,
                             borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -174,7 +172,7 @@ class _AllProductsState extends State<AllProducts>
                 child: TextField(
                   //controller: _text_controller,
                   onChanged: (text) {
-                    print("Text  onChange ${text}");
+                    print("Text  onChange $text");
 
                     setState(() {
                       _search_text = text;
@@ -182,14 +180,14 @@ class _AllProductsState extends State<AllProducts>
 
                     setState(() {
                       /*
-                        *  List _search_name=new List();
-  List _search_image=new List();
-  List _search_price=new List();
-  List _search_previous_price=new List();
-  List _search_categoryId=new List();
-  List _search_description=new List();
-  List _search_discount=new List();
-  List _search_id=new List();
+                        *  List _search_name=[];
+  List _search_image=[];
+  List _search_price=[];
+  List _search_previous_price=[];
+  List _search_categoryId=[];
+  List _search_description=[];
+  List _search_discount=[];
+  List _search_id=[];
                         * */
 
                       /*_search_name.clear();
@@ -202,13 +200,13 @@ class _AllProductsState extends State<AllProducts>
                         _search_id.clear();*/
                       // _search_room_number.clear();
 
-                      print("Text.................runing    ${_search_text}");
+                      print("Text.................runing    $_search_text");
 
                       _prev_search_text =
                           _search_text.substring(0, _search_text.length - 1);
 
                       print(
-                          "Text.................privious  ${_prev_search_text}");
+                          "Text.................privious  $_prev_search_text");
                     });
                   },
 
@@ -240,33 +238,33 @@ class _AllProductsState extends State<AllProducts>
     return Padding(
       padding: EdgeInsets.only(top: 100, bottom: 0.0),
       child: StreamBuilder(
-          stream: FirebaseDatabase.instance
-              .reference()
-              .child(Common.products)
-              .onValue,
-          builder: (context, snapshot) {
-            if (snapshot.data == null || snapshot.data.snapshot.value == null) {
+          stream:
+              FirebaseDatabase.instance.ref().child(Common.products).onValue,
+          builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+            if (snapshot.data == null ||
+                snapshot.data?.snapshot.value == null) {
               // print("Valueeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee  ${snapshot.data.snapshot.value}");
 
               return Center(
                 child: Container(),
               );
             } else {
-              print(
-                  "Valueeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee  ${snapshot.data.snapshot.value}");
+              // print(
+              //     "Valueeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee  ${snapshot.data.snapshot.value}");
 
-              List _search_name = new List();
-              List _search_image = new List();
-              List _search_price = new List();
-              List _search_previous_price = new List();
-              List _search_categoryId = new List();
-              List _search_description = new List();
-              List _search_discount = new List();
-              List _search_id = new List();
+              List _search_name = [];
+              List _search_image = [];
+              List _search_price = [];
+              List _search_previous_price = [];
+              List _search_categoryId = [];
+              List _search_description = [];
+              List _search_discount = [];
+              List _search_id = [];
 
-              Map<dynamic, dynamic> product = snapshot.data.snapshot.value;
+              Map<dynamic, dynamic> product =
+                  snapshot.data?.snapshot.value as Map<dynamic, dynamic>;
 
-              List<Product> _products_list = new List();
+              List<Product> _products_list = [];
 
               product.forEach((k, v) {
                 if (v["catagory_id"] == _tem_category[seleted_postion]) {
@@ -285,7 +283,7 @@ class _AllProductsState extends State<AllProducts>
                 }
               });
 
-              print("Search Text...................  ${_search_text}");
+              print("Search Text...................  $_search_text");
 
               if (_products_list.length > 0) {
                 if (_search_text != "" && _prev_search_text != _search_text) {
@@ -309,7 +307,7 @@ class _AllProductsState extends State<AllProducts>
                       print("Monu1");
 
                       print(
-                          "Nameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee  ${_products_list[i].name.toString().toLowerCase()}       ${_search_text}");
+                          "Nameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee  ${_products_list[i].name.toString().toLowerCase()}       $_search_text");
 
                       _search_name.add(_products_list[i].name);
                       _search_image.add(_products_list[i].image);
@@ -401,26 +399,26 @@ class _AllProductsState extends State<AllProducts>
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              Container(
-                                                child: StarRating(
-                                                    rating:
-                                                        _products_list[index]
-                                                                    .rating !=
-                                                                null
-                                                            ? double.parse(
-                                                                _products_list[
-                                                                        index]
-                                                                    .rating
-                                                                    .toString())
-                                                            : 0,
-                                                    spaceBetween: 0.0,
-                                                    starConfig: StarConfig(
-                                                      fillColor: Colors.yellow,
-                                                      size: 15,
-
-                                                      // other props
-                                                    )),
-                                              ),
+                                              // Container(
+                                              //   child: StarRating(
+                                              //       rating:
+                                              //           _products_list[index]
+                                              //                       .rating !=
+                                              //                   null
+                                              //               ? double.parse(
+                                              //                   _products_list[
+                                              //                           index]
+                                              //                       .rating
+                                              //                       .toString())
+                                              //               : 0,
+                                              //       spaceBetween: 0.0,
+                                              //       starConfig: StarConfig(
+                                              //         fillColor: Colors.yellow,
+                                              //         size: 15,
+                                              //
+                                              //         // other props
+                                              //       )),
+                                              // ),
                                               Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -537,17 +535,17 @@ class _AllProductsState extends State<AllProducts>
                                                     fontWeight:
                                                         FontWeight.bold),
                                               ),
-                                              Container(
-                                                child: StarRating(
-                                                    rating: double.parse("3"),
-                                                    spaceBetween: 0.0,
-                                                    starConfig: StarConfig(
-                                                      fillColor: Colors.yellow,
-                                                      size: 15,
-
-                                                      // other props
-                                                    )),
-                                              ),
+                                              // Container(
+                                              //   child: StarRating(
+                                              //       rating: double.parse("3"),
+                                              //       spaceBetween: 0.0,
+                                              //       starConfig: StarConfig(
+                                              //         fillColor: Colors.yellow,
+                                              //         size: 15,
+                                              //
+                                              //         // other props
+                                              //       )),
+                                              // ),
                                               Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -597,16 +595,17 @@ class _AllProductsState extends State<AllProducts>
   }
 
   Future<List<String>> _length() async {
-    List<String> _temp_list = List();
+    List<String> _temp_list = [];
 
     await FirebaseDatabase.instance
-        .reference()
+        .ref()
         .child(Common.category)
         .once()
-        .then((v) {
+        .then((DatabaseEvent v) {
       //    length = v.value.length;
 
-      Map<dynamic, dynamic> catagory = v.value;
+      Map<dynamic, dynamic> catagory =
+          v.snapshot.value as Map<dynamic, dynamic>;
 
       catagory.forEach((k, v) {
         _temp_list.add(k);

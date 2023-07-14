@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pinput/pin_put/pin_put.dart';
-import 'package:pinput/pin_put/pin_put_bloc.dart';
-import 'package:pinput/pin_put/pin_put_state.dart';
+
 
 class RegistationPage extends StatelessWidget {
   var _name_controller = TextEditingController();

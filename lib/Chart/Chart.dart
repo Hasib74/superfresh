@@ -20,17 +20,17 @@ class _ChartsState extends State<Charts> {
 
   //var total_price=0.0;
 
-  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  final FirebaseMessaging? firebaseMessaging = FirebaseMessaging.instance;
 
-  String adminToken;
+  String? adminToken;
 
   String serverToken =
       "AAAAYRdQILY:APA91bFzhd7EoGvrXC8Z6-FrbtAEvvSwzb0MtDZQrUzwkzsFmRp94cK_J0ChBWBMSvB309n-CcfsckMPemjoVrQopmb45SVgguUOupj3FeCMswEmmzBf3zv20adhZmirCmGOE5JgdxZt";
 
-  String _name;
-  String _address;
+  String? _name;
+  String? _address;
 
-  String _image;
+  String? _image;
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _ChartsState extends State<Charts> {
 
         _image = _user_list[2];
 
-        print("Name  ${_user_list}");
+        print("Name  $_user_list");
 
         print(_address);
 
@@ -55,7 +55,7 @@ class _ChartsState extends State<Charts> {
       });
     });
 
-    _adminToken().then((v) {
+    _adminToken()?.then((v) {
       setState(() {
         adminToken = v;
       });
@@ -118,13 +118,12 @@ class _ChartsState extends State<Charts> {
         width: MediaQuery.of(context).size.width,
         child: StreamBuilder(
             stream: FirebaseDatabase.instance
-                .reference()
+                .ref()
                 .child(Common.chart)
-                .child(Common.gmail.replaceAll(".", ""))
+                .child(Common.gmail!.replaceAll(".", ""))
                 .onValue,
-            builder: (context, snapshot) {
-              if (snapshot == null ||
-                  snapshot.data.snapshot.value == null ||
+            builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+              if (snapshot.data?.snapshot == null ||
                   snapshot.data == null ||
                   snapshot.hasError == true) {
                 return Row(
@@ -170,18 +169,19 @@ class _ChartsState extends State<Charts> {
                   ],
                 );
               } else {
-                List<String> price_list = new List();
+                List<String> priceList = [];
 
                 var price = 0.0;
 
-                Map<dynamic, dynamic> prices = snapshot.data.snapshot.value;
+                Map<dynamic, dynamic>? prices =
+                    snapshot.data?.snapshot.value as Map<String, String>;
 
                 prices.forEach((k, v) {
-                  price_list.add(v["price"]);
+                  priceList.add(v["price"]);
                 });
 
-                for (int i = 0; i < price_list.length; i++) {
-                  price += double.parse(price_list[i]);
+                for (int i = 0; i < priceList.length; i++) {
+                  price += double.parse(priceList[i]);
                 }
 
                 return Row(
@@ -190,7 +190,7 @@ class _ChartsState extends State<Charts> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "Total Price : ${price} tk",
+                        "Total Price : $price tk",
                         style: TextStyle(
                             color: Common.orange_color,
                             fontSize: 16,
@@ -214,7 +214,7 @@ class _ChartsState extends State<Charts> {
                                     content: ShippingInfo(),
                                   )).then((value) {
                             if (value != null) {
-                              print("Returned Value is  ${value}");
+                              print("Returned Value is  $value");
                               _order(value);
                             }
                           });
@@ -250,44 +250,44 @@ class _ChartsState extends State<Charts> {
   list() {
     return StreamBuilder(
         stream: FirebaseDatabase.instance
-            .reference()
+            .ref()
             .child(Common.chart)
-            .child(Common.gmail.replaceAll(".", ""))
+            .child(Common.gmail?.replaceAll(".", "") ?? "")
             .onValue,
-        builder: (context, snp) {
-          if (snp == null) {
+        builder: (context, AsyncSnapshot<DatabaseEvent> snp) {
+          if (snp.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
           } else {
-            if (snp.data.snapshot.value == null ||
+            if (snp.data == null ||
                 snp.data == null ||
                 snp.hasData == false ||
-                snp == null ||
-                snp.data.snapshot == null ||
+                snp.data == null ||
                 snp.hasError) {
               return Container();
             } else {
-              List<String> _price = new List();
-              List<String> _catagory_id = new List();
-              List<String> _child = new List();
-              List<String> _discription = new List();
-              List<String> _id = new List();
-              List<String> _image = new List();
-              List<String> _offer = new List();
-              List<String> _quantity = new List();
-              List<String> _rating = new List();
+              List<String> _price = [];
+              List<String> _catagory_id = [];
+              List<String> _child = [];
+              List<String> _discription = [];
+              List<String> _id = [];
+              List<String> _image = [];
+              List<String> _offer = [];
+              List<String> _quantity = [];
+              List<String> _rating = [];
 
-              List<String> _name = new List();
+              List<String> _name = [];
 
-              List<String> _key = new List();
+              List<String> _key = [];
 
-              List<String> _buy_price = new List();
+              List<String> _buy_price = [];
 
-              Map<dynamic, dynamic> _chart = snp.data.snapshot.value;
+              Map<dynamic, dynamic>? _chart =
+                  snp.data?.snapshot.value as Map<dynamic, dynamic>;
 
               _chart.forEach((k, v) {
-                print("Keyyyy  ${k}");
+                print("Keyyyy  $k");
 
-                print("Valueee  ${v}");
+                print("Valueee  $v");
 
                 _price.add(v["price"].toString());
                 _catagory_id.add(v["catagory_id"].toString());
@@ -342,21 +342,19 @@ class _ChartsState extends State<Charts> {
                                   ),
                                   StreamBuilder(
                                       stream: FirebaseDatabase.instance
-                                          .reference()
+                                          .ref()
                                           .child(Common.category)
                                           .child(_catagory_id[index])
                                           .child("name")
                                           .onValue,
-                                      builder: (context, snapshot) {
+                                      builder: (context,
+                                          AsyncSnapshot<DatabaseEvent>
+                                              snapshot) {
                                         if (snapshot.data == null) {
                                           return Container();
                                         } else {
                                           return Text(
-                                              snapshot.data.snapshot.value ==
-                                                      null
-                                                  ? ""
-                                                  : snapshot
-                                                      .data.snapshot.value,
+                                              "${snapshot.data?.snapshot.exists == false ? "" : snapshot.data?.snapshot.value.toString()}",
                                               style: TextStyle(
                                                   color: Color(0xff868686),
                                                   fontSize: 13,
@@ -384,10 +382,11 @@ class _ChartsState extends State<Charts> {
                                   InkWell(
                                       onTap: () {
                                         FirebaseDatabase.instance
-                                            .reference()
+                                            .ref()
                                             .child(Common.chart)
                                             .child(Common.gmail
-                                                .replaceAll(".", ""))
+                                                    ?.replaceAll(".", "") ??
+                                                "")
                                             .child(_key[index])
                                             .remove()
                                             .then((_) {
@@ -408,10 +407,11 @@ class _ChartsState extends State<Charts> {
 
                                     ongetQuantity: ((count) {
                                       FirebaseDatabase.instance
-                                          .reference()
+                                          .ref()
                                           .child(Common.chart)
-                                          .child(
-                                              Common.gmail.replaceAll(".", ""))
+                                          .child(Common.gmail
+                                                  ?.replaceAll(".", "") ??
+                                              "")
                                           .child(_key[index])
                                           .update({
                                         "quantiry": count,
@@ -444,7 +444,7 @@ class _ChartsState extends State<Charts> {
     FirebaseDatabase.instance
         .reference()
         .child(Common.order)
-        .child(Common.gmail.replaceAll(".", ""))
+        .child(Common.gmail?.replaceAll(".", "") ?? "")
         .child(Common.shipping_address)
         .set({
       "House Number": address.house_number,
@@ -454,18 +454,19 @@ class _ChartsState extends State<Charts> {
     });
 
     FirebaseDatabase.instance
-        .reference()
+        .ref()
         .child(Common.chart)
-        .child(Common.gmail.replaceAll(".", ""))
+        .child(Common.gmail?.replaceAll(".", "") ?? "")
         .once()
         .then((v) {
-      Map<dynamic, dynamic> _carty_list = v.value;
+      Map<dynamic, dynamic>? _carty_list =
+          v.snapshot.value as Map<dynamic, dynamic>;
 
       _carty_list.forEach((k, v) {
         FirebaseDatabase.instance
-            .reference()
+            .ref()
             .child(Common.order)
-            .child(Common.gmail.replaceAll(".", ""))
+            .child(Common.gmail?.replaceAll(".", "") ?? "")
             .push()
             .set({
               "buy_price": v["buy_price"],
@@ -481,9 +482,9 @@ class _ChartsState extends State<Charts> {
             .catchError((err) => print(err))
             .then((_) {
               FirebaseDatabase.instance
-                  .reference()
+                  .ref()
                   .child(Common.chart)
-                  .child(Common.gmail.replaceAll(".", ""))
+                  .child(Common.gmail?.replaceAll(".", "") ?? "")
                   .child(k)
                   .remove()
                   .then((_) {
@@ -493,8 +494,8 @@ class _ChartsState extends State<Charts> {
                   Map<String, dynamic> _v = value;
 
                   _v.forEach((k, v) {
-                    print("Key  ${k}");
-                    print("Value ${v}");
+                    print("Key  $k");
+                    print("Value $v");
                   });
                 });
               });
@@ -506,13 +507,15 @@ class _ChartsState extends State<Charts> {
   }
 
   Future<Map<String, dynamic>> sendAndRetrieveMessage() async {
-    await firebaseMessaging.requestNotificationPermissions(
-      const IosNotificationSettings(
-          sound: true, badge: true, alert: true, provisional: false),
+    await firebaseMessaging!.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      sound: true,
     );
 
     await http.post(
-      'https://fcm.googleapis.com/fcm/send',
+      Uri.parse("https://fcm.googleapis.com/fcm/send"),
       headers: <String, String>{
         'Content-Type': 'application/json',
         'Authorization': 'key=$serverToken',
@@ -520,7 +523,7 @@ class _ChartsState extends State<Charts> {
       body: jsonEncode(
         <String, dynamic>{
           'notification': <String, dynamic>{
-            'body': 'New Order from  ${_name}',
+            'body': 'New Order from  $_name',
             'title': 'New Order'
           },
           'priority': 'high',
@@ -539,51 +542,46 @@ class _ChartsState extends State<Charts> {
     final Completer<Map<String, dynamic>> completer =
         Completer<Map<String, dynamic>>();
 
-    firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        completer.complete(message);
-      },
-    );
-
     return completer.future;
   }
 
   Future<List<String>> _getUserDetails() async {
-    List<String> _user_list = new List();
+    List<String> _user_list = [];
 
     await FirebaseDatabase.instance
-        .reference()
+        .ref()
         .child(Common.user)
-        .child(Common.gmail.replaceAll(".", ""))
+        .child(Common.gmail?.replaceAll(".", "") ?? "")
         .child(Common.basic_info)
         .once()
-        .then((user) {
-      if (user.value != null) {
-        print("Valueeeeeeeeeeeeeeee ${user.value["name"]}");
+        .then((DatabaseEvent user) {
+      if (user.snapshot.value != null) {
+        Map<dynamic, dynamic> _user =
+            user.snapshot.value as Map<dynamic, dynamic>;
+        print("Valueeeeeeeeeeeeeeee ${user.snapshot.value}");
 
-        _user_list.add(user.value["name"]);
+        _user_list.add(_user["name"]);
 
-        _user_list.add(user.value["Address"]);
+        _user_list.add(_user["Address"]);
 
-        _user_list.add(user.value["Image"]);
+        _user_list.add(_user["Image"]);
       }
     });
 
     return _user_list;
   }
 
-  Future<String> _adminToken() async {
-    String token;
+  Future<String?>? _adminToken() async {
+    String? token;
 
     await FirebaseDatabase.instance
-        .reference()
+        .ref()
         .child("Token")
-        .reference()
         .child("Admin")
         .child("token")
         .once()
         .then((v) {
-      token = v.value;
+      token = v.snapshot.value.toString();
     }).catchError((err) => print(err));
 
     return token;
@@ -592,14 +590,14 @@ class _ChartsState extends State<Charts> {
 
 //Count library function create
 
-typedef getQuantity = int Function(int quantity);
+typedef getQuantity = int? Function(int quantity);
 
 class count extends StatefulWidget {
   var quantity;
 
-  getQuantity ongetQuantity;
+  getQuantity? ongetQuantity;
 
-  count({this.quantity, Key key, this.ongetQuantity}) : super(key: key);
+  count({this.quantity, Key? key, this.ongetQuantity}) : super(key: key);
 
   @override
   _countState createState() => _countState();
@@ -634,7 +632,10 @@ class _countState extends State<count> {
 
         // print("Count valueee  ${value}");
 
-        widget.ongetQuantity(value);
+        if (widget.ongetQuantity != null) {
+          widget.ongetQuantity!(value);
+        }
+
         setState(() {
           _current_quantity = value;
 

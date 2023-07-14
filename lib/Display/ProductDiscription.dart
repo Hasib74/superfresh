@@ -1,7 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:supper_fresh_stores/Common.dart';
-import 'package:flutter_star_rating/flutter_star_rating.dart';
 import 'package:supper_fresh_stores/Dialog/dialog.dart';
 import 'package:supper_fresh_stores/Library/Counter.dart';
 
@@ -127,14 +126,14 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                         stream: FirebaseDatabase.instance
                             .reference()
                             .child(Common.favourite)
-                            .child(Common.gmail.replaceAll(".", ""))
+                            .child(Common.gmail?.replaceAll(".", "") ??"")
                             .child("${widget.child}${widget.id}")
                             .onValue,
                         builder: (context, snapshot) {
                           if (snapshot.data == null) {
                             return Container();
                           } else {
-                            if (snapshot.data.snapshot.value == null) {
+                            if (snapshot.data == null) {
                               return new Icon(
                                 Icons.favorite_border,
                                 color: Common.orange_color,
@@ -181,19 +180,19 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
               width: MediaQuery.of(context).size.width,
               child: Row(
                 children: <Widget>[
-                  Container(
-                    child: StarRating(
-                        rating: widget.rating != null
-                            ? double.parse(widget.rating.toString())
-                            : 0,
-                        spaceBetween: 0.0,
-                        starConfig: StarConfig(
-                          fillColor: Colors.yellow,
-                          size: 15,
-
-                          // other props
-                        )),
-                  ),
+                  // Container(
+                  //   child: StarRating(
+                  //       rating: widget.rating != null
+                  //           ? double.parse(widget.rating.toString())
+                  //           : 0,
+                  //       spaceBetween: 0.0,
+                  //       starConfig: StarConfig(
+                  //         fillColor: Colors.yellow,
+                  //         size: 15,
+                  //
+                  //         // other props
+                  //       )),
+                  // ),
                   SizedBox(
                     width: 15,
                   ),
@@ -250,18 +249,18 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                     stream: FirebaseDatabase.instance
                         .reference()
                         .child(Common.chart)
-                        .child(Common.gmail.replaceAll(".", ""))
+                        .child(Common.gmail?.replaceAll(".", "") ??"")
                         .onValue,
                     builder: (context, snapshot) {
                       if (snapshot.data == null) {
                         return Container();
                       } else {
-                        List<String> _id = new List();
+                        List<String> _id = [];
 
-                        List<String> _child_list = new List();
+                        List<String> _child_list = [];
                         var productChartBefor = 0;
 
-                        if (snapshot.data.snapshot.value == null) {
+                        if (snapshot.data == null) {
                           return Container(
                             height: 50,
                             decoration: BoxDecoration(
@@ -294,10 +293,10 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                           );
                         } else {
                           Map<dynamic, dynamic> _chart =
-                              snapshot.data.snapshot.value;
+                              snapshot.data as Map<dynamic,dynamic>;
 
                           _chart.forEach((k, v) {
-                            print("Valueeeee  ${v}");
+                            print("Valueeeee  $v");
                             _id.add(v["id"]);
 
                             _child_list.add(v["child"]);
@@ -476,28 +475,28 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                 .onValue,
             builder: (context, snp) {
               if (snp.data == null ||
-                  snp.data.snapshot == null ||
-                  snp.data.snapshot.value == null) {
+                  snp.data == null ||
+                  snp.data == null) {
                 return Container();
               } else {
-                Map<dynamic, dynamic> _comments = snp.data.snapshot.value;
+                Map<dynamic, dynamic> _comments = snp.data as Map<dynamic, dynamic>;
 
                 // print(_comments.values.toList());
 
-                List<String> comments_list = new List();
-                List<String> gmail_list = new List();
-                List<String> image_list = new List();
-                List<String> name_list = new List();
-                List<double> rating_list = new List();
+                List<String> commentsList = [];
+                List<String> gmailList = [];
+                List<String> imageList = [];
+                List<String> nameList = [];
+                List<double> ratingList = [];
 
                 if (_comments != null) {
                   _comments.forEach((k, v) {
                     print(v["comments"]);
-                    comments_list.add(v["comments"]);
-                    gmail_list.add(v["gmail"]);
-                    image_list.add(v["image"]);
-                    name_list.add(v["name"]);
-                    rating_list.add(v["rating"]);
+                    commentsList.add(v["comments"]);
+                    gmailList.add(v["gmail"]);
+                    imageList.add(v["image"]);
+                    nameList.add(v["name"]);
+                    ratingList.add(v["rating"]);
                   });
 
                   // return Container();
@@ -519,7 +518,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                                         shape: BoxShape.circle,
                                         image: DecorationImage(
                                             image: NetworkImage(
-                                                image_list[index])),
+                                                imageList[index])),
                                       ),
                                     ),
                                     SizedBox(
@@ -530,14 +529,14 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Text(
-                                          name_list[index],
+                                          nameList[index],
                                           style: TextStyle(
                                               color: Colors.black45,
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          gmail_list[index],
+                                          gmailList[index],
                                           style: TextStyle(
                                               color: Colors.black45,
                                               fontSize: 10,
@@ -546,23 +545,23 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                                       ],
                                     ),
                                     Spacer(),
-                                    Container(
-                                      child: StarRating(
-                                          rating: rating_list[index],
-                                          spaceBetween: 0.0,
-                                          starConfig: StarConfig(
-                                            fillColor: Colors.yellow,
-                                            size: 15,
-
-                                            // other props
-                                          )),
-                                    ),
+                                    // Container(
+                                    //   child: StarRating(
+                                    //       rating: ratingList[index],
+                                    //       spaceBetween: 0.0,
+                                    //       starConfig: StarConfig(
+                                    //         fillColor: Colors.yellow,
+                                    //         size: 15,
+                                    //
+                                    //         // other props
+                                    //       )),
+                                    // ),
                                   ],
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    comments_list[index],
+                                    commentsList[index],
                                     style: TextStyle(
                                         color: Color(0xff989A9E), fontSize: 14),
                                   ),
@@ -591,16 +590,16 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
 
         Common.get_user().then((gmail) {
           FirebaseDatabase.instance
-              .reference()
+              .ref()
               .child(Common.chart)
-              .child(gmail.replaceAll(".", ""))
+              .child(gmail?.replaceAll(".", "") ?? "")
               .once()
               .then((v) {
-            if (v.value == null) {
+            if (v.snapshot == null) {
               FirebaseDatabase.instance
-                  .reference()
+                  .ref()
                   .child(Common.chart)
-                  .child(gmail.replaceAll(".", ""))
+                  .child(gmail?.replaceAll(".", "") ??"")
                   .push()
                   .set({
                 //  "catagory_id":widget.catagory_id
@@ -622,16 +621,16 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
             } else {
               print("Not Nullllllllllllllllllllllllllllll   ");
 
-              List<String> _id = new List();
+              List<String> _id = [];
 
-              List<String> _child_id = new List();
+              List<String> _child_id = [];
 
-              Map<dynamic, dynamic> _chart = v.value;
+              Map<dynamic, dynamic> _chart = v.snapshot.value as Map<dynamic ,dynamic>;
 
               var productChartBefor = 0;
 
               _chart.forEach((k, v) {
-                print("Valueeeee  ${v}");
+                print("Valueeeee  $v");
                 _id.add(v["id"]);
 
                 _child_id.add(v["child"]);
@@ -657,36 +656,34 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
               if (productChartBefor == 0) {
                 print("Category               id  ${widget.catagory_id}");
                 Common.get_user().then((gmail) {
-                  if (gmail != null) {
+                  FirebaseDatabase.instance
+                      .reference()
+                      .child(Common.chart)
+                      .child(gmail?.replaceAll(".", "") ??"")
+                      .once()
+                      .then((v) {
                     FirebaseDatabase.instance
                         .reference()
                         .child(Common.chart)
-                        .child(gmail.replaceAll(".", ""))
-                        .once()
-                        .then((v) {
-                      FirebaseDatabase.instance
-                          .reference()
-                          .child(Common.chart)
-                          .child(gmail.replaceAll(".", ""))
-                          .push()
-                          .set({
-                        "id": widget.id,
-                        "image": widget.image,
-                        "name": widget.name,
-                        "child": widget.child,
-                        "price": widget.price,
-                        "discription": widget.discreption,
-                        "offer": widget.offer,
-                        "rating": widget.rating,
-                        "index": widget.index,
-                        "catagory_id": widget.catagory_id,
-                        "buy_price": price.toString(),
-                        "quantiry": quantity.toString()
-                      });
-                    }).then((_) {
-                      print("Add product to chart");
+                        .child(gmail?.replaceAll(".", "") ?? "")
+                        .push()
+                        .set({
+                      "id": widget.id,
+                      "image": widget.image,
+                      "name": widget.name,
+                      "child": widget.child,
+                      "price": widget.price,
+                      "discription": widget.discreption,
+                      "offer": widget.offer,
+                      "rating": widget.rating,
+                      "index": widget.index,
+                      "catagory_id": widget.catagory_id,
+                      "buy_price": price.toString(),
+                      "quantiry": quantity.toString()
                     });
-                  }
+                  }).then((_) {
+                    print("Add product to chart");
+                  });
                 });
               } else {
                 print("Product alrady added to chart");
@@ -723,15 +720,15 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
     FirebaseDatabase.instance
         .reference()
         .child(Common.favourite)
-        .child(Common.gmail.replaceAll(".", ""))
+        .child(Common.gmail?.replaceAll(".", "") ??"")
         .child("${widget.child}${widget.id}")
         .once()
         .then((v) {
-      if (v.value == null) {
+      if (v.snapshot.exists) {
         FirebaseDatabase.instance
             .reference()
             .child(Common.favourite)
-            .child(Common.gmail.replaceAll(".", ""))
+            .child(Common.gmail?.replaceAll(".", "") ??"")
             .child("${widget.child}${widget.id}")
             .set({
           "id": widget.id,
@@ -747,12 +744,12 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
           "buy_price": price.toString(),
           "quantiry": quantity.toString()
         }).catchError((err) =>
-                print("Errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr  ${err}"));
+                print("Errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr  $err"));
       } else {
         FirebaseDatabase.instance
             .reference()
             .child(Common.favourite)
-            .child(Common.gmail.replaceAll(".", ""))
+            .child(Common.gmail?.replaceAll(".", "") ??"")
             .child("${widget.child}${widget.id}")
             .remove()
             .then((_) {

@@ -14,47 +14,48 @@ class _FavouriteState extends State<Favourite> {
         body: Common.gmail != null
             ? StreamBuilder(
                 stream: FirebaseDatabase.instance
-                    .reference()
+                    .ref()
                     .child(Common.user)
-                    .child(Common.gmail.replaceAll(".", ""))
+                    .child(Common.gmail!.replaceAll(".", ""))
                     .child(Common.basic_info)
                     .child("login")
                     .onValue,
-                builder: (context, snapshot) {
-                  if (snapshot.data == null ||
-                      snapshot.data.snapshot.value == null) {
+                builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+                  if (snapshot.data == null || snapshot.data == null) {
                     return Container();
                   } else {
-                    if (snapshot.data.snapshot.value == "true") {
+                    if (snapshot.data?.snapshot.value == "true") {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: StreamBuilder(
                             stream: FirebaseDatabase.instance
-                                .reference()
+                                .ref()
                                 .child(Common.favourite)
-                                .child(Common.gmail.replaceAll(".", ""))
-
+                                .child(Common.gmail?.replaceAll(".", "") ?? "")
                                 .onValue,
-                            builder: (context, snapshot) {
-                              List<String> _name_list = new List();
-                              List<String> _price_list = new List();
-                              List<String> _discription_list = new List();
-                              List<String> _image_list = new List();
-                              List<String> _rating_list = new List();
+                            builder: (context,
+                                AsyncSnapshot<DatabaseEvent> snapshot) {
+                              List<String> _name_list = [];
+                              List<String> _price_list = [];
+                              List<String> _discription_list = [];
+                              List<String> _image_list = [];
+                              List<String> _rating_list = [];
 
-                              List<String> _id_list = new List();
+                              List<String> _id_list = [];
 
-                              List<String> _catagory_list = new List();
-                              //  List<String> _name=new List();
+                              List<String> _catagory_list = [];
+                              //  List<String> _name=[];
 
                               if (snapshot.data == null ||
-                                  snapshot.data.snapshot.value == null) {
+                                  snapshot.data == null) {
                                 return Container();
                               } else {
-                                Map<dynamic, dynamic> fav_list =
-                                    snapshot.data.snapshot.value;
+                                Map<dynamic, dynamic>? favList = snapshot
+                                        .data
+                                        ?.snapshot
+                                        .value as Map<dynamic, dynamic> ;
 
-                                fav_list.forEach((k, v) {
+                                favList.forEach((k, v) {
                                   _name_list.add(v["name"].toString());
 
                                   _price_list.add(v["price"].toString());
@@ -150,12 +151,15 @@ class _FavouriteState extends State<Favourite> {
                           .child(Common.category)
                           .child(catagoyId)
                           .onValue,
-                      builder: (context, snapshot) {
+                      builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+
+
+                        Map<dynamic, dynamic> _data = snapshot.data?.snapshot.value as Map<dynamic, dynamic> ;
                         if (snapshot.data == null) {
                           return Container();
                         } else {
                           return Text(
-                            snapshot.data.snapshot.value["name"] ?? "",
+                           _data["name"] ?? "",
                             style: TextStyle(
                                 color: Color(0xff868686),
                                 fontSize: 13,

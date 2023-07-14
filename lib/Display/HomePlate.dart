@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:supper_fresh_stores/Chart/Chart.dart';
 import 'package:supper_fresh_stores/Common.dart';
@@ -13,7 +11,8 @@ import 'package:supper_fresh_stores/Display/Category/AllProducts.dart';
 import 'package:supper_fresh_stores/Display/Favourite/Favourite.dart';
 import 'package:supper_fresh_stores/Display/Home/Home.dart';
 import 'package:supper_fresh_stores/Display/Profile/Profile.dart';
-import 'package:supper_fresh_stores/Drawer/NaviationDrawer.dart';
+
+import '../Drawer/NaviationDrawer.dart';
 
 class HomePlate extends StatefulWidget {
   final current_state;
@@ -28,13 +27,13 @@ class _HomePlateState extends State<HomePlate>
     with AutomaticKeepAliveClientMixin {
   var current_selected_page = "home";
 
-  Widget current_page;
+  Widget? current_page;
 
   int variable = 0;
 
   GlobalKey<ScaffoldState> _globalKey = new GlobalKey();
 
-  FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
+  FirebaseMessaging firebaseMessaging =  FirebaseMessaging.instance;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       new FlutterLocalNotificationsPlugin();
 
@@ -50,38 +49,42 @@ class _HomePlateState extends State<HomePlate>
   void configLocalNotification() {
     var initializationSettingsAndroid =
         new AndroidInitializationSettings('app_icon');
-    var initializationSettingsIOS = new IOSInitializationSettings();
     var initializationSettings = new InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
+      android:  initializationSettingsAndroid,);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
   void registerNotification() {
-    firebaseMessaging.requestNotificationPermissions();
+    firebaseMessaging.requestPermission();
 
-    firebaseMessaging.configure(onMessage: (Map<String, dynamic> message) {
+    // firebaseMessaging!.configure(onMessage: (Map<String, dynamic> message) {
+    //   print('onMessage: $message');
+    //
+    //   // if()
+    //
+    //
+    //
+    //   return;
+    // }, onResume: (Map<String, dynamic> message) {
+    //   print('onResume: $message');
+    //   return;
+    // }, onLaunch: (Map<String, dynamic> message) {
+    //   print('onLaunch: $message');
+    //   return;
+    // });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('onMessage: $message');
 
-      // if()
-
-      showNotification(message['notification']);
-
-      return;
-    }, onResume: (Map<String, dynamic> message) {
-      print('onResume: $message');
-      return;
-    }, onLaunch: (Map<String, dynamic> message) {
-      print('onLaunch: $message');
-      return;
+      showNotification(message.data);
     });
-
     firebaseMessaging.getToken().then((token) {
       print('token: $token');
 
       FirebaseDatabase.instance
           .reference()
           .child("Token")
-          .child(Common.gmail.replaceAll(".", ""))
+          .child(Common.gmail?.replaceAll(".", "") ??"")
           .set({"token": token}).then((_) {
         print("Token Update");
       }).catchError((err) => print(err));
@@ -96,15 +99,14 @@ class _HomePlateState extends State<HomePlate>
           ? 'com.dfa.flutterchatdemo'
           : 'com.duytq.flutterchatdemo',
       'Flutter chat demo',
-      'your channel description',
       playSound: true,
       enableVibration: true,
-      importance: Importance.Max,
-      priority: Priority.High,
+      importance: Importance.max,
+      priority: Priority.high,
     );
-    var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+   // var iOSPlatformChannelSpecifics = ;
     var platformChannelSpecifics = new NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+        android: androidPlatformChannelSpecifics, );
     await flutterLocalNotificationsPlugin.show(
         new Random().nextInt(1000),
         message['title'].toString(),
@@ -122,7 +124,7 @@ class _HomePlateState extends State<HomePlate>
       },
       debugShowCheckedModeBanner: false,
       home: WillPopScope(
-        onWillPop: () {
+        onWillPop: () async {
           if (current_selected_page != "home") {
             setState(() {
               current_selected_page = "home";
@@ -130,11 +132,12 @@ class _HomePlateState extends State<HomePlate>
           } else {
             exit(0);
           }
+          return false ;
         },
         child: Scaffold(
             backgroundColor: Color(0xffF6F6F6),
             key: _globalKey,
-            drawer: NavigationDrawer(HomePlate().key, close_drawer, fun_fav,
+            drawer: AppNavigationDrawer(HomePlate().key!, close_drawer, fun_fav,
                 fun_home, fun_profile, fun_chart, fun_allproduct),
             appBar: new AppBar(
               title: Text(
@@ -147,7 +150,7 @@ class _HomePlateState extends State<HomePlate>
               backgroundColor: Color(0xffF6F6F6),
               leading: InkWell(
                 onTap: () {
-                  _globalKey.currentState.openDrawer();
+                  _globalKey.currentState!.openDrawer();
                 },
                 child: Icon(
                   Icons.menu,
@@ -192,7 +195,8 @@ class _HomePlateState extends State<HomePlate>
                               stream: FirebaseDatabase.instance
                                   .reference()
                                   .child(Common.user)
-                                  .child(Common.gmail.replaceAll(".", ""))
+                                  .child(
+                                      Common.gmail?.replaceAll(".", "") ?? "")
                                   .child(Common.basic_info)
                                   .child("login")
                                   .onValue,
@@ -204,30 +208,31 @@ class _HomePlateState extends State<HomePlate>
 
                                   return StreamBuilder(
                                       stream: FirebaseDatabase.instance
-                                          .reference()
+                                          .ref()
                                           .child(Common.chart)
-                                          .child(
-                                              Common.gmail.replaceAll(".", ""))
+                                          .child(Common.gmail
+                                                  ?.replaceAll(".", "") ??
+                                              "")
                                           .onValue,
-                                      builder: (context, snapshot) {
+                                      builder: (context,AsyncSnapshot<DatabaseEvent> snapshot) {
                                         if (snapshot.data == null ||
-                                            snapshot.data.snapshot.value ==
+                                            snapshot.data ==
                                                 null) {
                                           return Container();
                                         } else {
+
+                                          List? count = snapshot.data?.snapshot.value as List;
                                           return Positioned(
-                                              top: snapshot.data.snapshot.value
-                                                          .length >=
+                                              top: count.length >=
                                                       10
                                                   ? 10
                                                   : 13,
-                                              right: snapshot.data.snapshot
-                                                          .value.length >=
+                                              right: count.length >=
                                                       10
                                                   ? 10
                                                   : 13,
                                               child: Text(
-                                                "${snapshot.data.snapshot.value.length >= 10 ? "10+" : snapshot.data.snapshot.value.length}",
+                                                "${count.length >= 10 ? "10+" : count.length}",
                                                 style: TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 7,
@@ -355,7 +360,7 @@ class _HomePlateState extends State<HomePlate>
   }
 
   close_drawer() {
-    _globalKey.currentState.openEndDrawer();
+    _globalKey.currentState?.openEndDrawer();
   }
 
   fun_fav() {

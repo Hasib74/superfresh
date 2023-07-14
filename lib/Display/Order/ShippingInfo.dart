@@ -58,8 +58,8 @@ class _ShippingInfoState extends State<ShippingInfo> {
             "Payment By Online Banking",
             style: Theme.of(context)
                 .textTheme
-                .bodyText1
-                .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                .bodyLarge
+                !.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -96,8 +96,8 @@ class _ShippingInfoState extends State<ShippingInfo> {
                 "Payment On Cash",
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1
-                    .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                    .bodyLarge
+                    !.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -109,7 +109,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
   Text _title(BuildContext context) {
     return Text(
       "Select Order Type And Pick Point",
-      style: Theme.of(context).textTheme.headline6,
+      style: Theme.of(context).textTheme.titleLarge,
       textAlign: TextAlign.center,
     );
   }
@@ -122,7 +122,7 @@ class _ShippingInfoState extends State<ShippingInfo> {
         ),
         Text(
           "Address",
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       ],
     );

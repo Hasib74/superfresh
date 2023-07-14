@@ -1,24 +1,19 @@
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_star_rating/flutter_star_rating.dart';
 import 'package:supper_fresh_stores/Common.dart';
-import 'package:supper_fresh_stores/Display/HomePlate.dart';
 import 'package:supper_fresh_stores/Display/ProductDiscription.dart';
 import 'package:supper_fresh_stores/Model/Banner.dart';
-import 'package:supper_fresh_stores/Model/Comment.dart';
 import 'package:supper_fresh_stores/Model/Popular.dart';
 import 'package:supper_fresh_stores/Model/Product.dart';
 
 class Home extends StatefulWidget {
-  final Function(int) chnage_to_list;
+  final Function(int)? chnage_to_list;
 
-  Home({Key key, @required this.chnage_to_list}) : super(key: key);
+  Home({Key? key, @required this.chnage_to_list}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -28,11 +23,11 @@ class _HomeState extends State<Home> {
   String _prev_search_text = "";
   String _search_text = "";
 
-  List<Product> _popular_list = new List();
+  List<Product> _popular_list = [];
 
-  List<Product> _search_popular_list = new List();
-  FirebaseMessaging firebaseMessaging;
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  List<Product> _search_popular_list = [];
+  FirebaseMessaging? firebaseMessaging;
+  FlutterLocalNotificationsPlugin? flutterLocalNotificationsPlugin;
 
   @override
   void initState() {
@@ -81,16 +76,16 @@ class _HomeState extends State<Home> {
   Widget _banner_display() {
     return StreamBuilder(
         stream:
-            FirebaseDatabase.instance.reference().child(Common.banner).onValue,
-        builder: (context, snapshot) {
-          List<BannerM> _banner_list = new List();
+            FirebaseDatabase.instance.ref().child(Common.banner).onValue,
+        builder: (context, AsyncSnapshot<DatabaseEvent>snapshot) {
+          List<BannerM> _banner_list = [];
 
-          if (snapshot.data == null || snapshot.data.snapshot.value == null) {
+          if (snapshot.data == null || snapshot.data?.snapshot.value == null) {
             return Container(
               height: 150,
             );
           } else {
-            Map<dynamic, dynamic> _banner = snapshot.data.snapshot.value;
+            Map<dynamic, dynamic> _banner = snapshot.data?.snapshot.value as Map<String,String>;
 
             _banner.forEach((k, v) {
               _banner_list.add(new BannerM(
@@ -241,17 +236,17 @@ class _HomeState extends State<Home> {
                   .reference()
                   .child(Common.category)
                   .onValue,
-              builder: (context, snapshot) {
-                List<String> _image = new List();
+              builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+                List<String> _image = [];
 
-                List<String> _name = new List();
+                List<String> _name = [];
 
                 if (snapshot.data == null ||
-                    snapshot.data.snapshot.value == null) {
+                    snapshot.data?.snapshot.value == null) {
                   return Container();
                 } else {
                   Map<dynamic, dynamic> _category =
-                      snapshot.data.snapshot.value;
+                      snapshot.data?.snapshot.value as Map<dynamic,dynamic>;
 
                   _category.forEach((k, v) {
                     _image.add(v["image"]);
@@ -267,19 +262,28 @@ class _HomeState extends State<Home> {
                       itemBuilder: (context, int index) {
                         return ButtonTheme(
                           buttonColor: Color(0xffF6F6F6),
-                          child: FlatButton(
+                          child: ElevatedButton(
                             // disabledColor: true,
 
                             onPressed: () {
                               print("Button clicked......");
 
-                              widget.chnage_to_list(index);
+                              if(widget.chnage_to_list!=null){
+                                widget.chnage_to_list!(index);
+                              }
+
+
                             },
 
                             //  disabledElevation:0.0 ,
-                            disabledColor: Color(0xffF6F6F6),
+                            //disabledColor: Color(0xffF6F6F6),
 
-                            color: Color(0xffF6F6F6),
+                            style: ElevatedButton.styleFrom(
+                              primary: Color(0xffF6F6F6),
+                              elevation: 0.0,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
@@ -334,15 +338,15 @@ class _HomeState extends State<Home> {
                 .reference()
                 .child(Common.popular)
                 .onValue,
-            builder: (context, snapshot) {
-              List<String> _key = new List();
-              List<Popular> _popular_list = new List();
+            builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+              List<String> _key = [];
+              List<Popular> _popular_list = [];
 
               if (snapshot.data == null ||
-                  snapshot.data.snapshot.value == null) {
+                  snapshot.data?.snapshot.value == null) {
                 return Container();
               } else {
-                Map<dynamic, dynamic> popular = snapshot.data.snapshot.value;
+                Map<dynamic, dynamic> popular = snapshot.data?.snapshot.value as Map<dynamic,dynamic>;
 
                 popular.forEach((k, v) {
                   _popular_list.add(new Popular(
@@ -453,17 +457,18 @@ class _HomeState extends State<Home> {
                   ),
                   StreamBuilder(
                       stream: FirebaseDatabase.instance
-                          .reference()
+                          .ref()
                           .child(Common.category)
                           .child(popular.categoryId)
                           .onValue,
-                      builder: (context, snapshot) {
+                      builder: (context,AsyncSnapshot<DatabaseEvent> snapshot) {
                         if (snapshot.data == null ||
-                            snapshot.data.snapshot.value == null) {
+                            snapshot.data?.snapshot.value == null) {
                           return Container();
                         } else {
+                          Map<dynamic,dynamic> _data = snapshot.data?.snapshot.value as Map<dynamic,dynamic>;
                           return Text(
-                            snapshot.data.snapshot.value["name"],
+                            _data["name"],
                             style: TextStyle(
                                 color: Color(0xff868686),
                                 fontSize: 13,
@@ -582,15 +587,15 @@ class _HomeState extends State<Home> {
               stream: FirebaseDatabase.instance
                   .reference()
                   .child(Common.favourite)
-                  .child(Common.gmail.replaceAll(".", ""))
+                  .child(Common.gmail?.replaceAll(".", "") ??"")
 
-                  .child("${Common.popular}${key}")
+                  .child("${Common.popular}$key")
                   .onValue,
-              builder: (context, snapshot) {
+              builder: (context,AsyncSnapshot<DatabaseEvent> snapshot) {
                 if (snapshot.data == null) {
                   return Container();
                 } else {
-                  if (snapshot.data.snapshot.value == null) {
+                  if (snapshot.data?.snapshot.value == null) {
                     return new Icon(
                       Icons.favorite_border,
                       color: Common.orange_color,
@@ -608,20 +613,20 @@ class _HomeState extends State<Home> {
 
   void favoutie(Popular popular, key) {
     FirebaseDatabase.instance
-        .reference()
+        .ref()
         .child(Common.favourite)
-        .child(Common.gmail.replaceAll(".", ""))
+        .child(Common.gmail?.replaceAll(".", "") ??"")
 
-        .child("${Common.popular}${key}")
+        .child("${Common.popular}$key")
         .once()
-        .then((v) {
-      if (v.value == null) {
+        .then((DatabaseEvent v) {
+      if (v.snapshot.value == null) {
         FirebaseDatabase.instance
             .reference()
             .child(Common.favourite)
-            .child(Common.gmail.replaceAll(".", ""))
+            .child(Common.gmail?.replaceAll(".", "") ??"")
 
-            .child("${Common.popular}${key}")
+            .child("${Common.popular}$key")
             .set({
           "id": key,
           "image": popular.image,
@@ -636,14 +641,14 @@ class _HomeState extends State<Home> {
           "buy_price": popular.price,
           //  "quantiry": popular.
         }).catchError((err) =>
-                print("Errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr  ${err}"));
+                print("Errrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr  $err"));
       } else {
         FirebaseDatabase.instance
             .reference()
             .child(Common.favourite)
-            .child(Common.gmail.replaceAll(".", ""))
+            .child(Common.gmail?.replaceAll(".", "") ??"")
 
-            .child("${Common.popular}${key}")
+            .child("${Common.popular}$key")
             .remove()
             .then((_) {
           print("Favoutite is deleted");
@@ -665,7 +670,7 @@ class _HomeState extends State<Home> {
           child: TextField(
             //controller: _text_controller,
             onChanged: (text) {
-              print("Text  onChange ${text}");
+              print("Text  onChange $text");
 
               setState(() {
                 _search_text = text;
@@ -773,17 +778,17 @@ class _HomeState extends State<Home> {
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Container(
-                                  child: StarRating(
-                                      rating: double.parse("3"),
-                                      spaceBetween: 0.0,
-                                      starConfig: StarConfig(
-                                        fillColor: Colors.yellow,
-                                        size: 15,
-
-                                        // other props
-                                      )),
-                                ),
+                                // Container(
+                                //   child: StarRating(
+                                //       rating: double.parse("3"),
+                                //       spaceBetween: 0.0,
+                                //       starConfig: StarConfig(
+                                //         fillColor: Colors.yellow,
+                                //         size: 15,
+                                //
+                                //         // other props
+                                //       )),
+                                // ),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
@@ -828,12 +833,12 @@ class _HomeState extends State<Home> {
     _popular_list.clear();
 
     FirebaseDatabase.instance
-        .reference()
+        .ref()
         .child(Common.products)
         .once()
-        .then((v) {
-      if (v.value != null) {
-        Map<dynamic, dynamic> popular = v.value;
+        .then((DatabaseEvent v) {
+      if (v.snapshot.value != null) {
+        Map<dynamic, dynamic> popular = v.snapshot.value as Map;
 
         popular.forEach((k, v) {
           _popular_list.add(new Product(

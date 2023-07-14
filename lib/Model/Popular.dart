@@ -12,7 +12,7 @@ class Popular{
   var rating;
   var id;
 
-  List<Comment> comments_list;
+  List<Comment>? comments_list;
 
 
 

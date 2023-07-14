@@ -18,22 +18,22 @@ class Common {
   static String order = "Order";
   static String shipping_address = "Shipping Address";
 
-  static String gmail = null;
+  static String? gmail ;
 
-  static Color background_color = Color(0xffF6F6F6);
-  static Color orange_color = Color(0xffFF5126);
+  static Color? background_color = Color(0xffF6F6F6);
+  static Color? orange_color = Color(0xffFF5126);
 
   static Future<String> isLogIn() async {
     var logIn = "false";
 
     await FirebaseDatabase.instance
-        .reference()
+        .ref()
         .child(user)
         .child(basic_info)
-        .child(gmail)
+        .child(gmail??"")
         .once()
         .then((value) {
-      logIn = value.value["login"];
+      logIn = value.snapshot.child("login").value.toString();
     });
 
     return logIn;
@@ -54,7 +54,7 @@ class Common {
 
     var v = sp.getString("email");
 
-    print("Regsitaer value  ${v}");
+    print("Regsitaer value  $v");
 
     if (v != null) {
       isRegsitaer = true;
@@ -70,11 +70,11 @@ class Common {
 
     var v = sp.remove("email");
 
-    print("Regsitaer value  ${v}");
+    print("Regsitaer value  $v");
   }
 
-  static Future<String> get_user() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
+  static Future<String?> get_user() async {
+    SharedPreferences? sp = await SharedPreferences.getInstance();
 
     return sp.getString("email");
 

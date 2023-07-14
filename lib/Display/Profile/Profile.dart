@@ -77,17 +77,17 @@ class _ProfileState extends State<Profile> {
   profile_display() {
     return StreamBuilder(
         stream: FirebaseDatabase.instance
-            .reference()
+            .ref()
             .child(Common.user)
-            .child(Common.gmail.replaceAll(".", ""))
+            .child(Common.gmail?.replaceAll(".", "")??"")
             .child(Common.basic_info)
             .child("login")
             .onValue,
-        builder: (context, snapshot) {
+        builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
           if (snapshot.data == null) {
             return Container();
           } else {
-            return snapshot.data.snapshot.value == "true"
+            return snapshot.data?.snapshot.value == "true"
                 ? new Stack(
                     children: <Widget>[
                       Column(
@@ -134,18 +134,18 @@ class _ProfileState extends State<Profile> {
           //   Text("User Name",style: TextStyle(color: Color(0xff292929),fontSize: 17,fontWeight: FontWeight.bold),),
           StreamBuilder(
               stream: FirebaseDatabase.instance
-                  .reference()
+                  .ref()
                   .child(Common.user)
-                  .child(Common.gmail.replaceAll(".", ""))
+                  .child(Common.gmail?.replaceAll(".", "")??"")
                   .child(Common.basic_info)
                   .child("name")
                   .onValue,
-              builder: (context, snap) {
+              builder: (context,AsyncSnapshot<DatabaseEvent> snap) {
                 if (snap.data == null) {
                   return Container();
                 } else {
                   return Text(
-                    snap.data.snapshot.value,
+                    snap.data?.snapshot.value.toString() ?? "User Name",
                     style: TextStyle(
                         color: Color(0xffFEFEFE),
                         fontSize: 18,
@@ -216,11 +216,11 @@ class _ProfileState extends State<Profile> {
         stream: FirebaseDatabase.instance
             .reference()
             .child(Common.user)
-            .child(Common.gmail.replaceAll(".", ""))
+            .child(Common.gmail?.replaceAll(".", "") ??"")
             .child(Common.basic_info)
             .child("Image")
             .onValue,
-        builder: (context, snapshot) {
+        builder: (context,AsyncSnapshot<DatabaseEvent> snapshot) {
           print("Gmail.....  ${Common.gmail}");
 
           // print(snapshot.data.snapshot.value);
@@ -238,7 +238,7 @@ class _ProfileState extends State<Profile> {
                 image: DecorationImage(
                     fit: BoxFit.cover,
                     image: NetworkImage(
-                      snapshot.data.snapshot.value.toString(),
+                      snapshot.data?.snapshot.value.toString() ??"",
                     )),
               ),
             );
@@ -264,18 +264,18 @@ class _ProfileState extends State<Profile> {
           ),
           StreamBuilder(
               stream: FirebaseDatabase.instance
-                  .reference()
+                  .ref()
                   .child(Common.user)
-                  .child(Common.gmail.replaceAll(".", ""))
+                  .child(Common.gmail?.replaceAll(".", "") ??"")
                   .child(Common.basic_info)
                   .child("phone")
                   .onValue,
-              builder: (context, snap) {
+              builder: (context,AsyncSnapshot<DatabaseEvent> snap) {
                 if (snap.data == null) {
                   return Container();
                 } else {
                   return Text(
-                    snap.data.snapshot.value,
+                    snap.data?.snapshot.value.toString() ??"",
                     style: TextStyle(color: Color(0xffD3D3D3)),
                   );
                 }
@@ -303,18 +303,18 @@ class _ProfileState extends State<Profile> {
           ),
           StreamBuilder(
               stream: FirebaseDatabase.instance
-                  .reference()
+                  .ref()
                   .child(Common.user)
-                  .child(Common.gmail.replaceAll(".", ""))
+                  .child(Common.gmail?.replaceAll(".", "") ??"")
                   .child(Common.basic_info)
                   .child("email")
                   .onValue,
-              builder: (context, snap) {
+              builder: (context,AsyncSnapshot<DatabaseEvent> snap) {
                 if (snap.data == null) {
                   return Container();
                 } else {
                   return Text(
-                    snap.data.snapshot.value,
+                    snap.data?.snapshot.value.toString() ??"",
                     style: TextStyle(color: Color(0xffD3D3D3)),
                   );
                 }
@@ -342,18 +342,18 @@ class _ProfileState extends State<Profile> {
           ),
           StreamBuilder(
               stream: FirebaseDatabase.instance
-                  .reference()
+                  .ref()
                   .child(Common.user)
-                  .child(Common.gmail.replaceAll(".", ""))
+                  .child(Common.gmail?.replaceAll(".", "") ??"")
                   .child(Common.basic_info)
                   .child("Address")
                   .onValue,
-              builder: (context, snap) {
+              builder: (context,AsyncSnapshot<DatabaseEvent> snap) {
                 if (snap.data == null) {
                   return Container();
                 } else {
                   return Text(
-                    snap.data.snapshot.value,
+                    snap.data?.snapshot.value.toString() ?? "",
                     style: TextStyle(color: Color(0xffD3D3D3)),
                   );
                 }

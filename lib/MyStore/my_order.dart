@@ -9,47 +9,45 @@ class MyOrder extends StatefulWidget {
 }
 
 class _MyOrderState extends State<MyOrder> {
-  List<Order> _order_list = new List();
+  List<Order> _order_list = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    if (Common.gmail != null) {
-      print("Gmail.....................   ${Common.gmail}");
+    print("Gmail.....................   ${Common.gmail}");
 
-      FirebaseDatabase.instance
-          .reference()
-          .child(Common.order)
-          .child(Common.gmail.replaceAll(".", ""))
-          .once()
-          .then((value) {
-        Map<dynamic, dynamic> _order = value.value;
+    FirebaseDatabase.instance
+        .ref()
+        .child(Common.order )
+        .child(Common.gmail!.replaceAll(".", ""))
+        .once()
+        .then((value) {
+      Map<dynamic, dynamic> _order = value.snapshot.value as Map<String,String>;
 
-        _order.forEach((k, v) {
-          print("Keyyyyyyyyyyyyyyy   ${k}");
+      _order.forEach((k, v) {
+        print("Keyyyyyyyyyyyyyyy   $k");
 
-          print("Valueeeeeeeeeeeeeeeeeeee  ${v}");
+        print("Valueeeeeeeeeeeeeeeeeeee  $v");
 
-          if (k != "Shipping Address") {
-            setState(() {
-              _order_list.add(new Order(
-                  child: v["child"] ?? "",
-                  rating: v["rating"] ?? "",
-                  price: v["price"] ?? "",
-                  id: k ?? "",
-                  image: v["image"] ?? "",
-                  name: v["name"] ?? "",
-                  buy_price: v["buy_price"] ?? "",
-                  catagory_id: v["catagory_id"] ?? "",
-                  discription: v["discription"] ?? "",
-                  quantiry: v["quantiry"] ?? ""));
-            });
-          }
-        });
+        if (k != "Shipping Address") {
+          setState(() {
+            _order_list.add(new Order(
+                child: v["child"] ?? "",
+                rating: v["rating"] ?? "",
+                price: v["price"] ?? "",
+                id: k ?? "",
+                image: v["image"] ?? "",
+                name: v["name"] ?? "",
+                buy_price: v["buy_price"] ?? "",
+                catagory_id: v["catagory_id"] ?? "",
+                discription: v["discription"] ?? "",
+                quantiry: v["quantiry"] ?? ""));
+          });
+        }
       });
-    }
+    });
   }
 
   @override
@@ -114,9 +112,8 @@ class _MyOrderState extends State<MyOrder> {
                                 return Container();
                               } else {
                                 return Text(
-                                    snapshot.data.snapshot.value == null
-                                        ? ""
-                                        : snapshot.data.snapshot.value,
+                                    snapshot.data ==null? ""
+                                        : snapshot.data.toString(),
                                     style: TextStyle(
                                         color: Color(0xff868686),
                                         fontSize: 13,

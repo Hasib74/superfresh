@@ -1,27 +1,26 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:supper_fresh_stores/Common.dart';
-import 'package:supper_fresh_stores/Display/HomePlate.dart';
 import 'package:supper_fresh_stores/MyStore/MyStore.dart';
 
-class NavigationDrawer extends StatelessWidget {
+class AppNavigationDrawer extends StatelessWidget {
   // final key;
 
-  Function closeDrawer;
+  Function? closeDrawer;
 
-  Function fun_home;
-  Function fun_chart;
-  Function fun_order;
-  Function fun_profile;
-
-  //Function fun_profile;
-  Function fun_fav;
-
-  Function fun_all_product;
+  Function? fun_home;
+  Function? fun_chart;
+  Function? fun_order;
+  Function? fun_profile;
 
   //Function fun_profile;
+  Function? fun_fav;
 
-  NavigationDrawer(Key key, this.closeDrawer, this.fun_fav, this.fun_home,
+  Function? fun_all_product;
+
+  //Function fun_profile;
+
+  AppNavigationDrawer(Key key, this.closeDrawer, this.fun_fav, this.fun_home,
       this.fun_profile, this.fun_chart, this.fun_all_product)
       : super(key: key);
 
@@ -72,9 +71,9 @@ class NavigationDrawer extends StatelessWidget {
                       //new HomePlate(current_state: "profile",);
 
                       // Navigator.of(context).pop();
-                      closeDrawer();
+                      closeDrawer!();
 
-                      fun_home();
+                      fun_home!();
 
                       print("Homeeeee");
                     },
@@ -112,9 +111,9 @@ class NavigationDrawer extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      closeDrawer();
+                      closeDrawer!();
 
-                      fun_chart();
+                      fun_chart!();
                     },
                     child: new Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -154,8 +153,8 @@ class NavigationDrawer extends StatelessWidget {
                     onTap: () {
                       //closeDrawer;
 
-                      closeDrawer();
-                      fun_fav();
+                      closeDrawer!();
+                      fun_fav!();
 
                       //Navigator.of(context).pop();
                     },
@@ -185,9 +184,9 @@ class NavigationDrawer extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      closeDrawer();
+                      closeDrawer!();
 
-                      fun_all_product();
+                      fun_all_product!();
                     },
                     child: new Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -215,9 +214,9 @@ class NavigationDrawer extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      closeDrawer();
+                      closeDrawer!();
 
-                      fun_profile();
+                      fun_profile!();
                     },
                     child: new Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -306,7 +305,7 @@ class NavigationDrawer extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          closeDrawer();
+                          closeDrawer!();
 
                           Navigator.of(context).push(new MaterialPageRoute(
                               builder: (context) => MyStore()));
@@ -332,13 +331,13 @@ class NavigationDrawer extends StatelessWidget {
                             FirebaseDatabase.instance
                                 .reference()
                                 .child(Common.user)
-                                .child(Common.gmail.replaceAll(".", ""))
+                                .child(Common.gmail?.replaceAll(".", "")??"")
                                 .child(Common.basic_info)
                                 .update({"login": "false"}).then((_) {
                               Common.gmail = null;
                             });
 
-                            closeDrawer();
+                            closeDrawer!();
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0),
@@ -379,7 +378,7 @@ class NavigationDrawer extends StatelessWidget {
                 onTap: () {
                   // this.
 
-                  closeDrawer();
+                  closeDrawer!();
                 },
                 child: Icon(
                   Icons.close,

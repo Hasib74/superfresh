@@ -1,8 +1,6 @@
 import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
+import 'package:pinput/pinput.dart';
 import 'package:flutter/material.dart';
-import 'package:pinput/pin_put/pin_put.dart';
 import 'package:supper_fresh_stores/Registation/Registation_page.dart';
 
 class LogInPage extends StatefulWidget {
@@ -322,26 +320,26 @@ crossAxisAlignment: CrossAxisAlignment.start,
           height: 25,
         ),
 
-       Padding(
-         padding: const EdgeInsets.all(10.0),
-         child: Container(
-
-           padding: EdgeInsets.all(10),
-           child: Center(
-
-             child: PinPut( inputDecoration: InputDecoration(
-               focusedBorder: OutlineInputBorder(
-                 borderSide: BorderSide(color: Color(0xffFF5126), width: 1.0),
-               ),
-               enabledBorder: OutlineInputBorder(
-                 borderSide: BorderSide(color: Color(0xffFF5126), width: 1.0),
-               ),
-
-             ), onSubmit: (v)=>print(v), fieldsCount: 4,),
-
-           ),
-         ),
-       )
+       // Padding(
+       //   padding: const EdgeInsets.all(10.0),
+       //   child: Container(
+       //
+       //     padding: EdgeInsets.all(10),
+       //     child: Center(
+       //
+       //       child: Pinput( inputDecoration: InputDecoration(
+       //         focusedBorder: OutlineInputBorder(
+       //           borderSide: BorderSide(color: Color(0xffFF5126), width: 1.0),
+       //         ),
+       //         enabledBorder: OutlineInputBorder(
+       //           borderSide: BorderSide(color: Color(0xffFF5126), width: 1.0),
+       //         ),
+       //
+       //       ), onSubmit: (v)=>print(v), fieldsCount: 4,),
+       //
+       //     ),
+       //   ),
+       // )
 
 
       ],
