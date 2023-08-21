@@ -1,14 +1,17 @@
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:supper_fresh_stores/Common.dart';
+import 'package:supper_fresh_stores/Display/Home/_popular.dart';
 import 'package:supper_fresh_stores/Display/ProductDiscription.dart';
 import 'package:supper_fresh_stores/Model/Banner.dart';
 import 'package:supper_fresh_stores/Model/Popular.dart';
 import 'package:supper_fresh_stores/Model/Product.dart';
+
+import '_banner.dart';
+import '_category_display.dart';
 
 class Home extends StatefulWidget {
   final Function(int)? chnage_to_list;
@@ -19,7 +22,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   String _prev_search_text = "";
   String _search_text = "";
 
@@ -60,24 +63,29 @@ class _HomeState extends State<Home> {
         SizedBox(
           height: 4,
         ),
-        _banner_display(),
+        //  _banner_display(),
+
+        AppBanner(),
         SizedBox(
           height: 10,
         ),
-        _catagory_display(),
+        // _catagory_display(),
+
+        HomeCategoryDisplay(
+          chnage_to_list: widget.chnage_to_list,
+        ),
         SizedBox(
           height: 10,
         ),
-        _popular_display(),
+        HomePopularProducts(),
       ],
     );
   }
 
   Widget _banner_display() {
     return StreamBuilder(
-        stream:
-            FirebaseDatabase.instance.ref().child(Common.banner).onValue,
-        builder: (context, AsyncSnapshot<DatabaseEvent>snapshot) {
+        stream: FirebaseDatabase.instance.ref().child(Common.banner).onValue,
+        builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
           List<BannerM> _banner_list = [];
 
           if (snapshot.data == null || snapshot.data?.snapshot.value == null) {
@@ -85,18 +93,19 @@ class _HomeState extends State<Home> {
               height: 150,
             );
           } else {
-            Map<dynamic, dynamic> _banner = snapshot.data?.snapshot.value as Map<String,String>;
+            Map<dynamic, dynamic> _banner =
+                snapshot.data?.snapshot.value as Map<dynamic, dynamic>;
 
             _banner.forEach((k, v) {
               _banner_list.add(new BannerM(
-                  name: v["name"],
-                  price: v["price"],
-                  image: v["image"],
-                  discount: v["discount"],
-                  description: v["description"],
-                  rating: v["rating"],
-                  id: k.toString(),
-                  catagory_id: v["catagory_id"]));
+                  name: v["name"] ?? "",
+                  price: v["price"] ?? "",
+                  image: v["image"] ?? "",
+                  discount: v["discount"] ?? "",
+                  description: v["description"] ?? "",
+                  rating: v["rating"] ?? "",
+                  id: k.toString() ?? "",
+                  catagory_id: v["catagory_id"] ?? ""));
             });
 
             return CarouselSlider(
@@ -233,7 +242,7 @@ class _HomeState extends State<Home> {
           height: 120,
           child: StreamBuilder(
               stream: FirebaseDatabase.instance
-                  .reference()
+                  .ref()
                   .child(Common.category)
                   .onValue,
               builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
@@ -246,12 +255,12 @@ class _HomeState extends State<Home> {
                   return Container();
                 } else {
                   Map<dynamic, dynamic> _category =
-                      snapshot.data?.snapshot.value as Map<dynamic,dynamic>;
+                      snapshot.data?.snapshot.value as Map<dynamic, dynamic>;
 
                   _category.forEach((k, v) {
-                    _image.add(v["image"]);
+                    _image.add(v["image"] ?? "");
 
-                    _name.add(v["name"]);
+                    _name.add(v["name"] ?? "");
                   });
 
                   return ListView.builder(
@@ -268,11 +277,9 @@ class _HomeState extends State<Home> {
                             onPressed: () {
                               print("Button clicked......");
 
-                              if(widget.chnage_to_list!=null){
+                              if (widget.chnage_to_list != null) {
                                 widget.chnage_to_list!(index);
                               }
-
-
                             },
 
                             //  disabledElevation:0.0 ,
@@ -346,7 +353,8 @@ class _HomeState extends State<Home> {
                   snapshot.data?.snapshot.value == null) {
                 return Container();
               } else {
-                Map<dynamic, dynamic> popular = snapshot.data?.snapshot.value as Map<dynamic,dynamic>;
+                Map<dynamic, dynamic> popular =
+                    snapshot.data?.snapshot.value as Map<dynamic, dynamic>;
 
                 popular.forEach((k, v) {
                   _popular_list.add(new Popular(
@@ -461,12 +469,14 @@ class _HomeState extends State<Home> {
                           .child(Common.category)
                           .child(popular.categoryId)
                           .onValue,
-                      builder: (context,AsyncSnapshot<DatabaseEvent> snapshot) {
+                      builder:
+                          (context, AsyncSnapshot<DatabaseEvent> snapshot) {
                         if (snapshot.data == null ||
                             snapshot.data?.snapshot.value == null) {
                           return Container();
                         } else {
-                          Map<dynamic,dynamic> _data = snapshot.data?.snapshot.value as Map<dynamic,dynamic>;
+                          Map<dynamic, dynamic> _data = snapshot
+                              .data?.snapshot.value as Map<dynamic, dynamic>;
                           return Text(
                             _data["name"],
                             style: TextStyle(
@@ -587,11 +597,10 @@ class _HomeState extends State<Home> {
               stream: FirebaseDatabase.instance
                   .reference()
                   .child(Common.favourite)
-                  .child(Common.gmail?.replaceAll(".", "") ??"")
-
+                  .child(Common.gmail?.replaceAll(".", "") ?? "")
                   .child("${Common.popular}$key")
                   .onValue,
-              builder: (context,AsyncSnapshot<DatabaseEvent> snapshot) {
+              builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
                 if (snapshot.data == null) {
                   return Container();
                 } else {
@@ -615,8 +624,7 @@ class _HomeState extends State<Home> {
     FirebaseDatabase.instance
         .ref()
         .child(Common.favourite)
-        .child(Common.gmail?.replaceAll(".", "") ??"")
-
+        .child(Common.gmail?.replaceAll(".", "") ?? "")
         .child("${Common.popular}$key")
         .once()
         .then((DatabaseEvent v) {
@@ -624,8 +632,7 @@ class _HomeState extends State<Home> {
         FirebaseDatabase.instance
             .reference()
             .child(Common.favourite)
-            .child(Common.gmail?.replaceAll(".", "") ??"")
-
+            .child(Common.gmail?.replaceAll(".", "") ?? "")
             .child("${Common.popular}$key")
             .set({
           "id": key,
@@ -646,8 +653,7 @@ class _HomeState extends State<Home> {
         FirebaseDatabase.instance
             .reference()
             .child(Common.favourite)
-            .child(Common.gmail?.replaceAll(".", "") ??"")
-
+            .child(Common.gmail?.replaceAll(".", "") ?? "")
             .child("${Common.popular}$key")
             .remove()
             .then((_) {
@@ -856,6 +862,10 @@ class _HomeState extends State<Home> {
     });
   }
 
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
 /*  void favoutie(Popular  popular,key) {
 
     FirebaseDatabase.instance.reference().child(Common.favourite).child(key).once().then((v){
@@ -902,5 +912,4 @@ class _HomeState extends State<Home> {
     });
 
   }*/
-
 }

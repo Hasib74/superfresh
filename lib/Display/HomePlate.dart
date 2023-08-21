@@ -33,7 +33,7 @@ class _HomePlateState extends State<HomePlate>
 
   GlobalKey<ScaffoldState> _globalKey = new GlobalKey();
 
-  FirebaseMessaging firebaseMessaging =  FirebaseMessaging.instance;
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       new FlutterLocalNotificationsPlugin();
 
@@ -50,7 +50,8 @@ class _HomePlateState extends State<HomePlate>
     var initializationSettingsAndroid =
         new AndroidInitializationSettings('app_icon');
     var initializationSettings = new InitializationSettings(
-      android:  initializationSettingsAndroid,);
+      android: initializationSettingsAndroid,
+    );
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
@@ -84,7 +85,7 @@ class _HomePlateState extends State<HomePlate>
       FirebaseDatabase.instance
           .reference()
           .child("Token")
-          .child(Common.gmail?.replaceAll(".", "") ??"")
+          .child(Common.gmail?.replaceAll(".", "") ?? "")
           .set({"token": token}).then((_) {
         print("Token Update");
       }).catchError((err) => print(err));
@@ -104,9 +105,10 @@ class _HomePlateState extends State<HomePlate>
       importance: Importance.max,
       priority: Priority.high,
     );
-   // var iOSPlatformChannelSpecifics = ;
+    // var iOSPlatformChannelSpecifics = ;
     var platformChannelSpecifics = new NotificationDetails(
-        android: androidPlatformChannelSpecifics, );
+      android: androidPlatformChannelSpecifics,
+    );
     await flutterLocalNotificationsPlugin.show(
         new Random().nextInt(1000),
         message['title'].toString(),
@@ -132,13 +134,19 @@ class _HomePlateState extends State<HomePlate>
           } else {
             exit(0);
           }
-          return false ;
+          return false;
         },
         child: Scaffold(
             backgroundColor: Color(0xffF6F6F6),
             key: _globalKey,
-            drawer: AppNavigationDrawer(HomePlate().key!, close_drawer, fun_fav,
-                fun_home, fun_profile, fun_chart, fun_allproduct),
+            drawer: AppNavigationDrawer(
+                HomePlate().createState()._globalKey,
+                close_drawer,
+                fun_fav,
+                fun_home,
+                fun_profile,
+                fun_chart,
+                fun_allproduct),
             appBar: new AppBar(
               title: Text(
                 "Super fresh",
@@ -214,23 +222,30 @@ class _HomePlateState extends State<HomePlate>
                                                   ?.replaceAll(".", "") ??
                                               "")
                                           .onValue,
-                                      builder: (context,AsyncSnapshot<DatabaseEvent> snapshot) {
+                                      builder: (context,
+                                          AsyncSnapshot<DatabaseEvent>
+                                              snapshot) {
                                         if (snapshot.data == null ||
-                                            snapshot.data ==
-                                                null) {
+                                            snapshot.data == null) {
                                           return Container();
                                         } else {
+                                          List? count = snapshot
+                                              .data?.snapshot.value as List?;
 
-                                          List? count = snapshot.data?.snapshot.value as List;
+                                          if (count == null) {
+                                            return Text(
+                                              "0",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 7,
+                                                  fontWeight: FontWeight.bold),
+                                            );
+                                          }
+
                                           return Positioned(
-                                              top: count.length >=
-                                                      10
-                                                  ? 10
-                                                  : 13,
-                                              right: count.length >=
-                                                      10
-                                                  ? 10
-                                                  : 13,
+                                              top: count.length >= 10 ? 10 : 13,
+                                              right:
+                                                  count.length >= 10 ? 10 : 13,
                                               child: Text(
                                                 "${count.length >= 10 ? "10+" : count.length}",
                                                 style: TextStyle(

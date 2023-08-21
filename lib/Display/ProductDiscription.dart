@@ -63,7 +63,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
               children: <Widget>[
                 _top(),
                 _description(),
-                _comments(),
+                //    _comments(),
               ],
             ),
           ),
@@ -126,7 +126,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                         stream: FirebaseDatabase.instance
                             .reference()
                             .child(Common.favourite)
-                            .child(Common.gmail?.replaceAll(".", "") ??"")
+                            .child(Common.gmail?.replaceAll(".", "") ?? "")
                             .child("${widget.child}${widget.id}")
                             .onValue,
                         builder: (context, snapshot) {
@@ -247,9 +247,9 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
             Common.gmail != null
                 ? StreamBuilder(
                     stream: FirebaseDatabase.instance
-                        .reference()
+                        .ref()
                         .child(Common.chart)
-                        .child(Common.gmail?.replaceAll(".", "") ??"")
+                        .child(Common.gmail?.replaceAll(".", "") ?? "")
                         .onValue,
                     builder: (context, snapshot) {
                       if (snapshot.data == null) {
@@ -292,8 +292,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                             ),
                           );
                         } else {
-                          Map<dynamic, dynamic> _chart =
-                              snapshot.data as Map<dynamic,dynamic>;
+                          Map _chart = snapshot.data as Map;
 
                           _chart.forEach((k, v) {
                             print("Valueeeee  $v");
@@ -302,10 +301,12 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                             _child_list.add(v["child"]);
                           });
 
-                          for (int i = 0; i < _id.length; i++) {
-                            /*   print(
+                          return Container();
+
+                          /* for (int i = 0; i < _id.length; i++) {
+                            */ /*   print(
                                 "Child.........................  ${_child_list[i]}  ${widget.child} ==  ${_id[i]} ${widget.id} ");
-*/
+*/ /*
                             if (_id[i] == widget.id &&
                                 widget.child == _child_list[i]) {
                               productChartBefor = 1;
@@ -371,7 +372,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                                 ),
                               ),
                             );
-                          }
+                          }*/
                         }
                       }
                     })
@@ -468,18 +469,17 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
         ),
         StreamBuilder(
             stream: FirebaseDatabase.instance
-                .reference()
+                .ref()
                 .child("${widget.child}")
                 .child(widget.id)
                 .child("Comments")
                 .onValue,
             builder: (context, snp) {
-              if (snp.data == null ||
-                  snp.data == null ||
-                  snp.data == null) {
+              if (snp.data == null || snp.data == null || snp.data == null) {
                 return Container();
               } else {
-                Map<dynamic, dynamic> _comments = snp.data as Map<dynamic, dynamic>;
+                Map<dynamic, dynamic> _comments =
+                    snp.data as Map<dynamic, dynamic>;
 
                 // print(_comments.values.toList());
 
@@ -517,8 +517,8 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         image: DecorationImage(
-                                            image: NetworkImage(
-                                                imageList[index])),
+                                            image:
+                                                NetworkImage(imageList[index])),
                                       ),
                                     ),
                                     SizedBox(
@@ -599,7 +599,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
               FirebaseDatabase.instance
                   .ref()
                   .child(Common.chart)
-                  .child(gmail?.replaceAll(".", "") ??"")
+                  .child(gmail?.replaceAll(".", "") ?? "")
                   .push()
                   .set({
                 //  "catagory_id":widget.catagory_id
@@ -625,7 +625,8 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
 
               List<String> _child_id = [];
 
-              Map<dynamic, dynamic> _chart = v.snapshot.value as Map<dynamic ,dynamic>;
+              Map<dynamic, dynamic> _chart =
+                  v.snapshot.value as Map<dynamic, dynamic>;
 
               var productChartBefor = 0;
 
@@ -659,7 +660,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                   FirebaseDatabase.instance
                       .reference()
                       .child(Common.chart)
-                      .child(gmail?.replaceAll(".", "") ??"")
+                      .child(gmail?.replaceAll(".", "") ?? "")
                       .once()
                       .then((v) {
                     FirebaseDatabase.instance
@@ -720,7 +721,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
     FirebaseDatabase.instance
         .reference()
         .child(Common.favourite)
-        .child(Common.gmail?.replaceAll(".", "") ??"")
+        .child(Common.gmail?.replaceAll(".", "") ?? "")
         .child("${widget.child}${widget.id}")
         .once()
         .then((v) {
@@ -728,7 +729,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
         FirebaseDatabase.instance
             .reference()
             .child(Common.favourite)
-            .child(Common.gmail?.replaceAll(".", "") ??"")
+            .child(Common.gmail?.replaceAll(".", "") ?? "")
             .child("${widget.child}${widget.id}")
             .set({
           "id": widget.id,
@@ -749,7 +750,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
         FirebaseDatabase.instance
             .reference()
             .child(Common.favourite)
-            .child(Common.gmail?.replaceAll(".", "") ??"")
+            .child(Common.gmail?.replaceAll(".", "") ?? "")
             .child("${widget.child}${widget.id}")
             .remove()
             .then((_) {
