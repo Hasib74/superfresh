@@ -251,7 +251,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                         .child(Common.chart)
                         .child(Common.gmail?.replaceAll(".", "") ?? "")
                         .onValue,
-                    builder: (context, snapshot) {
+                    builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
                       if (snapshot.data == null) {
                         return Container();
                       } else {
@@ -259,6 +259,8 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
 
                         List<String> _child_list = [];
                         var productChartBefor = 0;
+
+                        print("snapshot.data chart  === > ${snapshot.data} ");
 
                         if (snapshot.data == null) {
                           return Container(
@@ -292,21 +294,27 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                             ),
                           );
                         } else {
-                          Map _chart = snapshot.data as Map;
+                          Map? _chart;
 
-                          _chart.forEach((k, v) {
-                            print("Valueeeee  $v");
+                          print("Testing ... ${snapshot.data?.snapshot.value}");
+
+
+
+
+                          if (snapshot.data?.snapshot.value is Map<dynamic, dynamic>) {
+                            _chart = snapshot.data?.snapshot.value as Map<dynamic, dynamic>;
+                          }
+
+                          _chart?.forEach((k, v) {
+                            print("Valueeeee aoppapa $v");
                             _id.add(v["id"]);
 
                             _child_list.add(v["child"]);
                           });
 
-                          return Container();
-
-                          /* for (int i = 0; i < _id.length; i++) {
-                            */ /*   print(
+                          for (int i = 0; i < _id.length; i++) {
+                            print(
                                 "Child.........................  ${_child_list[i]}  ${widget.child} ==  ${_id[i]} ${widget.id} ");
-*/ /*
                             if (_id[i] == widget.id &&
                                 widget.child == _child_list[i]) {
                               productChartBefor = 1;
@@ -372,7 +380,7 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
                                 ),
                               ),
                             );
-                          }*/
+                          }
                         }
                       }
                     })
@@ -625,12 +633,15 @@ class _ProductDiscriptionState extends State<ProductDiscription> {
 
               List<String> _child_id = [];
 
-              Map<dynamic, dynamic> _chart =
-                  v.snapshot.value as Map<dynamic, dynamic>;
+              Map<dynamic, dynamic>? _chart;
+
+              if (v.snapshot.value is Map) {
+                _chart = v.snapshot.value as Map<dynamic, dynamic>;
+              }
 
               var productChartBefor = 0;
 
-              _chart.forEach((k, v) {
+              _chart?.forEach((k, v) {
                 print("Valueeeee  $v");
                 _id.add(v["id"]);
 

@@ -23,8 +23,8 @@ class HomePlate extends StatefulWidget {
   _HomePlateState createState() => _HomePlateState();
 }
 
-class _HomePlateState extends State<HomePlate>
-    with AutomaticKeepAliveClientMixin {
+class _HomePlateState
+    extends State<HomePlate> /* with AutomaticKeepAliveClientMixin*/ {
   var current_selected_page = "home";
 
   Widget? current_page;
@@ -178,13 +178,16 @@ class _HomePlateState extends State<HomePlate>
             floatingActionButton: Container(
               width: 60,
               height: 60,
-              child: FloatingActionButton(
-                heroTag: "a",
-                hoverElevation: 4,
-                backgroundColor: Color(0xffFF5126),
+              child: InkWell(
+                //  heroTag: "a",
+                // hoverElevation: 4,
+
                 child: Container(
                   width: double.infinity,
                   height: double.infinity,
+                  decoration: BoxDecoration(
+                      color: Color(0xffFF5126),
+                      borderRadius: BorderRadius.circular(30)),
                   child: Stack(
                     children: <Widget>[
                       Padding(
@@ -201,7 +204,7 @@ class _HomePlateState extends State<HomePlate>
                           ? Container()
                           : StreamBuilder(
                               stream: FirebaseDatabase.instance
-                                  .reference()
+                                  .ref()
                                   .child(Common.user)
                                   .child(
                                       Common.gmail?.replaceAll(".", "") ?? "")
@@ -229,8 +232,13 @@ class _HomePlateState extends State<HomePlate>
                                             snapshot.data == null) {
                                           return Container();
                                         } else {
-                                          List? count = snapshot
-                                              .data?.snapshot.value as List?;
+                                          List? count;
+
+                                          if (snapshot.data?.snapshot.value
+                                              is List) {
+                                            count = snapshot
+                                                .data?.snapshot.value as List?;
+                                          }
 
                                           if (count == null) {
                                             return Text(
@@ -262,7 +270,7 @@ class _HomePlateState extends State<HomePlate>
                     ],
                   ),
                 ),
-                onPressed: () {
+                onTap: () {
                   print("Clicked to Chart button");
 
                   Navigator.of(context).push(
@@ -432,8 +440,8 @@ class _HomePlateState extends State<HomePlate>
       current_selected_page = "AllProducts";
     });
   }
-
+/*
   @override
   // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => true;*/
 }

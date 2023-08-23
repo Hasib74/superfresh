@@ -20,13 +20,17 @@ class _MyOrderState extends State<MyOrder> {
 
     FirebaseDatabase.instance
         .ref()
-        .child(Common.order )
+        .child(Common.order)
         .child(Common.gmail!.replaceAll(".", ""))
         .once()
         .then((value) {
-      Map<dynamic, dynamic> _order = value.snapshot.value as Map<String,String>;
+      Map<dynamic, dynamic>? _order;
 
-      _order.forEach((k, v) {
+      if (value.snapshot.value is Map<dynamic, dynamic>) {
+        _order = value.snapshot.value as Map<dynamic, dynamic>;
+      }
+
+      _order?.forEach((k, v) {
         print("Keyyyyyyyyyyyyyyy   $k");
 
         print("Valueeeeeeeeeeeeeeeeeeee  $v");
@@ -112,7 +116,8 @@ class _MyOrderState extends State<MyOrder> {
                                 return Container();
                               } else {
                                 return Text(
-                                    snapshot.data ==null? ""
+                                    snapshot.data == null
+                                        ? ""
                                         : snapshot.data.toString(),
                                     style: TextStyle(
                                         color: Color(0xff868686),

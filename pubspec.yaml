@@ -25,7 +25,7 @@ dependencies:
   cupertino_icons: ^1.0.5
   pinput: ^2.2.21
   carousel_slider: ^4.2.1
-  firebase_database: ^10.0.16
+  firebase_database: ^10.2.5
  # flutter_star_rating: ^0.0.3
   shared_preferences: ^2.0.17
   image_picker: ^0.8.6+1

@@ -173,15 +173,24 @@ class _ChartsState extends State<Charts> {
 
                 var price = 0.0;
 
-                Map<dynamic, dynamic>? prices =
-                    snapshot.data?.snapshot.value as Map<String, String>;
+                Map<dynamic?, dynamic>? prices;
 
-                prices.forEach((k, v) {
-                  priceList.add(v["price"]);
+                Object? _obj = snapshot.data?.snapshot.value;
+
+                if (_obj is Map<dynamic, dynamic>) {
+                  prices = _obj.cast<dynamic?, dynamic?>();
+                }
+
+                print("Prices type  $_obj");
+
+                prices?.forEach((k, v) {
+                  if (v != null) {}
+                  priceList.add(v!["price]"].toString());
                 });
 
                 for (int i = 0; i < priceList.length; i++) {
-                  price += double.parse(priceList[i]);
+                  price +=
+                      priceList[i].toString() == "null" ? 0 : double.parse(priceList[i]);
                 }
 
                 return Row(
@@ -281,10 +290,12 @@ class _ChartsState extends State<Charts> {
 
               List<String> _buy_price = [];
 
-              Map<dynamic, dynamic>? _chart =
-                  snp.data?.snapshot.value as Map<dynamic, dynamic>;
+              Map<dynamic, dynamic>? _chart;
+              if (snp.data?.snapshot.value is Map<dynamic, dynamic>) {
+                _chart = snp.data?.snapshot.value as Map<dynamic, dynamic>;
+              }
 
-              _chart.forEach((k, v) {
+              _chart?.forEach((k, v) {
                 print("Keyyyy  $k");
 
                 print("Valueee  $v");
@@ -560,11 +571,11 @@ class _ChartsState extends State<Charts> {
             user.snapshot.value as Map<dynamic, dynamic>;
         print("Valueeeeeeeeeeeeeeee ${user.snapshot.value}");
 
-        _user_list.add(_user["name"]);
+        _user_list.add(_user["name"] ?? "");
 
-        _user_list.add(_user["Address"]);
+        _user_list.add(_user["Address"] ?? "");
 
-        _user_list.add(_user["Image"]);
+        _user_list.add(_user["Image"] ?? "");
       }
     });
 

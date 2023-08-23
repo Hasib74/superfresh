@@ -50,12 +50,15 @@ class _FavouriteState extends State<Favourite> {
                                   snapshot.data == null) {
                                 return Container();
                               } else {
-                                Map<dynamic, dynamic>? favList = snapshot
-                                        .data
-                                        ?.snapshot
-                                        .value as Map<dynamic, dynamic> ;
+                                Map<dynamic, dynamic>? favList;
 
-                                favList.forEach((k, v) {
+                                if (snapshot.data?.snapshot.value
+                                    is Map<dynamic, dynamic>) {
+                                  favList = snapshot.data?.snapshot.value
+                                      as Map<dynamic, dynamic>;
+                                }
+
+                                favList?.forEach((k, v) {
                                   _name_list.add(v["name"].toString());
 
                                   _price_list.add(v["price"].toString());
@@ -147,19 +150,25 @@ class _FavouriteState extends State<Favourite> {
                   ),
                   StreamBuilder(
                       stream: FirebaseDatabase.instance
-                          .reference()
+                          .ref()
                           .child(Common.category)
                           .child(catagoyId)
                           .onValue,
-                      builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+                      builder:
+                          (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+                        Map<dynamic, dynamic>? _data;
 
+                        if (snapshot.data?.snapshot.value
+                            is Map<dynamic, dynamic>) {
+                          _data = snapshot.data?.snapshot.value
+                              as Map<dynamic, dynamic>;
+                        }
 
-                        Map<dynamic, dynamic> _data = snapshot.data?.snapshot.value as Map<dynamic, dynamic> ;
                         if (snapshot.data == null) {
                           return Container();
                         } else {
                           return Text(
-                           _data["name"] ?? "",
+                            _data?["name"] ?? "",
                             style: TextStyle(
                                 color: Color(0xff868686),
                                 fontSize: 13,
@@ -205,14 +214,14 @@ class _FavouriteState extends State<Favourite> {
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       ),
-                      Text(
-                        "4.5 tk",
-                        style: TextStyle(
-                          decoration: TextDecoration.lineThrough,
-                          decorationColor: Colors.black,
-                          decorationStyle: TextDecorationStyle.solid,
-                        ),
-                      ),
+                      // Text(
+                      //   "4.5 tk",
+                      //   style: TextStyle(
+                      //     decoration: TextDecoration.lineThrough,
+                      //     decorationColor: Colors.black,
+                      //     decorationStyle: TextDecorationStyle.solid,
+                      //   ),
+                      // ),
                     ],
                   )
                 ],
