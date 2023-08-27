@@ -198,7 +198,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                                     width: 100,
                                     height: 24,
                                     decoration: BoxDecoration(
-                                      color: Color(0xffFF5126),
+                                      color: Color(0xff63A6F4),
                                     ),
                                     child: Center(
                                       child: Text(
@@ -548,7 +548,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
       width: 70,
       height: 20,
       decoration: BoxDecoration(
-        color: Color(0xffFF5126),
+        color: Color(0xff63A6F4),
         borderRadius: BorderRadius.only(
             bottomRight: Radius.circular(15), topLeft: Radius.circular(15)),
       ),
@@ -569,7 +569,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
         height: 35,
         width: 45,
         decoration: BoxDecoration(
-            color: Color(0xffFF5126),
+            color: Color(0xff63A6F4),
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20),
                 bottomRight: Radius.circular(15))),
@@ -668,7 +668,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
       padding: const EdgeInsets.all(10.0),
       child: Container(
         decoration: BoxDecoration(
-            border: Border.all(color: Color(0xffFF5126), width: 1),
+            border: Border.all(color: Color(0xff63A6F4), width: 1),
             borderRadius: BorderRadius.all(Radius.circular(0.0)),
             color: Color(0xffE9EBEE)),
         child: Padding(

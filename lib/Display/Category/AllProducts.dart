@@ -140,7 +140,7 @@ class _AllProductsState extends State<AllProducts>
                         decoration: BoxDecoration(
                             color: _catagory_list.indexOf(catagory) ==
                                     _tabController?.index
-                                ? Color(0xffFF5126)
+                                ? Color(0xff63A6F4)
                                 : Colors.grey,
                             borderRadius: BorderRadius.all(Radius.circular(50)),
                             boxShadow: [
@@ -164,7 +164,7 @@ class _AllProductsState extends State<AllProducts>
             padding: const EdgeInsets.all(10.0),
             child: Container(
               decoration: BoxDecoration(
-                  border: Border.all(color: Color(0xffFF5126), width: 1),
+                  border: Border.all(color: Color(0xff63A6F4), width: 1),
                   borderRadius: BorderRadius.all(Radius.circular(50)),
                   color: Color(0xffE9EBEE)),
               child: Padding(
@@ -215,7 +215,7 @@ class _AllProductsState extends State<AllProducts>
                     hintText: "Search Product",
                     suffixIcon: Icon(
                       Icons.search,
-                      color: Color(0xffFF5126),
+                      color: Color(0xff63A6F4),
                     ),
                     border: InputBorder.none,
                     /*  enabledBorder: const OutlineInputBorder(

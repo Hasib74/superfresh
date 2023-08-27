@@ -249,7 +249,7 @@ class _LogInPageState extends State<LogInPage> {
             margin: EdgeInsets.only(left: 8, right: 8),
             width: MediaQuery.of(context).size.width,
             height: 40,
-            decoration: BoxDecoration(color: Color(0xffFF5126)),
+            decoration: BoxDecoration(color: Color(0xff63A6F4)),
             child: Center(
               child: Text(
                 "Login",
@@ -329,10 +329,10 @@ crossAxisAlignment: CrossAxisAlignment.start,
        //
        //       child: Pinput( inputDecoration: InputDecoration(
        //         focusedBorder: OutlineInputBorder(
-       //           borderSide: BorderSide(color: Color(0xffFF5126), width: 1.0),
+       //           borderSide: BorderSide(color: Color(0xff63A6F4), width: 1.0),
        //         ),
        //         enabledBorder: OutlineInputBorder(
-       //           borderSide: BorderSide(color: Color(0xffFF5126), width: 1.0),
+       //           borderSide: BorderSide(color: Color(0xff63A6F4), width: 1.0),
        //         ),
        //
        //       ), onSubmit: (v)=>print(v), fieldsCount: 4,),

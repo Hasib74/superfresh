@@ -53,14 +53,14 @@ class AppNavigationDrawer extends StatelessWidget {
                   SizedBox(
                     height: 30,
                   ),
-                  Center(
-                      child: Image(
-                    image: AssetImage(
-                      "Img/superfresh.png",
-                    ),
-                    width: 100,
-                    height: 100,
-                  )),
+                  // Center(
+                  //     child: Image(
+                  //   image: AssetImage(
+                  //     "Img/superfresh.png",
+                  //   ),
+                  //   width: 100,
+                  //   height: 100,
+                  // )),
 
                   SizedBox(
                     height: 35,

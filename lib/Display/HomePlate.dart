@@ -149,9 +149,9 @@ class _HomePlateState
                 fun_allproduct),
             appBar: new AppBar(
               title: Text(
-                "Super fresh",
+                "Medicine store",
                 style: TextStyle(
-                    color: Color(0xffFF5126), fontWeight: FontWeight.bold),
+                    color: Color(0xff63A6F4), fontWeight: FontWeight.bold),
               ),
               centerTitle: true,
               elevation: 0.0,
@@ -186,7 +186,7 @@ class _HomePlateState
                   width: double.infinity,
                   height: double.infinity,
                   decoration: BoxDecoration(
-                      color: Color(0xffFF5126),
+                      color: Color(0xff63A6F4),
                       borderRadius: BorderRadius.circular(30)),
                   child: Stack(
                     children: <Widget>[
@@ -307,7 +307,7 @@ class _HomePlateState
                             child: Icon(
                               Icons.home,
                               color: current_selected_page == "home"
-                                  ? Color(0xffFF5126)
+                                  ? Color(0xff63A6F4)
                                   : Color(0xff707070),
                             ),
                           ),
@@ -325,7 +325,7 @@ class _HomePlateState
                             child: Icon(
                               Icons.playlist_add,
                               color: current_selected_page == "AllProducts"
-                                  ? Color(0xffFF5126)
+                                  ? Color(0xff63A6F4)
                                   : Color(0xff707070),
                             ),
                           ),
@@ -347,7 +347,7 @@ class _HomePlateState
                             child: Icon(
                               Icons.favorite,
                               color: current_selected_page == "fav"
-                                  ? Color(0xffFF5126)
+                                  ? Color(0xff63A6F4)
                                   : Color(0xff707070),
                             ),
                           ),
@@ -364,7 +364,7 @@ class _HomePlateState
                             child: Icon(
                               Icons.perm_identity,
                               color: current_selected_page == "profile"
-                                  ? Color(0xffFF5126)
+                                  ? Color(0xff63A6F4)
                                   : Color(0xff707070),
                             ),
                           ),

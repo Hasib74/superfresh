@@ -21,7 +21,7 @@ class Common {
   static String? gmail ;
 
   static Color? background_color = Color(0xffF6F6F6);
-  static Color? orange_color = Color(0xffFF5126);
+  static Color? orange_color = Color(0xff63A6F4);
 
   static Future<String> isLogIn() async {
     var logIn = "false";

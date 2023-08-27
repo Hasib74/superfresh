@@ -126,7 +126,7 @@ class AppBanner extends StatelessWidget {
                                     width: 100,
                                     height: 24,
                                     decoration: BoxDecoration(
-                                      color: Color(0xffFF5126),
+                                      color: Color(0xff63A6F4),
                                     ),
                                     child: Center(
                                       child: Text(

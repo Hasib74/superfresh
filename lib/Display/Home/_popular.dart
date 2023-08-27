@@ -234,7 +234,7 @@ class HomePopularProducts extends StatelessWidget {
       width: 70,
       height: 20,
       decoration: BoxDecoration(
-        color: Color(0xffFF5126),
+        color: Color(0xff63A6F4),
         borderRadius: BorderRadius.only(
             bottomRight: Radius.circular(15), topLeft: Radius.circular(15)),
       ),
@@ -255,7 +255,7 @@ class HomePopularProducts extends StatelessWidget {
         height: 35,
         width: 45,
         decoration: BoxDecoration(
-            color: Color(0xffFF5126),
+            color: Color(0xff63A6F4),
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20),
                 bottomRight: Radius.circular(15))),

@@ -171,7 +171,7 @@ class _LogInAndRegistationPageDialogState
                 margin: EdgeInsets.only(left: 8, right: 8),
                 width: MediaQuery.of(context).size.width,
                 height: 40,
-                decoration: BoxDecoration(color: Color(0xffFF5126)),
+                decoration: BoxDecoration(color: Color(0xff63A6F4)),
                 child: Center(
                   child: Text(
                     "Login",
@@ -576,7 +576,7 @@ class _LogInAndRegistationPageDialogState
                 margin: EdgeInsets.only(left: 8, right: 8),
                 width: MediaQuery.of(context).size.width,
                 height: 40,
-                decoration: BoxDecoration(color: Color(0xffFF5126)),
+                decoration: BoxDecoration(color: Color(0xff63A6F4)),
                 child: Center(
                   child: Text(
                     "Sign Up",
